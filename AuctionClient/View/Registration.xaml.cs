@@ -14,9 +14,6 @@ using System.Windows.Shapes;
 
 namespace AuctionClient.View
 {
-    /// <summary>
-    /// Логика взаимодействия для Registration.xaml
-    /// </summary>
     public partial class Registration : Window
     {
         public Registration()
