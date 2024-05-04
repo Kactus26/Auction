@@ -8,13 +8,30 @@
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
 services:
+  db:
+    container_name: auction-db
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+        - 1433:1433
+    environment:
+        - ACCEPT_EULA=Y
+        - MSSQL_SA_PASSWORD=S3cur3P@ssW0rd!
+    healthcheck:
+        test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "S3cur3P@ssW0rd!" -Q "SELECT 1" || exit 1
+        interval: 5s
+        timeout: 3s
+        retries: 10
+        start_period: 10s
   server:
     build:
       dockerfile: AuctionServer/Dockerfile
       context: .
       target: final
     ports:
-      - 8080:8080
+      - 8081:8080
+    depends_on:
+        db:
+            condition: service_healthy
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
