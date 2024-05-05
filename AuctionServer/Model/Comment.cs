@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuctionClient.Model
+namespace AuctionServer.Model
 {
     internal class Comment
     {
         public int Id { get; set; }
-        public User Commentator { get; set; }
-        public Lot Lot { get; set; }
-        public string Text { get; set; }
-        public DateTime DateTime { get; set; }
-        public int Likes { get; set; }
-        public int Dislikes { get; set; }
+        public User Commentator { get; set; } = null!;
+        public Lot Lot { get; set; } = null!;
+        public string Text { get; set; } = string.Empty;
+        public DateTime DateTime { get; set; } = DateTime.Now;
+        public int Likes { get; set; } = 0;
+        public int Dislikes { get; set; } = 0;
     }
 }

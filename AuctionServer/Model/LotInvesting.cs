@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuctionClient.Model
+namespace AuctionServer.Model
 {
     internal class LotInvesting
     {
         public int Id { get; set; }
-        public User User { get; set; }
-        public Lot Lot { get; set; }
-        public DateTime DateTime { get; set; }
-        public double Price { get; set; }
+        public User User { get; set; } = null!;
+        public Lot Lot { get; set; } = null!;
+        public DateTime DateTime { get; set; } = DateTime.Now;
+        public double? Price { get; set; }
     }
 }
