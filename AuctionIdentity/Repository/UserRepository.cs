@@ -1,22 +1,28 @@
-﻿using AuctionIdentity.DTO;
+﻿using AuctionIdentity.Data;
+using AuctionIdentity.DTO;
 using AuctionIdentity.Interfaces;
-using AuctionServer.Model;
+using AuctionIdentity.Models;
 
 namespace AuctionIdentity.Repository
 {
-    public class UserRepository : IUserRepository
+    internal class UserRepository : IUserRepository
     {
-
+        private readonly DataContext _dataContext;
+        public UserRepository(DataContext dataContext)
+        {
+            _dataContext = dataContext;
+        }
 
         public async Task AddUser(RegisterUserRequest registerUser)
         {
-            User user = new User
+            /*User user = new User
             {
-                Name = registerUser.UserName,
+                Login = registerUser.UserName,
                 Email = registerUser.Email,
-                Password = registerUser.Password;
-            } 
-            _context.Add
+                Password = registerUser.Password
+            };
+            _dataContext.Add(user);
+            _dataContext.SaveChanges();*/
         }
     }
 }
