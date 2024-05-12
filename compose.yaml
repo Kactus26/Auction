@@ -32,6 +32,18 @@ services:
     depends_on:
         db:
             condition: service_healthy
+    
+
+  identity:
+    build:
+      dockerfile: AuctionIdentity/Dockerfile
+      context: .
+      target: final
+    ports:
+      - 8082:8082
+    depends_on:
+        db:
+            condition: service_healthy
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
