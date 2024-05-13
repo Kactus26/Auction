@@ -36,5 +36,11 @@ namespace AuctionIdentity.Controllers
             return Ok();
         }
 
+        [HttpPost("Test")]
+        public async Task<IActionResult> Test(RegisterUserRequest request)
+        {
+            return Ok(request);
+        }
+
     }
 }
