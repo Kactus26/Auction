@@ -1,7 +1,7 @@
-﻿using AuctionServer.Model;
+﻿using AuctionIdentity.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace AuctionServer.Data
+namespace AuctionIdentity.Data
 {
     internal class Seed
     {
@@ -24,12 +24,11 @@ namespace AuctionServer.Data
                 return;
             }
 
+            User user1 = new User() { Login = "Kactus", Email="sasha.baginsky@gmail.com",Password = "1234"};
+            User user2 = new User() { Login = "Odinson", Email="javiest@xdd.com", Password = "52064208" };
 
-            Lot lot = new Lot() { Name = "Stringi", Description = "Worn 3 months" };
-
-            dataContext.AddRange(lot);
+            dataContext.Users.AddRange(user1, user2);
             dataContext.SaveChanges();
-
         }
     }
 }

@@ -1,22 +1,27 @@
-﻿using AuctionIdentity.DTO;
+﻿using AuctionIdentity.Data;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using AuctionIdentity.DTO;
 using AuctionIdentity.Interfaces;
-using AuctionServer.Model;
+using AuctionIdentity.Models;
 
 namespace AuctionIdentity.Repository
 {
-    public class UserRepository : IUserRepository
+    internal class UserRepository : IUserRepository
     {
-
-
-        public async Task AddUser(RegisterUserRequest registerUser)
+        private DataContext _dataContext;
+        public UserRepository(DataContext dataContext)
         {
-            User user = new User
-            {
-                Name = registerUser.UserName,
-                Email = registerUser.Email,
-                Password = registerUser.Password;
-            } 
-            _context.Add
+            _dataContext = dataContext;
+        }
+
+        public async Task AddUser(User user)
+        {
+            await _dataContext.AddAsync(user);
+        }
+
+        public async Task SaveChanges()
+        {
+            await _dataContext.SaveChangesAsync();
         }
     }
 }

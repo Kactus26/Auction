@@ -10,7 +10,7 @@
         Title="Registration" Height="450" Width="350" Background="#202020" ResizeMode="NoResize">
 
     <Window.DataContext>
-        <vm:RegistrationVM/>
+        <vm:RegistrationViewModel/>
     </Window.DataContext>
 
     <TabControl
@@ -39,8 +39,8 @@
                   materialDesign:TextFieldAssist.UnderlineBrush="ForestGreen"
                   Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
 
-                <Button Margin="90,0,90,40" Height="42"
-              Content="Log in" Background="ForestGreen" Foreground="White" VerticalAlignment="Bottom"
+                <Button Margin="90,0,90,40" Height="42" Content="{Binding Text}"
+              Command="{Binding TestCommand}" Background="ForestGreen" Foreground="White" VerticalAlignment="Bottom"
               Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="ForestGreen"/>
 
             </Grid>
