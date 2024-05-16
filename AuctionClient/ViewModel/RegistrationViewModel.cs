@@ -1,5 +1,8 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using AuctionClient.View;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ControlzEx.Standard;
+using System.Windows;
 
 namespace AuctionClient.ViewModel
 {
@@ -11,7 +14,9 @@ namespace AuctionClient.ViewModel
         [RelayCommand]
         public void Test()
         {
-            Text = "dgfgdsgsd";
+            MainWindow window = new MainWindow();
+            window.Show();
+            Application.Current.MainWindow.Close();
         }
     }
 }
