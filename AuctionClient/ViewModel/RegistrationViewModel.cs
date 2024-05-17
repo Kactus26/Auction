@@ -9,14 +9,19 @@ namespace AuctionClient.ViewModel
     public partial class RegistrationViewModel : ObservableObject
     {
         [ObservableProperty]
-        private string text = "sdsafafasf";
+        private string name = "";
+        [ObservableProperty]
+        private string password = "";
+        [ObservableProperty]
+        private string confPassword = "";
 
         [RelayCommand]
         public void Test()
         {
-            MainWindow window = new MainWindow();
+            Name = Password;
+            /*MainWindow window = new MainWindow();
             window.Show();
-            Application.Current.MainWindow.Close();
+            Application.Current.MainWindow.Close();*/
         }
     }
 }

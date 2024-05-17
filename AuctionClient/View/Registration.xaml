@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:AuctionClient.ViewModel"
         xmlns:local="clr-namespace:AuctionClient.View"
         mc:Ignorable="d"
-        Title="Registration" Height="450" Width="350" Background="#202020" ResizeMode="NoResize">
+        Title="Registration" Height="500" Width="365" Background="#202020" ResizeMode="NoResize">
 
     <Window.DataContext>
         <vm:RegistrationViewModel/>
@@ -39,8 +39,8 @@
                   materialDesign:TextFieldAssist.UnderlineBrush="ForestGreen"
                   Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
 
-                <Button Margin="90,0,90,40" Height="42" Content="{Binding Text}"
-              Command="{Binding TestCommand}" Background="ForestGreen" Foreground="White" VerticalAlignment="Bottom"
+              <Button Margin="90,0,90,40" Height="42" Content="Log In"
+              Background="ForestGreen" Foreground="White" VerticalAlignment="Bottom"
               Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="ForestGreen"/>
 
             </Grid>
@@ -49,6 +49,7 @@
         <TabItem Header="Sign up">
             <Grid>
                 <TextBox
+                    Text="{Binding Name}"
                     VerticalAlignment="Center" Margin="50,0,50,270"
                     Foreground="White" FontSize="20"
                     materialDesign:HintAssist.Foreground="White"
@@ -57,13 +58,14 @@
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
                 <PasswordBox
+                    
                     FontSize="20"
                     VerticalAlignment="Center" Margin="50,0,50,120"
                     Foreground="White"
                     materialDesign:HintAssist.Foreground="White"
                     materialDesign:HintAssist.Hint="Password" BorderBrush="ForestGreen"
                     materialDesign:TextFieldAssist.UnderlineBrush="ForestGreen"
-                    Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
+                    Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" PasswordChanged="PasswordChanged"/>
 
                 <PasswordBox
                     FontSize="20"
@@ -73,11 +75,11 @@
                     materialDesign:HintAssist.Hint="Confirm password" BorderBrush="ForestGreen"
                     materialDesign:TextFieldAssist.UnderlineBrush="ForestGreen"
                     Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
-                
+
                 <Button Margin="90,0,90,40" Height="42"
+                    Command="{Binding TestCommand}"
                     Content="Log in" Background="ForestGreen" Foreground="White" VerticalAlignment="Bottom"
                     Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="ForestGreen"/>
-
             </Grid>
         </TabItem>
     </TabControl>
