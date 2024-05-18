@@ -1,5 +1,4 @@
-﻿using AuctionIdentity.DTO;
-using AuctionIdentity.Models;
+﻿using AuctionIdentity.Models;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace AuctionIdentity.Interfaces

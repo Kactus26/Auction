@@ -1,6 +1,5 @@
 ﻿using AuctionIdentity.Data;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using AuctionIdentity.DTO;
 using AuctionIdentity.Interfaces;
 using AuctionIdentity.Models;
 

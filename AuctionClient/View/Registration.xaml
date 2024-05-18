@@ -77,7 +77,7 @@
                     Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
 
                 <Button Margin="90,0,90,40" Height="42"
-                    Command="{Binding TestCommand}"
+                    Command="{Binding RegistrationCommand}"
                     Content="Log in" Background="ForestGreen" Foreground="White" VerticalAlignment="Bottom"
                     Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="ForestGreen"/>
             </Grid>

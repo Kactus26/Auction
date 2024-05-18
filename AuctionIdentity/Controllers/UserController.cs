@@ -1,6 +1,6 @@
-﻿using AuctionIdentity.DTO;
-using AuctionIdentity.Interfaces;
+﻿using AuctionIdentity.Interfaces;
 using AuctionIdentity.Models;
+using Common.DTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuctionIdentity.Controllers
@@ -19,14 +19,14 @@ namespace AuctionIdentity.Controllers
         }
 
         [HttpPost("RegisterUser")]
-        public async Task<IActionResult> RegisterUser(string login, string email, string password)
+        public async Task<IActionResult> RegisterUser(RegisterUserRequest request)
         {
-            string hashedPassword = _passwordHasher.GenereatePassword(password);
+            string hashedPassword = _passwordHasher.GenereatePassword(request.Password);
 
             User user = new User
             {
-                Login = login,
-                Email = email,
+                Login = request.UserName,
+                Email = request.Email,
                 Password = hashedPassword
             };
 
@@ -35,12 +35,5 @@ namespace AuctionIdentity.Controllers
 
             return Ok();
         }
-
-        [HttpPost("Test")]
-        public async Task<IActionResult> Test(RegisterUserRequest request)
-        {
-            return Ok(request);
-        }
-
     }
 }

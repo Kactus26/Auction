@@ -1,4 +1,4 @@
-﻿using AuctionIdentity.DTO;
+﻿using Common.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http;
@@ -6,11 +6,13 @@ using System.Threading;
 
 namespace AuctionGateway.Controllers
 {
-    public class Test : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class IdentityController : Controller
     {
         private readonly HttpClient _httpClient;
 
-        public Test(IHttpClientFactory httpClient) 
+        public IdentityController(IHttpClientFactory httpClient) 
         {
             _httpClient = httpClient.CreateClient("IdentityServer");
         }
@@ -18,7 +20,7 @@ namespace AuctionGateway.Controllers
         [HttpPost("Registration")]
         public async Task<IActionResult> RegistrationUser(RegisterUserRequest request, CancellationToken cancellationToken)
         {
-            var response = await _httpClient.PostAsJsonAsync($"User/Test", request, cancellationToken);
+            var response = await _httpClient.PostAsJsonAsync($"User/RegisterUser", request, cancellationToken);
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception(await response.Content.ReadAsStringAsync(cancellationToken));
