@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
 using System.Windows;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace AuctionClient.ViewModel
 {
@@ -30,12 +31,18 @@ namespace AuctionClient.ViewModel
         [RelayCommand]
         public async Task Registration()
         {
-            RegisterUserRequest test = new RegisterUserRequest() { UserName = "lol", Email = "lol", Password = "123" };
+            RegisterUserRequest test = new RegisterUserRequest() { UserName = "Eeeeeee", Email = "lol", Password = "123" };
 
+            await Post(test);
+        }
+
+        private async Task Post<T>(T request)
+        {
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
-               $"https://localhost:7002/api/Identity/Registration", test);
+                $"https://localhost:7002/api/Identity/Registration", request);
 
             response.EnsureSuccessStatusCode();
         }
+
     }
 }
