@@ -8,7 +8,7 @@ namespace Common.DTO
 {
     public class RegisterUserRequest
     {
-        public required string UserName { get; set; }
+        public required string Login { get; set; }
         public required string Password { get; set; }
         public required string Email { get; set; }
     }

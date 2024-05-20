@@ -28,5 +28,13 @@ namespace AuctionClient.View
                 ((dynamic)DataContext).Password = ((PasswordBox)sender).Password; 
             }
         }
+
+        private void ConfPasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext != null)
+            {
+                ((dynamic)DataContext).ConfPassword = ((PasswordBox)sender).Password;
+            }
+        }
     }
 }

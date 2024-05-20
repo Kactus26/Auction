@@ -3,7 +3,9 @@ using Common.DTO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ControlzEx.Standard;
+using Polly;
 using System;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
@@ -22,26 +24,63 @@ namespace AuctionClient.ViewModel
         }
 
         [ObservableProperty]
-        private string name = "";
+        private string login = "";
+        [ObservableProperty]
+        private string email = "";
         [ObservableProperty]
         private string password = "";
         [ObservableProperty]
         private string confPassword = "";
+        [ObservableProperty]
+        private string errorMessage = "";
 
         [RelayCommand]
         public async Task Registration()
         {
-            RegisterUserRequest test = new RegisterUserRequest() { UserName = "Eeeeeee", Email = "lol", Password = "123" };
+            /*if (Login.Length < 5)
+            {
+                ErrorMessage = "Login length must be higher than 4";
+                return;
+            }
+            else if (Email.Length < 5) //Сделать регулярное выражение
+            {
+                ErrorMessage = "Mail length must be higher than 4";
+                return;
+            }
+            else if (Password.Length < 5)
+            {
+                ErrorMessage = "Password length must be higher than 4";
+                return;
+            }
+            else if (Password != ConfPassword)
+            {
+                ErrorMessage = "Passwords doesn't match";
+                return;
+            }
+            RegisterUserRequest registerUserRequest = new RegisterUserRequest() { Login = Login, Email = Email, Password = Password };*/
 
-            await Post(test);
+            RegisterUserRequest registerUserRequest = new RegisterUserRequest() { Login = "Kactus", Email = "lol", Password = "123"};
+
+            await Post(registerUserRequest, "Registration");
         }
 
-        private async Task Post<T>(T request)
+        private async Task Post<T>(T request, string methodName)
         {
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
-                $"https://localhost:7002/api/Identity/Registration", request);
+            switch (methodName)
+            {
+                case "Registration":
+                    HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
+                        $"https://localhost:7002/api/Identity/Registration", request);
+                    response.EnsureSuccessStatusCode();
+                    break;
+/*                case "CheckUser":
+                    HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
+                        $"https://localhost:7002/api/Identity/CheckUser", request);
+                    break;*/
+            }
 
-            response.EnsureSuccessStatusCode();
+
+            
         }
 
     }
