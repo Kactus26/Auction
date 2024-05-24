@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Reflection.Metadata;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -27,7 +28,7 @@ namespace AuctionClient.ViewModel
         [ObservableProperty]
         private string login = "";
         [ObservableProperty]
-        private string email = "";
+        private string email = "sasha.baginsky@gmail.com";
         [ObservableProperty]
         private string password = "";
         [ObservableProperty]
@@ -38,7 +39,7 @@ namespace AuctionClient.ViewModel
         [RelayCommand]
         public async Task Registration()
         {
-/*            if (Login.Length < 5)
+            if (Login.Length < 5)
             {
                 ErrorMessage = "Login length must be higher than 4";
                 return;
@@ -58,34 +59,34 @@ namespace AuctionClient.ViewModel
                 ErrorMessage = "Passwords doesn't match";
                 return;
             }
-            RegisterUserRequest registerUserRequest = new RegisterUserRequest() { Login = Login, Email = Email, Password = Password };*/
 
-            RegisterUserRequest registerUserRequest = new RegisterUserRequest() { Login = "Kactus", Email = "lol", Password = "123" };
+            Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+            Match match = regex.Match(Email);
+            if (!match.Success)
+            {
+                ErrorMessage = "It's not an email";
+                return;
+            }
+
+            RegisterUserRequest registerUserRequest = new RegisterUserRequest() { Login = Login, Email = Email, Password = Password };
 
             await Post(registerUserRequest, "Registration");
         }
 
-        private async Task Post<T>(T request, string methodName)
+        [RelayCommand]
+        public async Task Authorization()
         {
-            switch (methodName)
-            {
-                case "Registration":
-                    HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
-                        $"https://localhost:7002/api/Identity/Registration", request);
-                    if(!response.IsSuccessStatusCode)
-                    {
-                        ErrorMessage = await response.Content.ReadAsStringAsync();
-                    }
-                    break;
-/*                case "CheckUser":
-                    HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
-                        $"https://localhost:7002/api/Identity/CheckUser", request);
-                    break;*/
-            }
-
-
             
         }
 
+        private async Task Post<T>(T request, string methodName)
+        {
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
+                $"https://localhost:7002/api/Identity/{methodName}", request);
+            if(!response.IsSuccessStatusCode && methodName == "Registration")
+            {
+                ErrorMessage = await response.Content.ReadAsStringAsync();
+            }
+        }
     }
 }

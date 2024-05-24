@@ -40,7 +40,7 @@
                   Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
 
                 <Button Margin="90,328,90,0" Height="42" Content="Log In" FontSize="17"
-              Background="ForestGreen" Foreground="White" VerticalAlignment="Top"
+              Background="ForestGreen" Foreground="White" VerticalAlignment="Top" Command="{Binding AuthorizationCommand}"
               Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="ForestGreen"/>
 
             </Grid>
