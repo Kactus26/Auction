@@ -8,6 +8,7 @@ using System;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Windows;
 using static System.Net.Mime.MediaTypeNames;
@@ -37,7 +38,7 @@ namespace AuctionClient.ViewModel
         [RelayCommand]
         public async Task Registration()
         {
-            /*if (Login.Length < 5)
+/*            if (Login.Length < 5)
             {
                 ErrorMessage = "Login length must be higher than 4";
                 return;
@@ -59,7 +60,7 @@ namespace AuctionClient.ViewModel
             }
             RegisterUserRequest registerUserRequest = new RegisterUserRequest() { Login = Login, Email = Email, Password = Password };*/
 
-            RegisterUserRequest registerUserRequest = new RegisterUserRequest() { Login = "Kactus", Email = "lol", Password = "123"};
+            RegisterUserRequest registerUserRequest = new RegisterUserRequest() { Login = "Kactus", Email = "lol", Password = "123" };
 
             await Post(registerUserRequest, "Registration");
         }
@@ -71,7 +72,10 @@ namespace AuctionClient.ViewModel
                 case "Registration":
                     HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
                         $"https://localhost:7002/api/Identity/Registration", request);
-                    response.EnsureSuccessStatusCode();
+                    if(!response.IsSuccessStatusCode)
+                    {
+                        ErrorMessage = await response.Content.ReadAsStringAsync();
+                    }
                     break;
 /*                case "CheckUser":
                     HttpResponseMessage response = await _httpClient.PostAsJsonAsync(

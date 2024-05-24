@@ -23,7 +23,7 @@ namespace AuctionIdentity.Controllers
         {
             if(!await _userRepository.CheckUserLogin(request.Login))
             {
-                return BadRequest("User with this login already exists");
+                return BadRequest("User with that login already exists");
             }
 
             string hashedPassword = _passwordHasher.GeneratePassword(request.Password);

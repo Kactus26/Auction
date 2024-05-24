@@ -23,9 +23,9 @@ namespace AuctionGateway.Controllers
             var response = await _httpClient.PostAsJsonAsync($"User/RegisterUser", request, cancellationToken);
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception(await response.Content.ReadAsStringAsync(cancellationToken));
+                return BadRequest(await response.Content.ReadAsStringAsync());
             }
-            return Ok(response.Content.ReadAsStringAsync());
+            return Ok(await response.Content.ReadAsStringAsync());
         }
 
     }
