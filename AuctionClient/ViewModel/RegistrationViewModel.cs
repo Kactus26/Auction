@@ -2,17 +2,9 @@
 using Common.DTO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ControlzEx.Standard;
-using Polly;
-using System;
-using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Reflection.Metadata;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Windows;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace AuctionClient.ViewModel
 {
@@ -70,7 +62,12 @@ namespace AuctionClient.ViewModel
 
             RegisterUserRequest registerUserRequest = new RegisterUserRequest() { Login = Login, Email = Email, Password = Password };
 
-            await Post(registerUserRequest, "Registration");
+            if (!await Post(registerUserRequest, "Registration"))
+                return;
+
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+            System.Windows.Application.Current.Windows[0].Close();
         }
 
         [RelayCommand]
@@ -79,14 +76,16 @@ namespace AuctionClient.ViewModel
             
         }
 
-        private async Task Post<T>(T request, string methodName)
+        private async Task<bool> Post<T>(T request, string methodName)
         {
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
                 $"https://localhost:7002/api/Identity/{methodName}", request);
             if(!response.IsSuccessStatusCode && methodName == "Registration")
             {
                 ErrorMessage = await response.Content.ReadAsStringAsync();
+                return false;
             }
+            return true;
         }
     }
 }
