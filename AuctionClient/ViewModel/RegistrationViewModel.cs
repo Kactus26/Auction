@@ -24,31 +24,35 @@ namespace AuctionClient.ViewModel
         [ObservableProperty]
         private string password = "";
         [ObservableProperty]
+        private string passwordReg = "";
+        [ObservableProperty]
         private string confPassword = "";
         [ObservableProperty]
         private string errorMessage = "";
+        [ObservableProperty]
+        private string errorMessageReg = "";
 
         [RelayCommand]
         public async Task Registration()
         {
             if (Login.Length < 5)
             {
-                ErrorMessage = "Login length must be higher than 4";
+                ErrorMessageReg = "Login length must be higher than 4";
                 return;
             }
             else if (Email.Length < 5) //Сделать регулярное выражение
             {
-                ErrorMessage = "Mail length must be higher than 4";
+                ErrorMessageReg = "Mail length must be higher than 4";
                 return;
             }
-            else if (Password.Length < 5)
+            else if (PasswordReg.Length < 5)
             {
-                ErrorMessage = "Password length must be higher than 4";
+                ErrorMessageReg = "Password length must be higher than 4";
                 return;
             }
-            else if (Password != ConfPassword)
+            else if (PasswordReg != ConfPassword)
             {
-                ErrorMessage = "Passwords doesn't match";
+                ErrorMessageReg = "Passwords doesn't match";
                 return;
             }
 
@@ -56,11 +60,11 @@ namespace AuctionClient.ViewModel
             Match match = regex.Match(Email);
             if (!match.Success)
             {
-                ErrorMessage = "It's not an email";
+                ErrorMessageReg = "It's not an email";
                 return;
             }
 
-            RegisterUserRequest registerUserRequest = new RegisterUserRequest() { Login = Login, Email = Email, Password = Password };
+            RegisterUserRequest registerUserRequest = new RegisterUserRequest() { Login = Login, Email = Email, Password = PasswordReg };
 
             if (!await Post(registerUserRequest, "Registration"))
                 return;
@@ -73,18 +77,31 @@ namespace AuctionClient.ViewModel
         [RelayCommand]
         public async Task Authorization()
         {
-            
+            AuthUserRequest authUserRequest = new AuthUserRequest() { Login = Login, Password = Password };
+
+            if (!await Post(authUserRequest, "Authorization"))
+                return;
+
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+            System.Windows.Application.Current.Windows[0].Close();
         }
 
         private async Task<bool> Post<T>(T request, string methodName)
         {
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
                 $"https://localhost:7002/api/Identity/{methodName}", request);
+
             if(!response.IsSuccessStatusCode && methodName == "Registration")
+            {
+                ErrorMessageReg = await response.Content.ReadAsStringAsync();
+                return false;
+            } else if (!response.IsSuccessStatusCode && methodName == "Authorization")
             {
                 ErrorMessage = await response.Content.ReadAsStringAsync();
                 return false;
             }
+
             return true;
         }
     }

@@ -22,7 +22,7 @@
 
         <TabItem Header="Log in">
             <Grid>
-                <TextBox
+                <TextBox Text="{Binding Login}"
                   VerticalAlignment="Center" Margin="50,0,50,210"
                   Foreground="White" FontSize="20"
                   materialDesign:HintAssist.Foreground="White"
@@ -31,17 +31,19 @@
                   Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
                 <PasswordBox
-                  FontSize="20"
+                  FontSize="20" 
                   VerticalAlignment="Center" Margin="50,0,50,0"
                   Foreground="White"
                   materialDesign:HintAssist.Foreground="White"
                   materialDesign:HintAssist.Hint="Password" BorderBrush="ForestGreen"
-                  materialDesign:TextFieldAssist.UnderlineBrush="ForestGreen"
+                  materialDesign:TextFieldAssist.UnderlineBrush="ForestGreen" PasswordChanged="PasswordChanged"
                   Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
 
                 <Button Margin="90,328,90,0" Height="42" Content="Log In" FontSize="17"
               Background="ForestGreen" Foreground="White" VerticalAlignment="Top" Command="{Binding AuthorizationCommand}"
               Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="ForestGreen"/>
+
+                <Label Content="{Binding ErrorMessage}" Foreground="Red" Margin="0,385,0,0" HorizontalAlignment="Center" FontSize="18"/>
 
             </Grid>
         </TabItem>
@@ -74,7 +76,7 @@
                     materialDesign:HintAssist.Foreground="White"
                     materialDesign:HintAssist.Hint="Password" BorderBrush="ForestGreen"
                     materialDesign:TextFieldAssist.UnderlineBrush="ForestGreen"
-                    Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" PasswordChanged="PasswordChanged"/>
+                    Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" PasswordChanged="PasswordChangedReg"/>
 
                 <PasswordBox
                     FontSize="20"
@@ -90,7 +92,7 @@
                     Content="Sign up" Background="ForestGreen" Foreground="White" VerticalAlignment="Top"
                     Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="ForestGreen"/>
 
-                <Label Content="{Binding ErrorMessage}" Foreground="Red" Margin="0,385,0,0" HorizontalAlignment="Center" FontSize="18"/>
+                <Label Content="{Binding ErrorMessageReg}" Foreground="Red" Margin="0,385,0,0" HorizontalAlignment="Center" FontSize="18"/>
 
             </Grid>
         </TabItem>

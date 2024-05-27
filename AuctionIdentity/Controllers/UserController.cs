@@ -40,5 +40,16 @@ namespace AuctionIdentity.Controllers
 
             return Ok();
         }
+        [HttpPost("AuthorizeUser")]
+        public async Task<IActionResult> AuthorizeUser(AuthUserRequest request)
+        {
+            if (await _userRepository.CheckUserLogin(request.Login))
+            {
+                return BadRequest("User with that login doesn't exist");
+            }
+
+
+            return Ok();
+        }
     }
 }

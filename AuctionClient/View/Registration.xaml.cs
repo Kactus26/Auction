@@ -24,8 +24,16 @@ namespace AuctionClient.View
         private void PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (DataContext != null)
+            {
+                ((dynamic)DataContext).Password = ((PasswordBox)sender).Password;
+            }
+        }
+
+        private void PasswordChangedReg(object sender, RoutedEventArgs e)
+        {
+            if (DataContext != null)
             { 
-                ((dynamic)DataContext).Password = ((PasswordBox)sender).Password; 
+                ((dynamic)DataContext).PasswordReg = ((PasswordBox)sender).Password; 
             }
         }
 
