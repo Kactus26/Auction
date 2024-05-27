@@ -26,7 +26,11 @@ namespace AuctionIdentity.Repository
             else
                 return false;
         }
-            
+        
+        public async Task<User> GetUserByLogin(string login)
+        {
+            return await _dataContext.Users.FirstOrDefaultAsync(x => x.Login == login);
+        }
 
         public async Task SaveChanges()
         {

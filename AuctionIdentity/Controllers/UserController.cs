@@ -43,10 +43,17 @@ namespace AuctionIdentity.Controllers
         [HttpPost("AuthorizeUser")]
         public async Task<IActionResult> AuthorizeUser(AuthUserRequest request)
         {
-            if (await _userRepository.CheckUserLogin(request.Login))
+            User user = await _userRepository.GetUserByLogin(request.Login);
+
+            if(user == null)
             {
                 return BadRequest("User with that login doesn't exist");
+            } 
+            else if (!_passwordHasher.Verify(request.Password, user.Password))
+            {
+                return BadRequest("Password is incorrect");
             }
+
 
 
             return Ok();

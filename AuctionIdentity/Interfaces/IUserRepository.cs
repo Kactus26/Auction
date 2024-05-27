@@ -6,6 +6,7 @@ namespace AuctionIdentity.Interfaces
     public interface IUserRepository
     {
         public Task<bool> CheckUserLogin(string login);
+        public Task<User> GetUserByLogin(string login);
         public Task AddUser(User user);
         public Task SaveChanges();
     }
