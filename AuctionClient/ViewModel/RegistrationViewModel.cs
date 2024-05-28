@@ -102,6 +102,7 @@ namespace AuctionClient.ViewModel
                 return false;
             }
 
+            var token = await response.Content.ReadAsStringAsync();
             return true;
         }
     }

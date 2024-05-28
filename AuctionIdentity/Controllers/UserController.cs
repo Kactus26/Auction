@@ -11,11 +11,13 @@ namespace AuctionIdentity.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly IJWTProvider _jwtProvider;
 
-        public UserController(IPasswordHasher passwordHasher, IUserRepository userRepository)
+        public UserController(IPasswordHasher passwordHasher, IUserRepository userRepository, IJWTProvider jwtProvider)
         {
             _passwordHasher = passwordHasher;
             _userRepository = userRepository;
+            _jwtProvider = jwtProvider;
         }
 
         [HttpPost("RegisterUser")]
@@ -54,9 +56,9 @@ namespace AuctionIdentity.Controllers
                 return BadRequest("Password is incorrect");
             }
 
+            string token = _jwtProvider.GenerateToken(user);
 
-
-            return Ok();
+            return Ok(token);
         }
     }
 }
