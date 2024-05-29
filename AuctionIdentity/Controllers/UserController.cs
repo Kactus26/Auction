@@ -1,6 +1,7 @@
 ﻿using AuctionIdentity.Interfaces;
 using AuctionIdentity.Models;
 using Common.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuctionIdentity.Controllers
@@ -42,6 +43,7 @@ namespace AuctionIdentity.Controllers
 
             return Ok();
         }
+
         [HttpPost("AuthorizeUser")]
         public async Task<IActionResult> AuthorizeUser(AuthUserRequest request)
         {
@@ -60,5 +62,12 @@ namespace AuctionIdentity.Controllers
 
             return Ok(token);
         }
+
+        [HttpPost("TestAuth")]
+        public async Task<IActionResult> TestAuth()
+        {
+            return Ok("Method is working");
+        }
+
     }
 }

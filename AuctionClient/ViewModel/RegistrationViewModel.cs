@@ -77,14 +77,16 @@ namespace AuctionClient.ViewModel
         [RelayCommand]
         public async Task Authorization()
         {
-            AuthUserRequest authUserRequest = new AuthUserRequest() { Login = Login, Password = Password };
+            await Post(1, "TestAuthGateway");
+
+            /*AuthUserRequest authUserRequest = new AuthUserRequest() { Login = Login, Password = Password };
 
             if (!await Post(authUserRequest, "Authorization"))
                 return;
 
             MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
-            System.Windows.Application.Current.Windows[0].Close();
+            System.Windows.Application.Current.Windows[0].Close();*/
         }
 
         private async Task<bool> Post<T>(T request, string methodName)
@@ -92,15 +94,17 @@ namespace AuctionClient.ViewModel
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
                 $"https://localhost:7002/api/Identity/{methodName}", request);
 
-            if(!response.IsSuccessStatusCode && methodName == "Registration")
-            {
-                ErrorMessageReg = await response.Content.ReadAsStringAsync();
-                return false;
-            } else if (!response.IsSuccessStatusCode && methodName == "Authorization")
-            {
-                ErrorMessage = await response.Content.ReadAsStringAsync();
-                return false;
-            }
+            /* if(!response.IsSuccessStatusCode && methodName == "Registration")
+             {
+                 ErrorMessageReg = await response.Content.ReadAsStringAsync();
+                 return false;
+             } else if (!response.IsSuccessStatusCode && methodName == "Authorization")
+             {
+                 ErrorMessage = await response.Content.ReadAsStringAsync();
+                 return false;
+             }*/
+
+            ErrorMessage = await response.Content.ReadAsStringAsync();
 
             var token = await response.Content.ReadAsStringAsync();
             return true;
