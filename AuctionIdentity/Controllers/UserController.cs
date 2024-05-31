@@ -60,6 +60,8 @@ namespace AuctionIdentity.Controllers
 
             string token = _jwtProvider.GenerateToken(user);
 
+
+
             return Ok(token);
         }
 

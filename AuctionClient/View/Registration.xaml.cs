@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AuctionClient.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,9 +17,18 @@ namespace AuctionClient.View
 {
     public partial class Registration : Window
     {
+
+        ApplicationContext db = new ApplicationContext();
         public Registration()
         {
             InitializeComponent();
+            Loaded += MainWindow_Loaded;
+
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            db.Database.EnsureCreated();
         }
 
         private void PasswordChanged(object sender, RoutedEventArgs e)
