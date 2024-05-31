@@ -8,7 +8,7 @@ namespace AuctionClient.Data
 {
     internal class LoggedUser
     {
-        public int Id { get; set; }
+        public int Id { get; set; } = 1;
         public string JWTToken { get; set; }
     }
 }
