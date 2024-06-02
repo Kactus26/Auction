@@ -17,8 +17,10 @@ namespace AuctionClient.ViewModel
         public RegistrationViewModel()
         {
             _httpClient = new HttpClient();
-/*            var test = db.Find<LoggedUser>(1);
-*/        }
+            LoggedUser loggedUser = db.Find<LoggedUser>(1)!;
+            if (loggedUser != null)
+                ChangeWindow();
+        }
 
         [ObservableProperty]
         private string login = "";
@@ -72,9 +74,7 @@ namespace AuctionClient.ViewModel
             if (!await Post(registerUserRequest, "Registration"))
                 return;
 
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show();
-            System.Windows.Application.Current.Windows[0].Close();
+            ChangeWindow();
         }
 
         [RelayCommand]
@@ -87,9 +87,7 @@ namespace AuctionClient.ViewModel
             if (!await Post(authUserRequest, "Authorization"))
                 return;
 
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Show();
-            System.Windows.Application.Current.Windows[0].Close();
+            ChangeWindow();
         }
 
         private async Task<bool> Post<T>(T request, string methodName)
@@ -107,15 +105,27 @@ namespace AuctionClient.ViewModel
                 ErrorMessage = await response.Content.ReadAsStringAsync();
                 return false;
             }
+            else if (!response.IsSuccessStatusCode)
+            {
+                ErrorMessage = await response.Content.ReadAsStringAsync();
 
-            ErrorMessage = await response.Content.ReadAsStringAsync();
+                ErrorMessage = await response.Content.ReadAsStringAsync();
+                return false;
+            }
 
-            var token = await response.Content.ReadAsStringAsync();
+            string token = await response.Content.ReadAsStringAsync();
             LoggedUser user = new LoggedUser { JWTToken = token };
             db.Add(user);
             db.SaveChanges();
 
             return true;
+        }
+
+        private void ChangeWindow()
+        {
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+            System.Windows.Application.Current.Windows[0].Close();
         }
     }
 }
