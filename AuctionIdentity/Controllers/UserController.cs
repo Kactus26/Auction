@@ -41,7 +41,9 @@ namespace AuctionIdentity.Controllers
             await _userRepository.AddUser(user);
             await _userRepository.SaveChanges();
 
-            return Ok();
+            string token = _jwtProvider.GenerateToken(user);
+
+            return Ok(token);
         }
 
         [HttpPost("AuthorizeUser")]

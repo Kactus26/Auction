@@ -17,10 +17,21 @@ namespace AuctionClient.ViewModel
 
         public RegistrationViewModel()
         {
+            db.Database.EnsureCreated();
             _httpClient = new HttpClient();
-/*            LoggedUser loggedUser = db.Find<LoggedUser>(1)!;
-            if (loggedUser != null)
-                ChangeWindow();*/
+            CheckToken();
+        }
+
+        public async void CheckToken()
+        {
+            LoggedUser lu = db.Find<LoggedUser>(1)!;
+            if (lu != null)
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", lu.JWTToken);
+
+                if (await Post(1, "TestAuthGateway"))
+                    ChangeWindow();
+            }
         }
 
         [ObservableProperty]
@@ -81,21 +92,16 @@ namespace AuctionClient.ViewModel
         [RelayCommand]
         public async Task Authorization()
         {
-            LoggedUser lg = db.Find<LoggedUser>(1)!;
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", lg.JWTToken);
-
-            await Post(1, "TestAuthGateway");
-
-/*            AuthUserRequest authUserRequest = new AuthUserRequest() { Login = Login, Password = Password };
+            AuthUserRequest authUserRequest = new AuthUserRequest() { Login = Login, Password = Password };
 
             if (!await Post(authUserRequest, "Authorization"))
                 return;
 
-            ChangeWindow();*/
+            ChangeWindow();
         }
 
         private async Task<bool> Post<T>(T request, string methodName)
-        {
+         {
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
                 $"https://localhost:7002/api/Identity/{methodName}", request);
 
@@ -113,11 +119,14 @@ namespace AuctionClient.ViewModel
                 ErrorMessage = await response.Content.ReadAsStringAsync();
                 return false;
             }
-                
-            string token = await response.Content.ReadAsStringAsync();
-            LoggedUser user = new LoggedUser { JWTToken = token };
-            db.Add(user);
-            db.SaveChanges();
+
+            if (methodName == "Registration" || methodName == "Authorization")
+            {
+                string token = await response.Content.ReadAsStringAsync();
+                LoggedUser user = new LoggedUser { JWTToken = token };
+                db.Add(user);
+                db.SaveChanges();
+            }
 
             return true;
         }
