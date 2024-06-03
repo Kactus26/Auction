@@ -86,7 +86,7 @@ namespace AuctionClient.ViewModel
 
             await Post(1, "TestAuthGateway");
 
-            /*AuthUserRequest authUserRequest = new AuthUserRequest() { Login = Login, Password = Password };
+/*            AuthUserRequest authUserRequest = new AuthUserRequest() { Login = Login, Password = Password };
 
             if (!await Post(authUserRequest, "Authorization"))
                 return;

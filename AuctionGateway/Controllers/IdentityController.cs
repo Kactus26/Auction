@@ -45,6 +45,8 @@ namespace AuctionGateway.Controllers
         [Authorize]
         public async Task<IActionResult> TestAuthGateway(int request, CancellationToken cancellationToken)
         {
+            var test = User.Claims.ToList();
+
             var response = await _httpClient.PostAsJsonAsync($"User/TestAuth", request, cancellationToken);
             if (!response.IsSuccessStatusCode)
             {
