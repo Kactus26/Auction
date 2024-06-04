@@ -1,4 +1,5 @@
 ﻿using Common.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http;
@@ -23,10 +24,28 @@ namespace AuctionGateway.Controllers
             var response = await _httpClient.PostAsJsonAsync($"User/RegisterUser", request, cancellationToken);
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception(await response.Content.ReadAsStringAsync(cancellationToken));
+                return BadRequest(await response.Content.ReadAsStringAsync());
             }
-            return Ok(response.Content.ReadAsStringAsync());
+            return Ok(await response.Content.ReadAsStringAsync());
         }
 
+        [HttpPost("Authorization")]
+        public async Task<IActionResult> Authorization(AuthUserRequest request, CancellationToken cancellationToken)
+        {
+            var response = await _httpClient.PostAsJsonAsync($"User/AuthorizeUser", request, cancellationToken);
+            if (!response.IsSuccessStatusCode)
+            {
+                return BadRequest(await response.Content.ReadAsStringAsync());
+            }
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
+
+        [HttpPost("TestAuthGateway")]
+        [Authorize]
+        public async Task<IActionResult> TestAuthGateway()
+        {
+            return Ok();
+        }
     }
 }

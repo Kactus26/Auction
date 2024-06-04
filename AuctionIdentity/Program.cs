@@ -10,6 +10,8 @@ builder.Services.AddControllers();
 builder.Services.AddTransient<Seed>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasherService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IJWTProvider, JWTProvider>();
+
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();

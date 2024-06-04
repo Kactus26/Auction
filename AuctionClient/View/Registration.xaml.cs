@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AuctionClient.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ namespace AuctionClient.View
 {
     public partial class Registration : Window
     {
+
         public Registration()
         {
             InitializeComponent();
@@ -24,8 +26,24 @@ namespace AuctionClient.View
         private void PasswordChanged(object sender, RoutedEventArgs e)
         {
             if (DataContext != null)
+            {
+                ((dynamic)DataContext).Password = ((PasswordBox)sender).Password;
+            }
+        }
+
+        private void PasswordChangedReg(object sender, RoutedEventArgs e)
+        {
+            if (DataContext != null)
             { 
-                ((dynamic)DataContext).Password = ((PasswordBox)sender).Password; 
+                ((dynamic)DataContext).PasswordReg = ((PasswordBox)sender).Password; 
+            }
+        }
+
+        private void ConfPasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (DataContext != null)
+            {
+                ((dynamic)DataContext).ConfPassword = ((PasswordBox)sender).Password;
             }
         }
     }

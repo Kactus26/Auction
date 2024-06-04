@@ -1,48 +1,148 @@
-﻿using AuctionClient.View;
+﻿using AuctionClient.Data;
+using AuctionClient.View;
 using Common.DTO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ControlzEx.Standard;
-using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
-using System.Windows;
-using static System.Net.Mime.MediaTypeNames;
+using System.Text.RegularExpressions;
 
 namespace AuctionClient.ViewModel
 {
     public partial class RegistrationViewModel : ObservableObject
     {
         private readonly HttpClient _httpClient;
+        ApplicationContext db = new ApplicationContext();
 
         public RegistrationViewModel()
         {
+            db.Database.EnsureCreated();
             _httpClient = new HttpClient();
+            CheckToken();
+        }
+
+        public async void CheckToken()
+        {
+            LoggedUser lu = db.Find<LoggedUser>(1)!;
+            if (lu != null)
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", lu.JWTToken);
+
+                if (await Post(1, "TestAuthGateway"))
+                    ChangeWindow();
+                else
+                {
+                    db.Remove(lu);
+                    db.SaveChanges();
+                }
+                    
+            }
         }
 
         [ObservableProperty]
-        private string name = "";
+        private string login = "";
+        [ObservableProperty]
+        private string email = "sasha.baginsky@gmail.com";
         [ObservableProperty]
         private string password = "";
         [ObservableProperty]
+        private string passwordReg = "";
+        [ObservableProperty]
         private string confPassword = "";
+        [ObservableProperty]
+        private string errorMessage = "";
+        [ObservableProperty]
+        private string errorMessageReg = "";
 
         [RelayCommand]
         public async Task Registration()
         {
-            RegisterUserRequest test = new RegisterUserRequest() { UserName = "Eeeeeee", Email = "lol", Password = "123" };
+            if (Login.Length < 5)
+            {
+                ErrorMessageReg = "Login length must be higher than 4";
+                return;
+            }
+            else if (Email.Length < 5) //Сделать регулярное выражение
+            {
+                ErrorMessageReg = "Mail length must be higher than 4";
+                return;
+            }
+            else if (PasswordReg.Length < 5)
+            {
+                ErrorMessageReg = "Password length must be higher than 4";
+                return;
+            }
+            else if (PasswordReg != ConfPassword)
+            {
+                ErrorMessageReg = "Passwords don't match";
+                return;
+            }
 
-            await Post(test);
+            Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+            Match match = regex.Match(Email);
+            if (!match.Success)
+            {
+                ErrorMessageReg = "It's not an email";
+                return;
+            }
+
+            RegisterUserRequest registerUserRequest = new RegisterUserRequest() { Login = Login, Email = Email, Password = PasswordReg };
+
+            if (!await Post(registerUserRequest, "Registration"))
+                return;
+
+            ChangeWindow();
         }
 
-        private async Task Post<T>(T request)
+        [RelayCommand]
+        public async Task Authorization()
         {
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
-                $"https://localhost:7002/api/Identity/Registration", request);
+            AuthUserRequest authUserRequest = new AuthUserRequest() { Login = Login, Password = Password };
 
-            response.EnsureSuccessStatusCode();
+            if (!await Post(authUserRequest, "Authorization"))
+                return;
+
+            ChangeWindow();
         }
 
+        private async Task<bool> Post<T>(T request, string methodName)
+         {
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
+                $"https://localhost:7002/api/Identity/{methodName}", request);
+
+            if (!response.IsSuccessStatusCode && methodName == "Registration")
+            {
+                ErrorMessageReg = await response.Content.ReadAsStringAsync();
+                return false;
+            }
+            else if (!response.IsSuccessStatusCode && methodName == "Authorization")
+            {
+                ErrorMessage = await response.Content.ReadAsStringAsync();
+                return false;
+            } else if (!response.IsSuccessStatusCode)
+            {
+                ErrorMessage = await response.Content.ReadAsStringAsync();
+                return false;
+            }
+
+            if (methodName == "Registration" || methodName == "Authorization")
+            {
+                string token = await response.Content.ReadAsStringAsync();
+                LoggedUser user = new LoggedUser { JWTToken = token };
+                db.Add(user);
+                db.SaveChanges();
+            }
+
+            return true;
+        }
+
+        [RelayCommand]
+        private void ChangeWindow()
+        {
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+            System.Windows.Application.Current.Windows[0].Close();
+        }
     }
 }
