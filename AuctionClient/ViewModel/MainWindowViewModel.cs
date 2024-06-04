@@ -18,8 +18,10 @@ namespace AuctionClient.ViewModel
         public void ExitFromAccount()
         {
             LoggedUser loggedUser = db.Find<LoggedUser>(1)!;
-            db.Remove(loggedUser);
-            db.SaveChanges();
+            if(loggedUser != null) { 
+                db.Remove(loggedUser);
+                db.SaveChanges();
+            }
 
             Registration regWindow = new Registration();
             regWindow.Show();

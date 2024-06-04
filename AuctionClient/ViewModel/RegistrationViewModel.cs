@@ -31,6 +31,12 @@ namespace AuctionClient.ViewModel
 
                 if (await Post(1, "TestAuthGateway"))
                     ChangeWindow();
+                else
+                {
+                    db.Remove(lu);
+                    db.SaveChanges();
+                }
+                    
             }
         }
 
@@ -69,7 +75,7 @@ namespace AuctionClient.ViewModel
             }
             else if (PasswordReg != ConfPassword)
             {
-                ErrorMessageReg = "Passwords doesn't match";
+                ErrorMessageReg = "Passwords don't match";
                 return;
             }
 
@@ -131,6 +137,7 @@ namespace AuctionClient.ViewModel
             return true;
         }
 
+        [RelayCommand]
         private void ChangeWindow()
         {
             MainWindow mainWindow = new MainWindow();
