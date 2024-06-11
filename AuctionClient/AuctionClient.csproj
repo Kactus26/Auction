@@ -22,4 +22,8 @@
     <ProjectReference Include="..\Common.DTO\Common.DTO.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="View\UserControl\" />
+  </ItemGroup>
+
 </Project>

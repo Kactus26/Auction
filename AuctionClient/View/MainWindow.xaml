@@ -13,7 +13,35 @@
     </Window.DataContext>
 
     <Grid>
-        <Label>Yeeeeeeeeeeeeeee</Label>
-        <Button Content="Exit" Command="{Binding ExitFromAccountCommand}"/>
+
+
+        <!-- Панель вкладок слева -->
+        <TabControl Grid.Column="0" Background="Green" TabStripPlacement="Left">
+            <TabControl.Resources>
+                <Style TargetType="TabItem" BasedOn="{StaticResource MaterialDesignTabItem}">
+                    <Setter Property="Background" Value="Green"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Style>
+            </TabControl.Resources>
+            <TabItem Header="Вкладка 1">
+                <Grid Grid.Column="1">
+                    <Grid>
+                        <Label>Yeeeeeeeeeeeeeee</Label>
+                        <Button Content="Exit" Command="{Binding ExitFromAccountCommand}"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Вкладка 2">
+            </TabItem>
+            <TabItem Header="Вкладка 3">
+                <TextBlock Text="Содержимое вкладки 3" />
+            </TabItem>
+        </TabControl>
+
+        <!-- Основное содержимое -->
+        
     </Grid>
+    
+    
+    
 </Window>
