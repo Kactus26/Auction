@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="View\UserControl\**" />
+    <EmbeddedResource Remove="View\UserControl\**" />
+    <None Remove="View\UserControl\**" />
+    <Page Remove="View\UserControl\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="MaterialDesignThemes" Version="5.0.0" />
     <PackageReference Include="MaterialDesignThemes.MahApps" Version="1.0.0" />
@@ -20,10 +27,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common.DTO\Common.DTO.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="View\UserControl\" />
   </ItemGroup>
 
 </Project>

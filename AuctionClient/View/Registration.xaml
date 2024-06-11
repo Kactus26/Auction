@@ -22,7 +22,6 @@
 
         <TabItem Header="Log in">
             <Grid>
-                
                 <TextBox Text="{Binding Login}"
                   VerticalAlignment="Center" Margin="50,0,50,300"
                   Foreground="White" FontSize="20"
