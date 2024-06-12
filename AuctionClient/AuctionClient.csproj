@@ -16,6 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Images\Guest.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="MaterialDesignThemes" Version="5.0.0" />
     <PackageReference Include="MaterialDesignThemes.MahApps" Version="1.0.0" />
@@ -27,6 +31,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common.DTO\Common.DTO.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\Guest.jpg" />
   </ItemGroup>
 
 </Project>

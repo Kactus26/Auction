@@ -23,7 +23,7 @@
         <TabItem Header="Log in">
             <Grid>
                 <TextBox Text="{Binding Login}"
-                  VerticalAlignment="Center" Margin="50,0,50,300"
+                  VerticalAlignment="Center" Margin="50,0,50,290"
                   Foreground="White" FontSize="20"
                   materialDesign:HintAssist.Foreground="White"
                   materialDesign:HintAssist.Hint="Login" BorderBrush="ForestGreen"
@@ -32,18 +32,18 @@
 
                 <PasswordBox
                   FontSize="20" 
-                  VerticalAlignment="Center" Margin="50,0,50,105"
+                  VerticalAlignment="Center" Margin="50,0,50,90"
                   Foreground="White"
                   materialDesign:HintAssist.Foreground="White"
                   materialDesign:HintAssist.Hint="Password" BorderBrush="ForestGreen"
                   materialDesign:TextFieldAssist.UnderlineBrush="ForestGreen" PasswordChanged="PasswordChanged"
                   Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
 
-                <Button Margin="90,250,90,0" Height="42" Content="Log In" FontSize="17"
+                <Button Margin="90,270,90,0" Height="42" Content="Log In" FontSize="17"
                 Background="ForestGreen" Foreground="White" VerticalAlignment="Top" Command="{Binding AuthorizationCommand}"
                 Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="ForestGreen"/>
 
-                <Button Margin="90,320,90,0" Height="42" Content="Enter as guest" FontSize="17"
+                <Button Margin="90,340,90,0" Height="42" Content="Enter as guest" FontSize="17"
                 Background="#202020" Foreground="White" VerticalAlignment="Top" Command="{Binding ChangeWindowCommand}"
                 Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="ForestGreen"/>
 

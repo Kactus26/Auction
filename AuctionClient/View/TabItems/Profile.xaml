@@ -3,10 +3,24 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:AuctionClient.ViewModel.TabItems"
              xmlns:local="clr-namespace:AuctionClient.View.TabItems"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.DataContext>
+        <vm:ProfileViewModel/>
+    </UserControl.DataContext>
+
     <Grid>
-        <TextBlock Background="White"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="2">
+            <Image Source="{Binding UserImage}"/>
+            <Button Content="Exit" BorderBrush="ForestGreen" Background="ForestGreen" Command="{Binding ExitFromAccountCommand}"/>
+        </Grid>
     </Grid>
 </UserControl>
