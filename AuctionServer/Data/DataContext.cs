@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AuctionServer.Data
 {
-    internal class DataContext : DbContext
+    public class DataContext : DbContext
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {

@@ -3,6 +3,7 @@ using CommonDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace AuctionGateway.Controllers
 {
@@ -20,8 +21,11 @@ namespace AuctionGateway.Controllers
         [HttpGet("GetUserData")]
         public async Task<IActionResult> GetUserData(CancellationToken cancellationToken)
         {
-/*            User.Identities.First().Claims.First().Value;
-*/            var response = await _httpClient.GetAsync($"Data/GetUserData", cancellationToken);
+            string jwt = Request.Headers.Authorization!;
+            var test = jwt.Substring(7);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", test);
+
+            var response = await _httpClient.GetAsync($"Data/GetUserData", cancellationToken);
             if (!response.IsSuccessStatusCode)
             {
                 return BadRequest(await response.Content.ReadAsStringAsync());

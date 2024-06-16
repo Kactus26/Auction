@@ -25,9 +25,10 @@ namespace AuctionServer.Data
             }
 
 
-            Lot lot = new Lot() { Name = "Stringi", Description = "Worn 3 months" };
+            User user1 = new User() { Name = "Kactus", Email = "sasha.baginsky@gmail.com" };
+            User user2 = new User() { Name = "Odinson", Email = "javiest@xdd.com" };
 
-            dataContext.AddRange(lot);
+            dataContext.Users.AddRange(user1, user2);
             dataContext.SaveChanges();
 
         }

@@ -13,6 +13,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace AuctionClient.ViewModel.TabItems
@@ -20,6 +21,18 @@ namespace AuctionClient.ViewModel.TabItems
     public partial class ProfileViewModel : ObservableObject
     {
         [ObservableProperty]
+        public string name = "";
+        [ObservableProperty]
+        public string surName = "";
+        [ObservableProperty]
+        public string email = "";
+        [ObservableProperty]
+        public string description = "";
+        [ObservableProperty]
+        public double balance;
+        [ObservableProperty]
+        public string userImage;
+        private string ErrorMessage {  get; set; }
         public string name = "";
         [ObservableProperty]
         public string surName = "";
