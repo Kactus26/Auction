@@ -4,10 +4,12 @@ using SignalRTest;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
 builder.Services.AddSignalR();
-
 builder.Services.AddTransient<Seed>();
 
+builder.Services.AddSwaggerGen();
+builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
@@ -26,5 +28,10 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 
 app.MapHub<ChatHub>("/chat");
+
+app.UseSwagger();
+app.UseSwaggerUI();
+app.MapControllers();
+
 
 app.Run();

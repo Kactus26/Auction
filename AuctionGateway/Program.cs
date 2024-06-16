@@ -17,6 +17,10 @@ builder.Services.AddHttpClient("IdentityServer", c =>
 {
     c.BaseAddress = new Uri(builder.Configuration.GetValue<string>("IdentityServerUrl")! + "/api/");
 });
+builder.Services.AddHttpClient("AuctionServer", c =>
+{
+    c.BaseAddress = new Uri(builder.Configuration.GetValue<string>("AuctionServerUrl")! + "/api/");
+});
 
 
 builder.Services.AddAuthorization();

@@ -96,7 +96,7 @@
                     Content="Sign up" Background="ForestGreen" Foreground="White" VerticalAlignment="Top"
                     Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="ForestGreen"/>
 
-                <Label Content="{Binding ErrorMessageReg}" Foreground="Red" Margin="0,385,0,0" HorizontalAlignment="Center" FontSize="18"/>
+                <Label Content="{Binding ErrorMessageReg}" Foreground="Red" Margin="0,410,0,0" HorizontalAlignment="Center" FontSize="18"/>
 
             </Grid>
         </TabItem>

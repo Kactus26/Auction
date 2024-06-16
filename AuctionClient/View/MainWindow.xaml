@@ -12,7 +12,7 @@
     <Grid>
 
         <TabControl TabStripPlacement="Left" Grid.Column="0" Width="Auto"
-            materialDesign:ColorZoneAssist.Foreground="ForestGreen"
+            materialDesign:ColorZoneAssist.Foreground="White"
             materialDesign:ColorZoneAssist.Mode="Custom"
             materialDesign:ColorZoneAssist.Background="#303030"
             Style="{StaticResource MaterialDesignFilledTabControl}">
@@ -24,6 +24,9 @@
             </TabItem>
             <TabItem Header="Profile">
                 <t:Profile/>
+            </TabItem>
+            <TabItem Header="Friends">
+
             </TabItem>
         </TabControl>
     </Grid>

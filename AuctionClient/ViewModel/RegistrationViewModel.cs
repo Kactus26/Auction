@@ -63,7 +63,7 @@ namespace AuctionClient.ViewModel
                 ErrorMessageReg = "Login length must be higher than 4";
                 return;
             }
-            else if (Email.Length < 5) //Сделать регулярное выражение
+            else if (Email.Length < 5)
             {
                 ErrorMessageReg = "Mail length must be higher than 4";
                 return;
