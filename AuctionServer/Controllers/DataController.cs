@@ -9,13 +9,9 @@ namespace AuctionServer.Controllers
         [HttpGet("GetUserData")]
         public async Task<IActionResult> GetUserData()
         {
-            Obj test = new Obj { Name = "sdsd", Value = "dsdsds"};
+            
 
             return Ok(test);
         }
     }
-}
-class Obj
-{    public string Name { get; set; }
-    public string Value { get; set; }
 }

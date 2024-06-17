@@ -2,6 +2,7 @@ using AuctionIdentity.Data;
 using AuctionIdentity.Interfaces;
 using AuctionIdentity.Repository;
 using AuctionIdentity.Services;
+using Common.DTO.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,8 @@ builder.Services.AddTransient<Seed>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasherService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJWTProvider, JWTProvider>();
+
+builder.Services.AddAutoMapper(typeof(Mapper).Assembly);
 
 
 builder.Services.AddSwaggerGen();

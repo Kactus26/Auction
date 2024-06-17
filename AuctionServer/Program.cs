@@ -1,4 +1,5 @@
 using AuctionServer.Data;
+
 using Microsoft.EntityFrameworkCore;
 using SignalRTest;
 
@@ -8,8 +9,11 @@ builder.Services.AddControllers();
 builder.Services.AddSignalR();
 builder.Services.AddTransient<Seed>();
 
+builder.Services.AddAutoMapper(typeof(Mapper).Assembly);
+
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
+
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
