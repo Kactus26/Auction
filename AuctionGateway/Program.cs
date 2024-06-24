@@ -1,4 +1,4 @@
-using Common.DTO.Services;
+using CommonDTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -8,8 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddAutoMapper(typeof(Mapper).Assembly);
-
+/*builder.Services.AddAutoMapper(typeof(Mapper).Assembly);
+*/
 builder.Services.AddHttpClient("IdentityServer", c =>
 {
     c.BaseAddress = new Uri(builder.Configuration.GetValue<string>("IdentityServerUrl")! + "/api/");

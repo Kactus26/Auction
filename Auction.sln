@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionIdentity", "AuctionI
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionGateway", "AuctionGateway\AuctionGateway.csproj", "{3CD23306-5718-4199-B028-5BC8B49554FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.DTO", "Common.DTO\Common.DTO.csproj", "{313C2560-408B-4DEB-B3AC-0538CEBD9B36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonDTO", "Test2\CommonDTO.csproj", "{AC383FA4-D1A7-46DE-9548-11919AA251EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{3CD23306-5718-4199-B028-5BC8B49554FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CD23306-5718-4199-B028-5BC8B49554FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CD23306-5718-4199-B028-5BC8B49554FF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{313C2560-408B-4DEB-B3AC-0538CEBD9B36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{313C2560-408B-4DEB-B3AC-0538CEBD9B36}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{313C2560-408B-4DEB-B3AC-0538CEBD9B36}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{313C2560-408B-4DEB-B3AC-0538CEBD9B36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC383FA4-D1A7-46DE-9548-11919AA251EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC383FA4-D1A7-46DE-9548-11919AA251EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC383FA4-D1A7-46DE-9548-11919AA251EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC383FA4-D1A7-46DE-9548-11919AA251EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

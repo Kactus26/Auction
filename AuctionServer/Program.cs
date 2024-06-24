@@ -1,7 +1,8 @@
 using AuctionServer.Data;
-
+using AuctionServer.Services;
 using Microsoft.EntityFrameworkCore;
 using SignalRTest;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddSignalR();
 builder.Services.AddTransient<Seed>();
 
-builder.Services.AddAutoMapper(typeof(Mapper).Assembly);
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
