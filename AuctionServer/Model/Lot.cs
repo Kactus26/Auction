@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AuctionServer.Model
+﻿namespace AuctionServer.Model
 {
-    internal class Lot
+    public class Lot
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;

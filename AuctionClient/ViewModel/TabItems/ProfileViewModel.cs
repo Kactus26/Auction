@@ -1,7 +1,9 @@
 ﻿using AuctionClient.Data;
 using AuctionClient.View;
+using CommonDTO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +13,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace AuctionClient.ViewModel.TabItems
 {
@@ -27,8 +30,8 @@ namespace AuctionClient.ViewModel.TabItems
         [ObservableProperty]
         public double balance;
         [ObservableProperty]
-        public string userImage;
-        private string ErrorMessage {  get; set; }
+        public string? userImage;
+        private string? ErrorMessage {  get; set; }
 
         private readonly HttpClient _httpClient;
         ApplicationContext db = new ApplicationContext();
@@ -44,28 +47,27 @@ namespace AuctionClient.ViewModel.TabItems
             }
             else
                 ProfileForGuest();
-
         }
 
         private async void GetUserData()
         {
-            await Get("GetUserData");
-        }
-
-        private async Task<bool> Get(string methodName)
-        {
-            HttpResponseMessage response = await _httpClient.GetAsync(
-                $"https://localhost:7002/api/Data/{methodName}");
+            HttpResponseMessage response = await _httpClient.GetAsync($"https://localhost:7002/api/Data/GetUserData");
 
             if (!response.IsSuccessStatusCode)
             {
                 ErrorMessage = await response.Content.ReadAsStringAsync();
                 MessageBox.Show(ErrorMessage);
-                return false;
+                return;
             }
 
-            var test = await response.Content.ReadAsStringAsync();
-            return true;
+            UserProfileDTO userData = JsonConvert.DeserializeObject<UserProfileDTO>(await response.Content.ReadAsStringAsync())!;
+
+            Name = userData.Name;
+            SurName = userData.Surname;
+            Email = userData.Email;
+            Description = userData.Info;
+            Balance = userData.Balance;
+            UserImage = userData.ImageUrl;
         }
 
         private async Task<bool> Post<T>(T request, string methodName)

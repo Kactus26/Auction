@@ -1,6 +1,6 @@
 ﻿using AuctionIdentity.Interfaces;
 using AuctionIdentity.Models;
-using Common.DTO;
+using CommonDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -64,12 +64,5 @@ namespace AuctionIdentity.Controllers
 
             return Ok(token);
         }
-
-        [HttpGet("TestAuth")]
-        public async Task<IActionResult> TestAuth()
-        {
-            return Ok("Method is working");
-        }
-
     }
 }

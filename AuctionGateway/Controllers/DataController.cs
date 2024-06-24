@@ -1,4 +1,5 @@
-﻿using Common.DTO;
+﻿using AutoMapper;
+using CommonDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
@@ -19,7 +20,8 @@ namespace AuctionGateway.Controllers
         [HttpGet("GetUserData")]
         public async Task<IActionResult> GetUserData(CancellationToken cancellationToken)
         {
-            var response = await _httpClient.GetAsync($"Data/GetUserData", cancellationToken);
+/*            User.Identities.First().Claims.First().Value;
+*/            var response = await _httpClient.GetAsync($"Data/GetUserData", cancellationToken);
             if (!response.IsSuccessStatusCode)
             {
                 return BadRequest(await response.Content.ReadAsStringAsync());

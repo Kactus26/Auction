@@ -1,4 +1,4 @@
-﻿using Common.DTO;
+﻿using CommonDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -42,8 +42,8 @@ namespace AuctionGateway.Controllers
 
 
         [HttpPost("TestAuthGateway")]
-        [Authorize]
-        public async Task<IActionResult> TestAuthGateway()
+        [Authorize]//Метод необхом для проверки действительности токена юзера
+        public IActionResult TestAuthGateway()
         {
             return Ok();
         }

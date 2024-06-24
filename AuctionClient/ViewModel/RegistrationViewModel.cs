@@ -1,6 +1,6 @@
 ﻿using AuctionClient.Data;
 using AuctionClient.View;
-using Common.DTO;
+using CommonDTO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Net.Http;
