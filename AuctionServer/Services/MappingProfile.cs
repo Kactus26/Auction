@@ -1,7 +1,6 @@
 ﻿using AuctionServer.Model;
 using AutoMapper;
 using CommonDTO;
-using System.Security.Claims;
 
 namespace AuctionServer.Services
 {
@@ -9,8 +8,9 @@ namespace AuctionServer.Services
     {
         public MappingProfile()
         {
-            CreateMap<User, UserProfileDTO>()
-                .ReverseMap();
+            CreateMap<User, UserProfileDTO>().ReverseMap();
+            CreateMap<User, RegisterUserRequest>().ReverseMap();
+
         }
     }
 

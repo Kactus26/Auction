@@ -18,6 +18,7 @@ builder.Services.AddTransient<Seed>();
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddScoped<IDataRepository, DataRepository>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 
 builder.Services.AddDbContext<DataContext>(options =>

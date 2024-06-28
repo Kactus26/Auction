@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,8 +18,8 @@ namespace AuctionServer.Model
         public double Balance { get; set; } = 0.00;
 /*        public ICollection<User> Friends { get; set; }
 */        
-        public ICollection<Lot> OwnLots { get; set; } = new List<Lot>();
-        public ICollection<Lot> FollowingLots { get; set; } = new List<Lot>();
-        public ICollection<LotInvesting> Investings { get; set; } = new List<LotInvesting>();
+        public ICollection<Lot> OwnLots { get; set; }
+        public ICollection<Lot> FollowingLots { get; set; }
+        public ICollection<LotInvesting> Investings { get; set; } 
     }
 }

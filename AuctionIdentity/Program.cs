@@ -29,7 +29,7 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    await new Seed(scope.ServiceProvider.GetRequiredService<DataContext>()).SeedDataContext();
+    await new Seed(scope.ServiceProvider.GetRequiredService<DataContext>(), scope.ServiceProvider.GetService<IPasswordHasher>()).SeedDataContext();
 }
 
 app.UseSwagger();

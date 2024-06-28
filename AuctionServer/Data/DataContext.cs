@@ -1,10 +1,6 @@
 ﻿using AuctionServer.Model;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Xml;
 
 namespace AuctionServer.Data
 {
@@ -23,6 +19,7 @@ namespace AuctionServer.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
 
             modelBuilder.Entity<User>()
                 .HasMany(l => l.OwnLots)

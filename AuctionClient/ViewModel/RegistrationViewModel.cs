@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Input;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Security.Principal;
 using System.Text.RegularExpressions;
 
 namespace AuctionClient.ViewModel
@@ -29,7 +30,7 @@ namespace AuctionClient.ViewModel
             {
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", lu.JWTToken);
 
-                if (await Post(1, "TestAuthGateway"))
+                if (await Post(1, "Identity", "TestAuthGateway"))
                     ChangeWindow();
                 else
                 {
@@ -89,8 +90,14 @@ namespace AuctionClient.ViewModel
 
             RegisterUserRequest registerUserRequest = new RegisterUserRequest() { Login = Login, Email = Email, Password = PasswordReg };
 
-            if (!await Post(registerUserRequest, "Registration"))
+            if (!await Post(registerUserRequest, "Identity", "Registration"))
                 return;
+            else
+            {
+                LoggedUser lu = db.Find<LoggedUser>(1)!;
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", lu.JWTToken);
+                await Post(registerUserRequest, "Data", "AddUser");
+            }
 
             ChangeWindow();
         }
@@ -100,16 +107,16 @@ namespace AuctionClient.ViewModel
         {
             AuthUserRequest authUserRequest = new AuthUserRequest() { Login = Login, Password = Password };
 
-            if (!await Post(authUserRequest, "Authorization"))
+            if (!await Post(authUserRequest, "Identity", "Authorization"))
                 return;
 
             ChangeWindow();
         }
 
-        private async Task<bool> Post<T>(T request, string methodName)
+        private async Task<bool> Post<T>(T request, string controllerName, string methodName)
          {
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
-                $"https://localhost:7002/api/Identity/{methodName}", request);
+                $"https://localhost:7002/api/{controllerName}/{methodName}", request);
 
             if (!response.IsSuccessStatusCode && methodName == "Registration")
             {
@@ -123,6 +130,7 @@ namespace AuctionClient.ViewModel
             } else if (!response.IsSuccessStatusCode)
             {
                 ErrorMessage = await response.Content.ReadAsStringAsync();
+                ErrorMessageReg = await response.Content.ReadAsStringAsync();
                 return false;
             }
 
