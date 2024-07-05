@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionGateway", "AuctionGa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonDTO", "Test2\CommonDTO.csproj", "{AC383FA4-D1A7-46DE-9548-11919AA251EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuctionServer.Tests", "AuctionServer.Tests\AuctionServer.Tests.csproj", "{BDE1F24D-6C08-4D5E-9D00-336B58F401A7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{AC383FA4-D1A7-46DE-9548-11919AA251EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC383FA4-D1A7-46DE-9548-11919AA251EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC383FA4-D1A7-46DE-9548-11919AA251EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDE1F24D-6C08-4D5E-9D00-336B58F401A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDE1F24D-6C08-4D5E-9D00-336B58F401A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDE1F24D-6C08-4D5E-9D00-336B58F401A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDE1F24D-6C08-4D5E-9D00-336B58F401A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

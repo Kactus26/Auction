@@ -65,11 +65,11 @@ namespace AuctionIdentity.Controllers
             return Ok(token);
         }
 
-        [HttpGet("TestAuth")]
+/*        [HttpGet("TestAuth")]
         public async Task<IActionResult> TestAuth()
         {
             return Ok("Method is working");
-        }
+        }*/
 
     }
 }
