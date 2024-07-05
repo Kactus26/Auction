@@ -39,7 +39,6 @@ namespace AuctionGateway.Controllers
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt[7..]);
 
             var response = await _httpClient.PostAsJsonAsync($"Data/AddUser", userRequest, cancellationToken);
-            var test2 = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)
             {
                 return BadRequest(await response.Content.ReadAsStringAsync());

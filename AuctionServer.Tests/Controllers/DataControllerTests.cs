@@ -71,5 +71,19 @@ namespace AuctionServer.Tests.Controllers
             var test = Assert.IsType<OkObjectResult>(result);
             Assert.IsType<UserProfileDTO>(test.Value);
         }
+
+        [Fact]
+        public async Task DataController_UserAdded_ReturnOk()
+        {
+            var userId = 1;
+            var request = new RegisterUserRequest { Login = "Kactus", Email = "sasa@gmail", Password = "52"};
+            var user = new User { Id = userId, Name = "Guts", Email = "sasa@gmail"};
+            _mockMapper.Setup(m=>m.Map<User>(request)).Returns(user);
+            _mockDataRepository.Setup(x => x.AddUser(user));//Хотелось бы сделать нормальную проверку через ValueTask, но из-за махинаций с транзакциями внутри репозитория не выйдет
+
+            IActionResult result = await _dataController.AddUser(request);
+
+            Assert.IsType<OkObjectResult>(result);
+        }
     }
 }

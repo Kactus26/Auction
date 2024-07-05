@@ -42,7 +42,7 @@ namespace AuctionServer.Repository
 
         public async Task SaveChanges()
         {
-            
+            await _dataContext.SaveChangesAsync();
         }
     }
 }

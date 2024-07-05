@@ -2,6 +2,7 @@
 using AuctionIdentity.Interfaces;
 using AuctionIdentity.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace AuctionIdentity.Repository
 {
@@ -13,9 +14,9 @@ namespace AuctionIdentity.Repository
             _dataContext = dataContext;
         }
 
-        public async Task AddUser(User user)
+        public async ValueTask<EntityEntry<User>> AddUser(User user)
         {
-            await _dataContext.AddAsync(user);
+            return await _dataContext.AddAsync(user);
         }
 
         public async Task<bool> CheckUserLogin(string login)

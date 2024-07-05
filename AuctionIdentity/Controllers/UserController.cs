@@ -3,6 +3,7 @@ using AuctionIdentity.Models;
 using CommonDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AuctionIdentity.Controllers
 {
@@ -38,7 +39,10 @@ namespace AuctionIdentity.Controllers
                 Password = hashedPassword
             };
 
-            await _userRepository.AddUser(user);
+            var result = await _userRepository.AddUser(user);
+            if (result.State != EntityState.Added)
+                return BadRequest("User was't added");
+
             await _userRepository.SaveChanges();
 
             string token = _jwtProvider.GenerateToken(user);

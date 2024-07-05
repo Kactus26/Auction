@@ -7,7 +7,7 @@ namespace AuctionIdentity.Interfaces
     {
         public Task<bool> CheckUserLogin(string login);
         public Task<User> GetUserByLogin(string login);
-        public Task AddUser(User user);
+        public ValueTask<EntityEntry<User>> AddUser(User user);
         public Task SaveChanges();
     }
 }

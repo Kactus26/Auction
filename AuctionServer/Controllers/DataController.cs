@@ -36,7 +36,7 @@ namespace AuctionServer.Controllers
         }
         
         [HttpPost("AddUser")]
-        public async Task<IActionResult> GetUserData(RegisterUserRequest userRequest)
+        public async Task<IActionResult> AddUser(RegisterUserRequest userRequest)
         {
             int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
             User user = _mapper.Map<User>(userRequest);
