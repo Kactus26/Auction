@@ -10,7 +10,7 @@ using Moq;
 using System.Security.Claims;
 using Xunit;
 
-namespace AuctionServer.Tests.Controllers
+namespace AuctionServer.Tests.UnitTests.Controllers
 {
     public class DataControllerTests
     {
@@ -20,7 +20,7 @@ namespace AuctionServer.Tests.Controllers
 
         public DataControllerTests()
         {
-            _mockDataRepository =  new Mock<IDataRepository>();
+            _mockDataRepository = new Mock<IDataRepository>();
             _mockMapper = new Mock<IMapper>();
 
             _dataController = new DataController(_mockMapper.Object, _mockDataRepository.Object);
@@ -76,9 +76,9 @@ namespace AuctionServer.Tests.Controllers
         public async Task DataController_UserAdded_ReturnOk()
         {
             var userId = 1;
-            var request = new RegisterUserRequest { Login = "Kactus", Email = "sasa@gmail", Password = "52"};
-            var user = new User { Id = userId, Name = "Guts", Email = "sasa@gmail"};
-            _mockMapper.Setup(m=>m.Map<User>(request)).Returns(user);
+            var request = new RegisterUserRequest { Login = "Kactus", Email = "sasa@gmail", Password = "52" };
+            var user = new User { Id = userId, Name = "Guts", Email = "sasa@gmail" };
+            _mockMapper.Setup(m => m.Map<User>(request)).Returns(user);
             _mockDataRepository.Setup(x => x.AddUser(user));//Хотелось бы сделать нормальную проверку через ValueTask, но из-за махинаций с транзакциями внутри репозитория не выйдет
 
             IActionResult result = await _dataController.AddUser(request);

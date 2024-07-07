@@ -8,7 +8,7 @@ using System.Text;
 
 namespace AuctionIdentity.Services
 {
-    internal class JWTProvider : IJWTProvider
+    public class JWTProvider : IJWTProvider
     {
         private readonly JWTOptions _options;
         private readonly IConfiguration _configuration;
