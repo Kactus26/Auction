@@ -10,8 +10,10 @@ namespace AuctionServer.Tests.IntegrationalTests
         protected readonly IJWTProvider _jwtProvider;
         public IntegrationTestBase()
         {
+            string jsonPath = Path.GetFullPath(@"..\..\..\appsettings.json");
+
             var configuration = new ConfigurationBuilder()
-           .AddJsonFile("C:\\Users\\Professional\\source\\repos\\Auction\\AuctionServer.Tests\\appsettings.json") // Убедитесь, что у вас есть этот файл с нужными настройками
+           .AddJsonFile(jsonPath)
            .Build();
 
             var services = new ServiceCollection();

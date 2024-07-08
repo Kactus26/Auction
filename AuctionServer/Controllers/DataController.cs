@@ -30,7 +30,7 @@ namespace AuctionServer.Controllers
             if(user == null)
                 return NotFound();
 
-            var userDTO = _mapper.Map<UserProfileDTO>(user);
+            UserProfileDTO userDTO = _mapper.Map<UserProfileDTO>(user);
 
             return Ok(userDTO);
         }
