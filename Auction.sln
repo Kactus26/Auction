@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuctionGateway", "AuctionGa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommonDTO", "Test2\CommonDTO.csproj", "{AC383FA4-D1A7-46DE-9548-11919AA251EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuctionServer.Tests", "AuctionServer.Tests\AuctionServer.Tests.csproj", "{BDE1F24D-6C08-4D5E-9D00-336B58F401A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auction.Tests", "AuctionServer.Tests\Auction.Tests.csproj", "{BDE1F24D-6C08-4D5E-9D00-336B58F401A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
