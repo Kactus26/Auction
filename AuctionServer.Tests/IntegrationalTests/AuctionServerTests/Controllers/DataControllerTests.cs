@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 using Xunit;
 
 namespace AuctionServer.Tests.IntegrationalTests.AuctionServerTests.Controllers
@@ -12,27 +13,24 @@ namespace AuctionServer.Tests.IntegrationalTests.AuctionServerTests.Controllers
     public class DataControllerTests : IntegrationTestBase, IClassFixture<WebApplicationFactory<Program>>
     {
         private readonly HttpClient _client;
-        private readonly DbContextOptions<DataContext> _options;
 
         public DataControllerTests(WebApplicationFactory<Program> factory)
         {
             _client = factory.CreateClient();
-            _options = new DbContextOptionsBuilder<DataContext>()
-                .UseInMemoryDatabase(databaseName: "InMemoryDbForTesting")
-                .Options;
         }
 
         [Fact]
         public async Task DataController_CheckUserData_ReturnOk()
         {
             // Arrange
-            var user = new User { Id = 1, Login = "Kactus", Email = "Test@test", Password = "Test"};
+            var user = new User { Id = 1, Login = "Kactus", Email = "Test@test", Password = "Test" };
             var token = _jwtProvider.GenerateToken(user);
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             // Act
             var response = await _client.GetAsync("api/Data/GetUserData");
+            response.EnsureSuccessStatusCode();
 
             // Assert
             response.EnsureSuccessStatusCode();
@@ -42,25 +40,27 @@ namespace AuctionServer.Tests.IntegrationalTests.AuctionServerTests.Controllers
         }
 
         [Fact]
-        public void TestInMemoryDatabase()
+        public async Task DataController_AddUser_ReturnOk()
         {
             // Arrange
-            using (var context = new DataContext(_options))
-            {
-                var entity = new AuctionServer.Model.User { Name = "Test", Email = "asdadsda" };
-                context.Users.Add(entity);
-                context.SaveChanges();
-            }
+            RegisterUserRequest request = new RegisterUserRequest() { Login = "Kactus", Email = "Test@test", Password = "Test" }; //Email from here
+            var user = new User { Id = 10000, Login = "Kactus", Email = "Test@test", Password = "Test" }; //Id from here
+            var token = _jwtProvider.GenerateToken(user);
 
-            // Act
-            using (var context = new DataContext(_options))
-            {
-                var result = context.Users.FirstOrDefault();
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-                // Assert
-                Assert.NotNull(result);
-                // Add more assertions as needed
-            }
+            //Act
+            var response = await _client.PostAsJsonAsync("api/Data/AddUser", request);
+            response.EnsureSuccessStatusCode();
+
+            var userAdded = await _dataContext.Users.Where(x => x.Id == user.Id && x.Email == request.Email).FirstOrDefaultAsync();
+
+            // Assert
+            Assert.NotNull(userAdded);
+
+            //Clear
+            _dataContext.Users.Remove(userAdded);
+            _dataContext.SaveChanges();
         }
     }
 }

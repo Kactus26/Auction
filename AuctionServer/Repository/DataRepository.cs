@@ -22,8 +22,7 @@ namespace AuctionServer.Repository
 
         public async Task AddUser(User user)
         {
-            await _dataContext.Users.AddAsync(user);
-            /*using (var transaction = await _dataContext.Database.BeginTransactionAsync())
+            using (var transaction = await _dataContext.Database.BeginTransactionAsync())
             {
                 try
                 {
@@ -37,8 +36,11 @@ namespace AuctionServer.Repository
                 {
                     await transaction.RollbackAsync();
                     throw;
+
                 }
-            }*/
+
+            }
+
         }
 
         public async Task SaveChanges()

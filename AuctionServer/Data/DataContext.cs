@@ -1,6 +1,5 @@
 ﻿using AuctionServer.Model;
 using Microsoft.EntityFrameworkCore;
-using System.Xml;
 
 namespace AuctionServer.Data
 {

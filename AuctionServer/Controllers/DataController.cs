@@ -40,11 +40,10 @@ namespace AuctionServer.Controllers
         {
             int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
             User user = _mapper.Map<User>(userRequest);
-/*            user.Id = userId;
-*/            user.Name = "New User)";
+            user.Id = userId;
+            user.Name = "New User";
 
             await _dataRepository.AddUser(user);
-            await _dataRepository.SaveChanges();
 
             return Ok("User has been added");
         }
