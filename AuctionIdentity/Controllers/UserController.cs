@@ -25,9 +25,12 @@ namespace AuctionIdentity.Controllers
         [HttpPost("RegisterUser")]
         public async Task<IActionResult> RegisterUser(RegisterUserRequest request)
         {
+            if (!await _userRepository.CheckUserEmail(request.Email))
+                return BadRequest("User with this email already exists");
+
             if(!await _userRepository.CheckUserLogin(request.Login))
             {
-                return BadRequest("User with that login already exists");
+                return BadRequest("User with this login already exists");
             }
 
             string hashedPassword = _passwordHasher.GeneratePassword(request.Password);

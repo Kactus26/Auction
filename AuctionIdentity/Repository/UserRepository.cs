@@ -26,7 +26,15 @@ namespace AuctionIdentity.Repository
             else
                 return false;
         }
-        
+
+        public async Task<bool> CheckUserEmail(string email)
+        {
+            if (await _dataContext.Users.Where(x => x.Email == email).FirstOrDefaultAsync() == null)
+                return true;
+            else
+                return false;
+        }
+
         public async Task<User> GetUserByLogin(string login)
         {
             return await _dataContext.Users.FirstOrDefaultAsync(x => x.Login == login);
