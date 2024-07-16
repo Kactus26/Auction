@@ -42,7 +42,7 @@ namespace AuctionGateway.Controllers
 
 
         [HttpPost("TestAuthGateway")]
-        [Authorize]//Метод необхом для проверки действительности токена юзера
+        [Authorize]//Method that cheks is user authorized and token is actual
         public IActionResult TestAuthGateway()
         {
             return Ok();

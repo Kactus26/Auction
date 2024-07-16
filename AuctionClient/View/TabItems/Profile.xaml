@@ -29,38 +29,39 @@
           VerticalAlignment="Top" Grid.RowSpan="2"
           Foreground="White" FontSize="20"
           materialDesign:HintAssist.Foreground="White"
-          materialDesign:HintAssist.Hint="Name" BorderBrush="ForestGreen"
-          materialDesign:TextFieldAssist.UnderlineBrush="ForestGreen"
+          materialDesign:HintAssist.Hint="Name" BorderBrush="Gray"
+          materialDesign:TextFieldAssist.UnderlineBrush="White"
           Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
         <TextBox Text="{Binding SurName}" Margin="20,0,20,0"
           Foreground="White" FontSize="20" VerticalAlignment="Bottom"
           materialDesign:HintAssist.Foreground="White"
-          materialDesign:HintAssist.Hint="Surname" BorderBrush="ForestGreen"
-          materialDesign:TextFieldAssist.UnderlineBrush="ForestGreen"
+          materialDesign:HintAssist.Hint="Surname" BorderBrush="Gray"
+          materialDesign:TextFieldAssist.UnderlineBrush="White"
           Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
         <TextBox Text="{Binding Email}" Margin="20,0,20,0"
           Foreground="White" FontSize="20" VerticalAlignment="Center"
           materialDesign:HintAssist.Foreground="White"
-          materialDesign:HintAssist.Hint="Email" BorderBrush="ForestGreen"
-          materialDesign:TextFieldAssist.UnderlineBrush="ForestGreen"
+          materialDesign:HintAssist.Hint="Email" BorderBrush="Gray"
+          materialDesign:TextFieldAssist.UnderlineBrush="White"
           Style="{StaticResource MaterialDesignFloatingHintTextBox}" Grid.Row="1"/>
 
         <TextBox Text="{Binding Description}" Margin="20,0,20,0"
           VerticalAlignment="Center" Grid.Row="2" Grid.ColumnSpan="2"
           Foreground="White" FontSize="20" TextWrapping="Wrap"
           materialDesign:HintAssist.Foreground="White"
-          materialDesign:HintAssist.Hint="Description" BorderBrush="#202020"
-          materialDesign:TextFieldAssist.UnderlineBrush="Transparent"
-          Style="{StaticResource MaterialDesignFloatingHintTextBox}" Height="130"/>
+          materialDesign:HintAssist.Hint="Description" BorderBrush="Gray"
+          materialDesign:TextFieldAssist.UnderlineBrush="White"
+          Style="{StaticResource MaterialDesignFloatingHintTextBox}" Height="100"/>
 
         <Label Content="Balance:" Grid.Column="1" Foreground="White"
                FontSize="25" Margin="0,23,0,75"/>
         <Label Content="{Binding Balance}" Grid.Column="1" Foreground="White"
         FontSize="25" Margin="102,23,0,65"/>
 
-        <Image Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Source="{Binding UserImage}"/>
-        <Button Grid.Row="2" Grid.Column="2" Content="Exit" BorderBrush="ForestGreen" Background="ForestGreen" Command="{Binding ExitFromAccountCommand}"/>
+        <Image Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Source="{Binding UserImage}" Margin="0,0,20,0"/>
+        <Button Grid.Row="2" Grid.Column="2" Content="Update" BorderBrush="White" Background="White" Command="{Binding UpdateUserDataCommand}" Foreground="#FF8A8585" Margin="0,-50,15,0"/>
+        <Button Grid.Row="2" Grid.Column="2" Content="Exit" BorderBrush="White" Background="White" Command="{Binding ExitFromAccountCommand}" Foreground="#FF8A8585" Grid.ColumnSpan="2" Margin="0,60,15,0"/>
     </Grid>
 </UserControl>

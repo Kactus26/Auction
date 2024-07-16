@@ -47,5 +47,18 @@ namespace AuctionServer.Controllers
 
             return Ok("User has been added");
         }
+
+        [HttpPost("UpdateUserData")]//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        public async Task<IActionResult> UpdateUserData(ChangedDataDTO newData)
+        {
+            int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
+            User user = await _dataRepository.GetUserDataByid(userId);
+
+            user = _mapper.Map(newData, user);
+
+            await _dataRepository.SaveChanges();
+
+            return Ok();
+        }
     }
 }

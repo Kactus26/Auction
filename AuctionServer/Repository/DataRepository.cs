@@ -20,6 +20,11 @@ namespace AuctionServer.Repository
             return await _dataContext.Users.FirstOrDefaultAsync(x => x.Id == id);
         }
 
+/*        public void UpdateUserData(User newData)
+        {
+            _dataContext.Users.Update(newData);
+        }
+*/
         public async Task AddUser(User user)
         {
             using (var transaction = await _dataContext.Database.BeginTransactionAsync())

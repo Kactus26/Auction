@@ -10,7 +10,7 @@ namespace AuctionServer.Services
         {
             CreateMap<User, UserProfileDTO>().ReverseMap();
             CreateMap<User, RegisterUserRequest>().ReverseMap();
-
+            CreateMap<User, ChangedDataDTO>().ReverseMap();
         }
     }
 

@@ -43,6 +43,28 @@ namespace AuctionClient.ViewModel.TabItems
                 ProfileForGuest();
         }
 
+        private async Task<bool> Post<T>(T request, string methodName)
+        {
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
+                $"https://localhost:7002/api/Data/{methodName}", request);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                ErrorMessage = await response.Content.ReadAsStringAsync();
+                MessageBox.Show(ErrorMessage);
+                return false;
+            }
+            
+            return true;
+        }
+
+        [RelayCommand]
+        public async Task UpdateUserData()
+        {
+            ChangedDataDTO newData = new ChangedDataDTO() { Name = this.Name, Surname = this.SurName, Email = this.Email, Info = Description, Balance = this.Balance, ImageUrl = UserImage};
+            await Post(newData, "UpdateUserData");
+        }
+
         private async void GetUserData()
         {
             HttpResponseMessage response = await _httpClient.GetAsync($"https://localhost:7002/api/Data/GetUserData");
@@ -62,21 +84,6 @@ namespace AuctionClient.ViewModel.TabItems
             Description = userData.Info;
             Balance = userData.Balance;
             UserImage = userData.ImageUrl;
-        }
-
-        private async Task<bool> Post<T>(T request, string methodName)
-        {
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
-                $"https://localhost:7002/api/Data/{methodName}", request);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                ErrorMessage = await response.Content.ReadAsStringAsync();
-                MessageBox.Show(ErrorMessage);
-                return false;
-            }
-            
-            return true;
         }
 
         public void ProfileForGuest()

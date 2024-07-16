@@ -45,5 +45,20 @@ namespace AuctionGateway.Controllers
             }
             return Ok(await response.Content.ReadAsStringAsync());
         }
+
+        [HttpPost("UpdateUserData")]
+        [Authorize]
+        public async Task<IActionResult> UpdateUserData(ChangedDataDTO newData, CancellationToken cancellationToken)
+        {
+            string jwt = Request.Headers.Authorization!;
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt[7..]);
+
+            var response = await _httpClient.PostAsJsonAsync($"Data/UpdateUserData", newData, cancellationToken);
+            if (!response.IsSuccessStatusCode)
+            {
+                return BadRequest(await response.Content.ReadAsStringAsync());
+            }
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
     }
 }
