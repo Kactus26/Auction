@@ -99,7 +99,6 @@ namespace AuctionServer.Tests.IntegrationalTests.AuctionServerTests.Controllers
 
             //Clear
             ChangeProperties(updatedUser, userBeforeUpdate);
-
             _dataContext.SaveChanges();
         }
     }

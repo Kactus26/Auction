@@ -54,6 +54,9 @@ namespace AuctionServer.Controllers
             int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
             User user = await _dataRepository.GetUserDataByid(userId);
 
+            if(user == null) 
+                return NotFound("User not found");
+
             user = _mapper.Map(newData, user);
 
             await _dataRepository.SaveChanges();
