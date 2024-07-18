@@ -9,6 +9,7 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Reflection;
 using System.Windows;
 
 namespace AuctionClient.ViewModel.TabItems
@@ -103,28 +104,25 @@ namespace AuctionClient.ViewModel.TabItems
         }
 
         [RelayCommand]
-        public void UploadImage()
+        public async Task UploadImage()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png) | *.jpg; *.jpeg; *.png";
             if (openFileDialog.ShowDialog() == true)
             {
-                var filePath = openFileDialog.FileName;
-                var fileBytes = File.ReadAllBytes(filePath);
+                string filePath = openFileDialog.FileName;
+                var fileBytes = File.ReadAllBytes(filePath);//Перенести
 
                 UserImagePath = filePath;
 
-                /*var fileContent = new ByteArrayContent(fileBytes);
-                fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("multipart/form-data");
+                ByteArrayContent fileContent = new ByteArrayContent(fileBytes);//И это всё перенести в метод сохранения
 
-                var formData = new MultipartFormDataContent();
+                MultipartFormDataContent formData = new MultipartFormDataContent();
                 formData.Add(fileContent, "file", Path.GetFileName(filePath));
 
-                var response = await _httpClient.PostAsync("https://yourapiurl/api/upload/upload", formData);
+                /*await Post(formData, "");*/
+                var response = await _httpClient.PostAsync("https://localhost:7002/api/Data/UploadImage", formData);
                 response.EnsureSuccessStatusCode();
-
-                var result = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(result);*/
             }
         }
 

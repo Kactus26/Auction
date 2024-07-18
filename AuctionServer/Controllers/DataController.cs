@@ -4,6 +4,7 @@ using AuctionServer.Repository;
 using AutoMapper;
 using CommonDTO;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace AuctionServer.Controllers
 {
@@ -13,12 +14,15 @@ namespace AuctionServer.Controllers
     {
         private readonly IDataRepository _dataRepository;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _environment;
+
         public string UserId => User.Identities.First().Claims.First().Value;
 
-        public DataController(IMapper mapper, IDataRepository dataRepos)
+        public DataController(IMapper mapper, IDataRepository dataRepos, IWebHostEnvironment environment)
         {
             _dataRepository = dataRepos;
             _mapper = mapper;
+            _environment = environment;
         }
 
         [HttpGet("GetUserData")]
@@ -48,7 +52,7 @@ namespace AuctionServer.Controllers
             return Ok("User has been added");
         }
 
-        [HttpPost("UpdateUserData")]//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        [HttpPost("UpdateUserData")]
         public async Task<IActionResult> UpdateUserData(ChangedDataDTO newData)
         {
             int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
@@ -62,6 +66,26 @@ namespace AuctionServer.Controllers
             await _dataRepository.SaveChanges();
 
             return Ok();
+        }
+
+        [HttpPost("UploadImage")]
+        public async Task<IActionResult> UploadImage([FromForm] IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("No file uploaded.");
+
+            var uploadPath = Path.Combine(_environment.WebRootPath, "userImages");
+            if (!Directory.Exists(uploadPath))
+                Directory.CreateDirectory(uploadPath);
+
+            var filePath = Path.Combine(uploadPath, file.FileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            return Ok(new { FilePath = filePath });
         }
     }
 }

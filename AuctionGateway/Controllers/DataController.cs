@@ -60,5 +60,43 @@ namespace AuctionGateway.Controllers
             }
             return Ok(await response.Content.ReadAsStringAsync());
         }
+
+        [HttpPost("UploadImage")]
+        [Authorize]
+        public async Task<IActionResult> UploadImage([FromForm]IFormFile file)
+        {
+            string jwt = Request.Headers.Authorization!;
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt[7..]);
+
+            if (file == null || file.Length == 0)
+                return BadRequest("No file uploaded.");
+
+            // Создаем MultipartFormDataContent для отправки данных на конечный сервер
+            var content = new MultipartFormDataContent();
+            using (var ms = new MemoryStream())
+            {
+                await file.CopyToAsync(ms);
+                var fileBytes = ms.ToArray();
+                var fileContent = new ByteArrayContent(fileBytes);
+
+                content.Add(fileContent, "file", file.FileName);
+
+                // Отправляем данные на конечный сервер
+                var response = await _httpClient.PostAsync("Data/UploadImage", content);
+                if (!response.IsSuccessStatusCode)
+                    return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
+
+                var result = await response.Content.ReadAsStringAsync();
+                return Ok(result);  
+            }
+
+
+            /*var response = await _httpClient.PostAsJsonAsync($"Data/UploadImage", newData, cancellationToken);
+            if (!response.IsSuccessStatusCode)
+            {
+                return BadRequest(await response.Content.ReadAsStringAsync());
+            }
+            return Ok(await response.Content.ReadAsStringAsync());*/
+        }
     }
 }
