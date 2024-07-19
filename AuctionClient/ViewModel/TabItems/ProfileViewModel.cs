@@ -28,12 +28,10 @@ namespace AuctionClient.ViewModel.TabItems
         [ObservableProperty]
         public double balance;
         [ObservableProperty]
-        public string? userImagePath;
-        private bool IsGuest { get; set; } = false;
-
-        /*        private ByteArrayContent? Image {  get; set; }
-        */
+        public string userImagePath;
         #endregion
+        private byte[] ImageToSend { get; set; }
+        private bool IsGuest { get; set; } = false;
         private string? ErrorMessage {  get; set; }
 
         private readonly HttpClient _httpClient;
@@ -80,6 +78,17 @@ namespace AuctionClient.ViewModel.TabItems
 
             ChangedDataDTO newData = new ChangedDataDTO() { Name = this.Name, Surname = this.SurName, Email = this.Email, Info = Description, Balance = this.Balance};
             await Post(newData, "UpdateUserData");
+
+            if(ImageToSend != null) 
+            { 
+                ByteArrayContent fileContent = new ByteArrayContent(ImageToSend);//И это всё перенести в метод сохранения
+
+                MultipartFormDataContent formData = new MultipartFormDataContent();
+                formData.Add(fileContent, "file", Path.GetFileName(UserImagePath));
+
+                var response = await _httpClient.PostAsync("https://localhost:7002/api/Data/UploadImage", formData);
+                response.EnsureSuccessStatusCode();
+            }
         }
 
         private async void GetUserData()//Check User Image 
@@ -111,18 +120,9 @@ namespace AuctionClient.ViewModel.TabItems
             if (openFileDialog.ShowDialog() == true)
             {
                 string filePath = openFileDialog.FileName;
-                var fileBytes = File.ReadAllBytes(filePath);//Перенести
+                ImageToSend = File.ReadAllBytes(filePath);//Перенести
 
                 UserImagePath = filePath;
-
-                ByteArrayContent fileContent = new ByteArrayContent(fileBytes);//И это всё перенести в метод сохранения
-
-                MultipartFormDataContent formData = new MultipartFormDataContent();
-                formData.Add(fileContent, "file", Path.GetFileName(filePath));
-
-                /*await Post(formData, "");*/
-                var response = await _httpClient.PostAsync("https://localhost:7002/api/Data/UploadImage", formData);
-                response.EnsureSuccessStatusCode();
             }
         }
 
