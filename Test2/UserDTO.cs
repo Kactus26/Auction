@@ -13,6 +13,12 @@ namespace CommonDTO
         public double Balance { get; set; } = 0.00;
     }
 
+    public class UserDataWithImageDTO
+    {
+        public UserProfileDTO ProfileData { get; set; } = null!;
+        public byte[] Image { get; set; } = null!;
+    }
+
     public class ChangedDataDTO
     {
         public string Name { get; set; } = null!;

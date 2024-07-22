@@ -28,6 +28,9 @@ namespace AuctionGateway.Controllers
             if (!response.IsSuccessStatusCode)
             {
                 return BadRequest(await response.Content.ReadAsStringAsync());
+            } else if(response.Content.Headers.ContentType.MediaType == "multipart/form-data")
+            {
+                return Ok(response);
             }
             return Ok(await response.Content.ReadAsStringAsync());
         }
@@ -71,7 +74,6 @@ namespace AuctionGateway.Controllers
             if (file == null || file.Length == 0)
                 return BadRequest("No file uploaded.");
 
-            // Создаем MultipartFormDataContent для отправки данных на конечный сервер
             var content = new MultipartFormDataContent();
             using (var ms = new MemoryStream())
             {
@@ -81,7 +83,6 @@ namespace AuctionGateway.Controllers
 
                 content.Add(fileContent, "file", file.FileName);
 
-                // Отправляем данные на конечный сервер
                 var response = await _httpClient.PostAsync("Data/UploadImage", content);
                 if (!response.IsSuccessStatusCode)
                     return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
@@ -89,14 +90,6 @@ namespace AuctionGateway.Controllers
                 var result = await response.Content.ReadAsStringAsync();
                 return Ok(result);  
             }
-
-
-            /*var response = await _httpClient.PostAsJsonAsync($"Data/UploadImage", newData, cancellationToken);
-            if (!response.IsSuccessStatusCode)
-            {
-                return BadRequest(await response.Content.ReadAsStringAsync());
-            }
-            return Ok(await response.Content.ReadAsStringAsync());*/
         }
     }
 }

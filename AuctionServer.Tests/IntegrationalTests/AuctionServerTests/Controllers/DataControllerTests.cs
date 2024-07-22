@@ -31,7 +31,7 @@ namespace AuctionServer.Tests.IntegrationalTests.AuctionServerTests.Controllers
         }
 
         [Fact]
-        public async Task DataController_CheckUserData_ReturnOk()
+        public async Task DataController_GetUserData_ReturnOk()
         {
             // Arrange
             var user = new User { Id = 1, Login = "Kactus", Email = "Test@test", Password = "Test" };
@@ -44,7 +44,27 @@ namespace AuctionServer.Tests.IntegrationalTests.AuctionServerTests.Controllers
             response.EnsureSuccessStatusCode();
 
             // Assert
+            UserProfileDTO result = JsonConvert.DeserializeObject<UserProfileDTO>(await response.Content.ReadAsStringAsync())!;
+            Assert.IsType<UserProfileDTO>(result);
+            Assert.Equal(user.Id, result.Id);
+        }
+
+        [Fact]
+        public async Task DataController_GetUserDataWithImage_ReturnOk()
+        {
+            // Arrange
+            var user = new User { Id = 5, Login = "Kactus", Email = "Test@test", Password = "Test" };
+            var token = _jwtProvider.GenerateToken(user);
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Act
+            var response = await _client.GetAsync("api/Data/GetUserData");
             response.EnsureSuccessStatusCode();
+            var test = response.Content.ReadAsStringAsync();
+            var test2 = response.Content.Headers.ToString();
+
+            // Assert
             UserProfileDTO result = JsonConvert.DeserializeObject<UserProfileDTO>(await response.Content.ReadAsStringAsync())!;
             Assert.IsType<UserProfileDTO>(result);
             Assert.Equal(user.Id, result.Id);
@@ -101,5 +121,6 @@ namespace AuctionServer.Tests.IntegrationalTests.AuctionServerTests.Controllers
             ChangeProperties(updatedUser, userBeforeUpdate);
             _dataContext.SaveChanges();
         }
+
     }
 }

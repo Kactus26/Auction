@@ -66,13 +66,12 @@ namespace AuctionClient.ViewModel.TabItems
         }
 
         [RelayCommand]
-        public async Task UpdateUserData()//Add User Image
+        public async Task UpdateUserData()
         {
             if (IsGuest) {
                 MessageBox.Show("Guest can't update his profile");
                 return;
-            } else if (Name.Length == 0 || SurName.Length == 0 || Email.Length == 0)
-            {
+            } else if (Name.Length == 0 || SurName.Length == 0 || Email.Length == 0){
                 MessageBox.Show("Name, Surname and Email have to be greater than 1 symbol");
             }
 
@@ -81,17 +80,21 @@ namespace AuctionClient.ViewModel.TabItems
 
             if(ImageToSend != null) 
             { 
-                ByteArrayContent fileContent = new ByteArrayContent(ImageToSend);//И это всё перенести в метод сохранения
+                ByteArrayContent fileContent = new ByteArrayContent(ImageToSend);
 
-                MultipartFormDataContent formData = new MultipartFormDataContent();
-                formData.Add(fileContent, "file", Path.GetFileName(UserImagePath));
+                MultipartFormDataContent formData = new MultipartFormDataContent
+                {
+                    { fileContent, "file", Path.GetFileName(UserImagePath) }
+                };
 
                 var response = await _httpClient.PostAsync("https://localhost:7002/api/Data/UploadImage", formData);
                 response.EnsureSuccessStatusCode();
             }
+
+            MessageBox.Show("Data successfully updated! Congrats!");
         }
 
-        private async void GetUserData()//Check User Image 
+        private async void GetUserData()
         {
             HttpResponseMessage response = await _httpClient.GetAsync($"https://localhost:7002/api/Data/GetUserData");
 
@@ -100,6 +103,9 @@ namespace AuctionClient.ViewModel.TabItems
                 ErrorMessage = await response.Content.ReadAsStringAsync();
                 MessageBox.Show(ErrorMessage);
                 return;
+            } else if(response.Content.Headers.ContentType.MediaType == "multipart/form-data")
+            {
+                //Нужно обработать данные
             }
 
             UserProfileDTO userData = JsonConvert.DeserializeObject<UserProfileDTO>(await response.Content.ReadAsStringAsync())!;
@@ -120,7 +126,7 @@ namespace AuctionClient.ViewModel.TabItems
             if (openFileDialog.ShowDialog() == true)
             {
                 string filePath = openFileDialog.FileName;
-                ImageToSend = File.ReadAllBytes(filePath);//Перенести
+                ImageToSend = File.ReadAllBytes(filePath);
 
                 UserImagePath = filePath;
             }

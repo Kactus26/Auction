@@ -4,7 +4,11 @@ using AuctionServer.Repository;
 using AutoMapper;
 using CommonDTO;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text.Json.Serialization;
 
 namespace AuctionServer.Controllers
 {
@@ -31,11 +35,40 @@ namespace AuctionServer.Controllers
             int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
             User user = await _dataRepository.GetUserDataByid(userId);
 
-            if(user == null)
+            if (user == null)
                 return NotFound();
 
             UserProfileDTO userDTO = _mapper.Map<UserProfileDTO>(user);
 
+            if (userDTO.ImageUrl != null)
+            {
+                MultipartFormDataContent content = new MultipartFormDataContent();
+
+                ByteArrayContent image = new ByteArrayContent(System.IO.File.ReadAllBytes(userDTO.ImageUrl));
+                image.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = "userImage"
+                };
+                content.Add(image, "userImage", System.IO.Path.GetFileName(userDTO.ImageUrl));
+
+                StringContent serializedUser = new StringContent(JsonConvert.SerializeObject(userDTO));
+                serializedUser.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                {
+                    FileName = "userData"
+                };
+
+                content.Add(serializedUser, "userData");
+
+                var stream = new MemoryStream();
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    await content.CopyToAsync(stream);
+                    stream.Position = 0;
+                    var result = new FileStreamResult(stream, "multipart/form-data");
+
+                    return result;
+                }
+            }
             return Ok(userDTO);
         }
         
@@ -71,6 +104,9 @@ namespace AuctionServer.Controllers
         [HttpPost("UploadImage")]
         public async Task<IActionResult> UploadImage([FromForm] IFormFile file)
         {
+            int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
+            User user = await _dataRepository.GetUserDataByid(userId);
+
             if (file == null || file.Length == 0)
                 return BadRequest("No file uploaded.");
 
@@ -85,7 +121,10 @@ namespace AuctionServer.Controllers
                 await file.CopyToAsync(stream);
             }
 
-            return Ok(new { FilePath = filePath });
+            user.ImageUrl = filePath;
+            await _dataRepository.SaveChanges();
+
+            return Ok("User Image successfully updated");
         }
     }
 }
