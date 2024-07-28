@@ -9,8 +9,8 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Reflection;
 using System.Windows;
+using System.Windows.Shapes;
 
 namespace AuctionClient.ViewModel.TabItems
 {
@@ -33,6 +33,7 @@ namespace AuctionClient.ViewModel.TabItems
         private byte[] ImageToSend { get; set; }
         private bool IsGuest { get; set; } = false;
         private string? ErrorMessage {  get; set; }
+        private const string pathToImages = "../../../Images/";
 
         private readonly HttpClient _httpClient;
         ApplicationContext db = new ApplicationContext();
@@ -84,7 +85,7 @@ namespace AuctionClient.ViewModel.TabItems
 
                 MultipartFormDataContent formData = new MultipartFormDataContent
                 {
-                    { fileContent, "file", Path.GetFileName(UserImagePath) }
+                    { fileContent, "file", System.IO.Path.GetFileName(UserImagePath) }
                 };
 
                 var response = await _httpClient.PostAsync("https://localhost:7002/api/Data/UploadImage", formData);
@@ -96,26 +97,37 @@ namespace AuctionClient.ViewModel.TabItems
 
         private async void GetUserData()
         {
-            HttpResponseMessage response = await _httpClient.GetAsync($"https://localhost:7002/api/Data/GetUserData");
+            HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:7002/api/Data/GetUserData");
 
             if (!response.IsSuccessStatusCode)
             {
                 ErrorMessage = await response.Content.ReadAsStringAsync();
                 MessageBox.Show(ErrorMessage);
                 return;
-            } else if(response.Content.Headers.ContentType.MediaType == "multipart/form-data")
-            {
-                //Нужно обработать данные
             }
 
-            UserProfileDTO userData = JsonConvert.DeserializeObject<UserProfileDTO>(await response.Content.ReadAsStringAsync())!;
+            UserDataWithImageDTO user = JsonConvert.DeserializeObject<UserDataWithImageDTO>(await response.Content.ReadAsStringAsync());
 
-            Name = userData.Name;
-            SurName = userData.Surname;
-            Email = userData.Email;
-            Description = userData.Info;
-            Balance = userData.Balance;
-            UserImagePath = userData.ImageUrl;
+            if (user != null)
+            {
+                Name = user.ProfileData.Name;
+                SurName = user.ProfileData.Surname;
+                Email = user.ProfileData.Email;
+                Description = user.ProfileData.Info;
+                Balance = user.ProfileData.Balance;
+
+                string relativePath = pathToImages + "ProfileImage.png";
+                string absolutePath = System.IO.Path.GetFullPath(relativePath);
+
+                using (var stream = new FileStream(absolutePath, FileMode.Create, FileAccess.Write))
+                {
+                    stream.Write(user.Image);
+                }
+
+                UserImagePath = absolutePath;
+            }
+            else
+                MessageBox.Show("User data not found");
         }
 
         [RelayCommand]
@@ -139,7 +151,7 @@ namespace AuctionClient.ViewModel.TabItems
             SurName = "Guestovich";
             Email = "guest.guestov@gmail.guest";
             Description = "I'm just guest";
-            UserImagePath = "../../Images/Guest.jpg";
+            UserImagePath = pathToImages + "Guest.jpg";
             IsGuest = true;
         }
 

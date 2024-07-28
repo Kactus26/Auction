@@ -42,36 +42,28 @@ namespace AuctionServer.Controllers
 
             if (userDTO.ImageUrl != null)
             {
-                MultipartFormDataContent content = new MultipartFormDataContent();
+                byte[] image = System.IO.File.ReadAllBytes(userDTO.ImageUrl);
 
-                ByteArrayContent image = new ByteArrayContent(System.IO.File.ReadAllBytes(userDTO.ImageUrl));
-                image.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-                {
-                    FileName = "userImage"
-                };
-                content.Add(image, "userImage", System.IO.Path.GetFileName(userDTO.ImageUrl));
+                UserDataWithImageDTO userData = new UserDataWithImageDTO() { ProfileData = userDTO, Image = image };
 
-                StringContent serializedUser = new StringContent(JsonConvert.SerializeObject(userDTO));
-                serializedUser.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
-                {
-                    FileName = "userData"
-                };
-
-                content.Add(serializedUser, "userData");
-
-                var stream = new MemoryStream();
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    await content.CopyToAsync(stream);
-                    stream.Position = 0;
-                    var result = new FileStreamResult(stream, "multipart/form-data");
-
-                    return result;
-                }
+                return Ok(userData);
             }
+
             return Ok(userDTO);
         }
-        
+
+/*        [HttpGet("GetUserImage")]
+        public async Task<IActionResult> GetUserImage()
+        {
+            int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
+            User user = await _dataRepository.GetUserDataByid(userId);
+
+            if (user == null)
+                return NotFound();
+
+            return Ok(System.IO.File.ReadAllBytes(user.ImageUrl));
+        }*/
+
         [HttpPost("AddUser")]
         public async Task<IActionResult> AddUser(RegisterUserRequest userRequest)
         {
@@ -106,7 +98,7 @@ namespace AuctionServer.Controllers
         {
             int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
             User user = await _dataRepository.GetUserDataByid(userId);
-
+            
             if (file == null || file.Length == 0)
                 return BadRequest("No file uploaded.");
 

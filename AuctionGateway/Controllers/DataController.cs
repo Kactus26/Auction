@@ -2,6 +2,8 @@
 using CommonDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 
@@ -26,14 +28,23 @@ namespace AuctionGateway.Controllers
 
             var response = await _httpClient.GetAsync($"Data/GetUserData", cancellationToken);
             if (!response.IsSuccessStatusCode)
-            {
                 return BadRequest(await response.Content.ReadAsStringAsync());
-            } else if(response.Content.Headers.ContentType.MediaType == "multipart/form-data")
-            {
-                return Ok(response);
-            }
+
             return Ok(await response.Content.ReadAsStringAsync());
         }
+
+/*        [HttpGet("GetUserImage")]
+        public async Task<IActionResult> GetUserImage(CancellationToken cancellationToken)
+        {
+            string jwt = Request.Headers.Authorization!;
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt[7..]);
+
+            var response = await _httpClient.GetAsync($"Data/GetUserImage", cancellationToken);
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }*/
 
         [HttpPost("AddUser")]
         public async Task<IActionResult> AddUserData(RegisterUserRequest userRequest, CancellationToken cancellationToken)
