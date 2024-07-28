@@ -33,19 +33,6 @@ namespace AuctionGateway.Controllers
             return Ok(await response.Content.ReadAsStringAsync());
         }
 
-/*        [HttpGet("GetUserImage")]
-        public async Task<IActionResult> GetUserImage(CancellationToken cancellationToken)
-        {
-            string jwt = Request.Headers.Authorization!;
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt[7..]);
-
-            var response = await _httpClient.GetAsync($"Data/GetUserImage", cancellationToken);
-            if (!response.IsSuccessStatusCode)
-                return BadRequest(await response.Content.ReadAsStringAsync());
-
-            return Ok(await response.Content.ReadAsStringAsync());
-        }*/
-
         [HttpPost("AddUser")]
         public async Task<IActionResult> AddUserData(RegisterUserRequest userRequest, CancellationToken cancellationToken)
         {

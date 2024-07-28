@@ -40,29 +40,17 @@ namespace AuctionServer.Controllers
 
             UserProfileDTO userDTO = _mapper.Map<UserProfileDTO>(user);
 
+            UserDataWithImageDTO userDataWithImageDTO = new UserDataWithImageDTO { ProfileData = userDTO };
+
             if (userDTO.ImageUrl != null)
             {
                 byte[] image = System.IO.File.ReadAllBytes(userDTO.ImageUrl);
 
-                UserDataWithImageDTO userData = new UserDataWithImageDTO() { ProfileData = userDTO, Image = image };
-
-                return Ok(userData);
+                userDataWithImageDTO.Image = image;
             }
 
-            return Ok(userDTO);
+            return Ok(userDataWithImageDTO);
         }
-
-/*        [HttpGet("GetUserImage")]
-        public async Task<IActionResult> GetUserImage()
-        {
-            int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
-            User user = await _dataRepository.GetUserDataByid(userId);
-
-            if (user == null)
-                return NotFound();
-
-            return Ok(System.IO.File.ReadAllBytes(user.ImageUrl));
-        }*/
 
         [HttpPost("AddUser")]
         public async Task<IActionResult> AddUser(RegisterUserRequest userRequest)
@@ -106,7 +94,7 @@ namespace AuctionServer.Controllers
             if (!Directory.Exists(uploadPath))
                 Directory.CreateDirectory(uploadPath);
 
-            var filePath = Path.Combine(uploadPath, file.FileName);
+            var filePath = Path.Combine(uploadPath, System.Convert.ToString(userId) + file.FileName);
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
