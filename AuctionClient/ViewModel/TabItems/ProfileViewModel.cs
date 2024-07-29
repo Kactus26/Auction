@@ -72,27 +72,17 @@ namespace AuctionClient.ViewModel.TabItems
             if (IsGuest) {
                 MessageBox.Show("Guest can't update his profile");
                 return;
-            } else if (Name.Length == 0 || SurName.Length == 0 || Email.Length == 0){
+            } else if (Name.Length == 0 || SurName.Length == 0 || Email.Length == 0) {
                 MessageBox.Show("Name, Surname and Email have to be greater than 1 symbol");
             }
 
-            UserProfileDTO newData = new UserProfileDTO() { Name = this.Name, Surname = this.SurName, Email = this.Email, Info = Description, Balance = this.Balance};
-            await Post(newData, "UpdateUserData");
-
+            UserDataWithImageDTO newData = new UserDataWithImageDTO { ProfileData = new UserProfileDTO { Name = this.Name, Surname = this.SurName, Email = this.Email, Info = Description, Balance = this.Balance } };
+            
             if(ImageToSend != null) 
-            { 
-                ByteArrayContent fileContent = new ByteArrayContent(ImageToSend);
+                newData.Image = ImageToSend;
 
-                MultipartFormDataContent formData = new MultipartFormDataContent
-                {
-                    { fileContent, "file", System.IO.Path.GetFileName(UserImagePath) }
-                };
-
-                var response = await _httpClient.PostAsync("https://localhost:7002/api/Data/UploadImage", formData);
-                response.EnsureSuccessStatusCode();
-            }
-
-            MessageBox.Show("Data successfully updated! Congrats!");
+            if(await Post(newData, "UpdateUserData"))
+                MessageBox.Show("Data successfully updated! Congrats!");
         }
 
         private async void GetUserData()

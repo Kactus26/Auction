@@ -66,7 +66,7 @@ namespace AuctionServer.Controllers
         }
 
         [HttpPost("UpdateUserData")]
-        public async Task<IActionResult> UpdateUserData(UserProfileDTO newData)
+        public async Task<IActionResult> UpdateUserData(UserDataWithImageDTO newData)
         {
             int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
             User user = await _dataRepository.GetUserDataByid(userId);
@@ -74,39 +74,36 @@ namespace AuctionServer.Controllers
             if(user == null) 
                 return NotFound("User not found");
 
-            user = _mapper.Map(newData, user);
+            user = _mapper.Map(newData.ProfileData, user);
             user.Id = userId;
+
+            if(newData.Image != null)
+            {
+                UploadImage(newData.Image, user);
+            }
 
             await _dataRepository.SaveChanges();
 
             return Ok();
         }
 
-        [HttpPost("UploadImage")]
-        public async Task<IActionResult> UploadImage([FromForm] IFormFile file)
-        {
-            int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
-            User user = await _dataRepository.GetUserDataByid(userId);
-            
-            if (file == null || file.Length == 0)
-                return BadRequest("No file uploaded.");
-
+        private IActionResult UploadImage(byte[] image, User user)
+        {            
             var uploadPath = Path.Combine(_environment.WebRootPath, "userImages");
             if (!Directory.Exists(uploadPath))
                 Directory.CreateDirectory(uploadPath);
 
-            var filePath = Path.Combine(uploadPath, System.Convert.ToString(userId) + ".jpg");
+            var filePath = Path.Combine(uploadPath, System.Convert.ToString(user.Id) + ".jpg");
 
             if(Path.Exists(filePath))//Deletes previous user image
                 System.IO.File.Delete(filePath);
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
-                await file.CopyToAsync(stream);
+                stream.Write(image);
             }
 
             user.ImageUrl = filePath;
-            await _dataRepository.SaveChanges();
 
             return Ok("User Image successfully updated");
         }

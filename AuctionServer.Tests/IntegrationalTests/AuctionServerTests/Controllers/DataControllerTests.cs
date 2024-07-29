@@ -84,7 +84,7 @@ namespace AuctionServer.Tests.IntegrationalTests.AuctionServerTests.Controllers
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            UserProfileDTO newData = new UserProfileDTO() { Name = "UpdatedKactus", Email = "UpdatedEmail", Info = "I'm updated...", Surname = "UpdatedSurname", ImageUrl = "sadasda", Balance = 0 };
+            UserDataWithImageDTO newData = new UserDataWithImageDTO() { ProfileData = new UserProfileDTO { Name = "UpdatedKactus", Email = "UpdatedEmail", Info = "I'm updated...", Surname = "UpdatedSurname", ImageUrl = "sadasda", Balance = 0 } };
             Model.User fakeUpdatedUser = new Model.User() { Id = userBeforeUpdate.Id, Name = "UpdatedKactus", Email = "UpdatedEmail", Info = "I'm updated...", Surname = "UpdatedSurname", ImageUrl = "sadasda", Balance = 0 };
 
             //Act

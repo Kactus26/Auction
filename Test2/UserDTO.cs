@@ -16,7 +16,7 @@ namespace CommonDTO
     public class UserDataWithImageDTO
     {
         public UserProfileDTO ProfileData { get; set; } = null!;
-        public byte[] Image { get; set; } = null!;
+        public byte[]? Image { get; set; }
     }
 
     public class LotDTO
