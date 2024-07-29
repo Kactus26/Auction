@@ -95,7 +95,10 @@ namespace AuctionServer.Controllers
             if (!Directory.Exists(uploadPath))
                 Directory.CreateDirectory(uploadPath);
 
-            var filePath = Path.Combine(uploadPath, System.Convert.ToString(userId) + file.FileName);
+            var filePath = Path.Combine(uploadPath, System.Convert.ToString(userId) + ".jpg");
+
+            if(Path.Exists(filePath))//Deletes previous user image
+                System.IO.File.Delete(filePath);
 
             using (var stream = new FileStream(filePath, FileMode.Create))
             {
