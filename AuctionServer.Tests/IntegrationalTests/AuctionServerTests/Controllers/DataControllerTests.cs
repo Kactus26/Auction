@@ -31,7 +31,7 @@ namespace AuctionServer.Tests.IntegrationalTests.AuctionServerTests.Controllers
         }
 
         [Fact]
-        public async Task DataController_CheckUserData_ReturnOk()
+        public async Task DataController_GetUserData_ReturnOk()
         {
             // Arrange
             var user = new User { Id = 1, Login = "Kactus", Email = "Test@test", Password = "Test" };
@@ -44,10 +44,9 @@ namespace AuctionServer.Tests.IntegrationalTests.AuctionServerTests.Controllers
             response.EnsureSuccessStatusCode();
 
             // Assert
-            response.EnsureSuccessStatusCode();
-            UserProfileDTO result = JsonConvert.DeserializeObject<UserProfileDTO>(await response.Content.ReadAsStringAsync())!;
-            Assert.IsType<UserProfileDTO>(result);
-            Assert.Equal(user.Id, result.Id);
+            UserDataWithImageDTO result = JsonConvert.DeserializeObject<UserDataWithImageDTO>(await response.Content.ReadAsStringAsync())!;
+            Assert.IsType<UserDataWithImageDTO>(result);
+            Assert.Equal(user.Id, result.ProfileData.Id);
         }
 
         [Fact]
@@ -85,7 +84,7 @@ namespace AuctionServer.Tests.IntegrationalTests.AuctionServerTests.Controllers
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            ChangedDataDTO newData = new ChangedDataDTO() { Name = "UpdatedKactus", Email = "UpdatedEmail", Info = "I'm updated...", Surname = "UpdatedSurname", ImageUrl = "sadasda", Balance = 0 };
+            UserDataWithImageDTO newData = new UserDataWithImageDTO() { ProfileData = new UserProfileDTO { Name = "UpdatedKactus", Email = "UpdatedEmail", Info = "I'm updated...", Surname = "UpdatedSurname", ImageUrl = "sadasda", Balance = 0 } };
             Model.User fakeUpdatedUser = new Model.User() { Id = userBeforeUpdate.Id, Name = "UpdatedKactus", Email = "UpdatedEmail", Info = "I'm updated...", Surname = "UpdatedSurname", ImageUrl = "sadasda", Balance = 0 };
 
             //Act
@@ -99,8 +98,8 @@ namespace AuctionServer.Tests.IntegrationalTests.AuctionServerTests.Controllers
 
             //Clear
             ChangeProperties(updatedUser, userBeforeUpdate);
-
             _dataContext.SaveChanges();
         }
+
     }
 }

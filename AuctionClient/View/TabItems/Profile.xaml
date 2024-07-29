@@ -56,11 +56,13 @@
           Style="{StaticResource MaterialDesignFloatingHintTextBox}" Height="100"/>
 
         <Label Content="Balance:" Grid.Column="1" Foreground="White"
-               FontSize="25" Margin="0,23,0,75"/>
+               FontSize="20" Margin="0,28,0,75"/>
         <Label Content="{Binding Balance}" Grid.Column="1" Foreground="White"
-        FontSize="25" Margin="102,23,0,65"/>
+        FontSize="20" Margin="85,28,0,65"/>
 
-        <Image Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Source="{Binding UserImage}" Margin="0,0,20,0"/>
+        <Button Grid.Row="0" Grid.Column="2" Content="Upload Image" BorderBrush="White" Background="Transparent" Foreground="White" Command="{Binding UploadImageCommand}" Margin="0,-70,15,0"/>
+
+        <Image Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Source="{Binding UserImagePath}" Margin="0,70,20,0"/>
         <Button Grid.Row="2" Grid.Column="2" Content="Update" BorderBrush="White" Background="White" Command="{Binding UpdateUserDataCommand}" Foreground="#FF8A8585" Margin="0,-50,15,0"/>
         <Button Grid.Row="2" Grid.Column="2" Content="Exit" BorderBrush="White" Background="White" Command="{Binding ExitFromAccountCommand}" Foreground="#FF8A8585" Grid.ColumnSpan="2" Margin="0,60,15,0"/>
     </Grid>

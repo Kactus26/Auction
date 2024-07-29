@@ -4,6 +4,11 @@ using AuctionServer.Repository;
 using AutoMapper;
 using CommonDTO;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text.Json.Serialization;
 
 namespace AuctionServer.Controllers
 {
@@ -13,12 +18,15 @@ namespace AuctionServer.Controllers
     {
         private readonly IDataRepository _dataRepository;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _environment;
+
         public string UserId => User.Identities.First().Claims.First().Value;
 
-        public DataController(IMapper mapper, IDataRepository dataRepos)
+        public DataController(IMapper mapper, IDataRepository dataRepos, IWebHostEnvironment environment)
         {
             _dataRepository = dataRepos;
             _mapper = mapper;
+            _environment = environment;
         }
 
         [HttpGet("GetUserData")]
@@ -27,14 +35,23 @@ namespace AuctionServer.Controllers
             int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
             User user = await _dataRepository.GetUserDataByid(userId);
 
-            if(user == null)
+            if (user == null)
                 return NotFound();
 
             UserProfileDTO userDTO = _mapper.Map<UserProfileDTO>(user);
 
-            return Ok(userDTO);
+            UserDataWithImageDTO userDataWithImageDTO = new UserDataWithImageDTO { ProfileData = userDTO };
+
+            if (userDTO.ImageUrl != null)
+            {
+                byte[] image = System.IO.File.ReadAllBytes(userDTO.ImageUrl);
+
+                userDataWithImageDTO.Image = image;
+            }
+
+            return Ok(userDataWithImageDTO);
         }
-        
+
         [HttpPost("AddUser")]
         public async Task<IActionResult> AddUser(RegisterUserRequest userRequest)
         {
@@ -48,17 +65,47 @@ namespace AuctionServer.Controllers
             return Ok("User has been added");
         }
 
-        [HttpPost("UpdateUserData")]//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        public async Task<IActionResult> UpdateUserData(ChangedDataDTO newData)
+        [HttpPost("UpdateUserData")]
+        public async Task<IActionResult> UpdateUserData(UserDataWithImageDTO newData)
         {
             int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
             User user = await _dataRepository.GetUserDataByid(userId);
 
-            user = _mapper.Map(newData, user);
+            if(user == null) 
+                return NotFound("User not found");
+
+            user = _mapper.Map(newData.ProfileData, user);
+            user.Id = userId;
+
+            if(newData.Image != null)
+            {
+                UploadImage(newData.Image, user);
+            }
 
             await _dataRepository.SaveChanges();
 
             return Ok();
+        }
+
+        private IActionResult UploadImage(byte[] image, User user)
+        {            
+            var uploadPath = Path.Combine(_environment.WebRootPath, "userImages");
+            if (!Directory.Exists(uploadPath))
+                Directory.CreateDirectory(uploadPath);
+
+            var filePath = Path.Combine(uploadPath, System.Convert.ToString(user.Id) + ".jpg");
+
+            if(Path.Exists(filePath))//Deletes previous user image
+                System.IO.File.Delete(filePath);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                stream.Write(image);
+            }
+
+            user.ImageUrl = filePath;
+
+            return Ok("User Image successfully updated");
         }
     }
 }

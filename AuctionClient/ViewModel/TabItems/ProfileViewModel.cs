@@ -3,16 +3,20 @@ using AuctionClient.View;
 using CommonDTO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
 using Newtonsoft.Json;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Windows;
+using System.Windows.Shapes;
 
 namespace AuctionClient.ViewModel.TabItems
 {
     public partial class ProfileViewModel : ObservableObject
     {
+        #region UserData
         [ObservableProperty]
         public string name = "";
         [ObservableProperty]
@@ -24,8 +28,12 @@ namespace AuctionClient.ViewModel.TabItems
         [ObservableProperty]
         public double balance;
         [ObservableProperty]
-        public string? userImage;
+        public string userImagePath;
+        #endregion
+        private byte[] ImageToSend { get; set; }
+        private bool IsGuest { get; set; } = false;
         private string? ErrorMessage {  get; set; }
+        private const string pathToImages = "../../../Images/";
 
         private readonly HttpClient _httpClient;
         ApplicationContext db = new ApplicationContext();
@@ -61,13 +69,25 @@ namespace AuctionClient.ViewModel.TabItems
         [RelayCommand]
         public async Task UpdateUserData()
         {
-            ChangedDataDTO newData = new ChangedDataDTO() { Name = this.Name, Surname = this.SurName, Email = this.Email, Info = Description, Balance = this.Balance, ImageUrl = UserImage};
-            await Post(newData, "UpdateUserData");
+            if (IsGuest) {
+                MessageBox.Show("Guest can't update his profile");
+                return;
+            } else if (Name.Length == 0 || SurName.Length == 0 || Email.Length == 0) {
+                MessageBox.Show("Name, Surname and Email have to be greater than 1 symbol");
+            }
+
+            UserDataWithImageDTO newData = new UserDataWithImageDTO { ProfileData = new UserProfileDTO { Name = this.Name, Surname = this.SurName, Email = this.Email, Info = Description, Balance = this.Balance } };
+            
+            if(ImageToSend != null) 
+                newData.Image = ImageToSend;
+
+            if(await Post(newData, "UpdateUserData"))
+                MessageBox.Show("Data successfully updated! Congrats!");
         }
 
         private async void GetUserData()
         {
-            HttpResponseMessage response = await _httpClient.GetAsync($"https://localhost:7002/api/Data/GetUserData");
+            HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:7002/api/Data/GetUserData");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -76,14 +96,42 @@ namespace AuctionClient.ViewModel.TabItems
                 return;
             }
 
-            UserProfileDTO userData = JsonConvert.DeserializeObject<UserProfileDTO>(await response.Content.ReadAsStringAsync())!;
+            UserDataWithImageDTO user = JsonConvert.DeserializeObject<UserDataWithImageDTO>(await response.Content.ReadAsStringAsync());
 
-            Name = userData.Name;
-            SurName = userData.Surname;
-            Email = userData.Email;
-            Description = userData.Info;
-            Balance = userData.Balance;
-            UserImage = userData.ImageUrl;
+            if (user != null)
+            {
+                Name = user.ProfileData.Name;
+                SurName = user.ProfileData.Surname;
+                Email = user.ProfileData.Email;
+                Description = user.ProfileData.Info;
+                Balance = user.ProfileData.Balance;
+
+                string relativePath = pathToImages + "ProfileImage.png";
+                string absolutePath = System.IO.Path.GetFullPath(relativePath);
+
+                using (var stream = new FileStream(absolutePath, FileMode.Create, FileAccess.Write))
+                {
+                    stream.Write(user.Image);
+                }
+
+                UserImagePath = absolutePath;
+            }
+            else
+                MessageBox.Show("User data not found");
+        }
+
+        [RelayCommand]
+        public async Task UploadImage()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Image files (*.jpg, *.jpeg, *.png) | *.jpg; *.jpeg; *.png";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string filePath = openFileDialog.FileName;
+                ImageToSend = File.ReadAllBytes(filePath);
+
+                UserImagePath = filePath;
+            }
         }
 
         public void ProfileForGuest()
@@ -93,7 +141,8 @@ namespace AuctionClient.ViewModel.TabItems
             SurName = "Guestovich";
             Email = "guest.guestov@gmail.guest";
             Description = "I'm just guest";
-            UserImage = "../../Images/Guest.jpg";
+            UserImagePath = pathToImages + "Guest.jpg";
+            IsGuest = true;
         }
 
         [RelayCommand]

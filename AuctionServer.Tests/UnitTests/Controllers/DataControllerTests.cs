@@ -3,6 +3,7 @@ using AuctionServer.Interfaces;
 using AuctionServer.Model;
 using AutoMapper;
 using CommonDTO;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -16,14 +17,16 @@ namespace AuctionServer.Tests.UnitTests.Controllers
     {
         private readonly Mock<IDataRepository> _mockDataRepository;
         private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IWebHostEnvironment> _mockEnviroment;
         private readonly DataController _dataController;
 
         public DataControllerTests()
         {
             _mockDataRepository = new Mock<IDataRepository>();
             _mockMapper = new Mock<IMapper>();
+            _mockEnviroment = new Mock<IWebHostEnvironment>();
 
-            _dataController = new DataController(_mockMapper.Object, _mockDataRepository.Object);
+            _dataController = new DataController(_mockMapper.Object, _mockDataRepository.Object, _mockEnviroment.Object);
 
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
             {
@@ -69,7 +72,7 @@ namespace AuctionServer.Tests.UnitTests.Controllers
 
             // Assert
             var test = Assert.IsType<OkObjectResult>(result);
-            Assert.IsType<UserProfileDTO>(test.Value);
+            Assert.IsType<UserDataWithImageDTO>(test.Value);
         }
 
         [Fact]

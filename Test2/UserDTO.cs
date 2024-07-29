@@ -13,14 +13,10 @@ namespace CommonDTO
         public double Balance { get; set; } = 0.00;
     }
 
-    public class ChangedDataDTO
+    public class UserDataWithImageDTO
     {
-        public string Name { get; set; } = null!;
-        public string Surname { get; set; } = String.Empty;
-        public string Email { get; set; } = null!;
-        public string Info { get; set; } = String.Empty;
-        public string? ImageUrl { get; set; }
-        public double Balance { get; set; } = 0.00;
+        public UserProfileDTO ProfileData { get; set; } = null!;
+        public byte[]? Image { get; set; }
     }
 
     public class LotDTO
