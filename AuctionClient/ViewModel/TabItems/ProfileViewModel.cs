@@ -76,7 +76,7 @@ namespace AuctionClient.ViewModel.TabItems
                 MessageBox.Show("Name, Surname and Email have to be greater than 1 symbol");
             }
 
-            ChangedDataDTO newData = new ChangedDataDTO() { Name = this.Name, Surname = this.SurName, Email = this.Email, Info = Description, Balance = this.Balance};
+            UserProfileDTO newData = new UserProfileDTO() { Name = this.Name, Surname = this.SurName, Email = this.Email, Info = Description, Balance = this.Balance};
             await Post(newData, "UpdateUserData");
 
             if(ImageToSend != null) 

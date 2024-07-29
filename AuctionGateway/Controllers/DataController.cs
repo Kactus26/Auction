@@ -49,7 +49,7 @@ namespace AuctionGateway.Controllers
 
         [HttpPost("UpdateUserData")]
         [Authorize]
-        public async Task<IActionResult> UpdateUserData(ChangedDataDTO newData, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateUserData(UserProfileDTO newData, CancellationToken cancellationToken)
         {
             string jwt = Request.Headers.Authorization!;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt[7..]);

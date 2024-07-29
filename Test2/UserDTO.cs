@@ -19,16 +19,6 @@ namespace CommonDTO
         public byte[] Image { get; set; } = null!;
     }
 
-    public class ChangedDataDTO
-    {
-        public string Name { get; set; } = null!;
-        public string Surname { get; set; } = String.Empty;
-        public string Email { get; set; } = null!;
-        public string Info { get; set; } = String.Empty;
-        public string? ImageUrl { get; set; }
-        public double Balance { get; set; } = 0.00;
-    }
-
     public class LotDTO
     {
         public int Id { get; set; }

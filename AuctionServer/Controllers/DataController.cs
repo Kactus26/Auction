@@ -66,7 +66,7 @@ namespace AuctionServer.Controllers
         }
 
         [HttpPost("UpdateUserData")]
-        public async Task<IActionResult> UpdateUserData(ChangedDataDTO newData)
+        public async Task<IActionResult> UpdateUserData(UserProfileDTO newData)
         {
             int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
             User user = await _dataRepository.GetUserDataByid(userId);
@@ -75,6 +75,7 @@ namespace AuctionServer.Controllers
                 return NotFound("User not found");
 
             user = _mapper.Map(newData, user);
+            user.Id = userId;
 
             await _dataRepository.SaveChanges();
 

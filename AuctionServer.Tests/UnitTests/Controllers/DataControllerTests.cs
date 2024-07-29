@@ -72,7 +72,7 @@ namespace AuctionServer.Tests.UnitTests.Controllers
 
             // Assert
             var test = Assert.IsType<OkObjectResult>(result);
-            Assert.IsType<UserProfileDTO>(test.Value);
+            Assert.IsType<UserDataWithImageDTO>(test.Value);
         }
 
         [Fact]

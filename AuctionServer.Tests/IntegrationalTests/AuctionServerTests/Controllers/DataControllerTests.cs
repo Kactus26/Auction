@@ -44,30 +44,9 @@ namespace AuctionServer.Tests.IntegrationalTests.AuctionServerTests.Controllers
             response.EnsureSuccessStatusCode();
 
             // Assert
-            UserProfileDTO result = JsonConvert.DeserializeObject<UserProfileDTO>(await response.Content.ReadAsStringAsync())!;
-            Assert.IsType<UserProfileDTO>(result);
-            Assert.Equal(user.Id, result.Id);
-        }
-
-        [Fact]
-        public async Task DataController_GetUserDataWithImage_ReturnOk()
-        {
-            // Arrange
-            var user = new User { Id = 5, Login = "Kactus", Email = "Test@test", Password = "Test" };
-            var token = _jwtProvider.GenerateToken(user);
-
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            // Act
-            var response = await _client.GetAsync("api/Data/GetUserData");
-            response.EnsureSuccessStatusCode();
-            var test = response.Content.ReadAsStringAsync();
-            var test2 = response.Content.Headers.ToString();
-
-            // Assert
-            UserProfileDTO result = JsonConvert.DeserializeObject<UserProfileDTO>(await response.Content.ReadAsStringAsync())!;
-            Assert.IsType<UserProfileDTO>(result);
-            Assert.Equal(user.Id, result.Id);
+            UserDataWithImageDTO result = JsonConvert.DeserializeObject<UserDataWithImageDTO>(await response.Content.ReadAsStringAsync())!;
+            Assert.IsType<UserDataWithImageDTO>(result);
+            Assert.Equal(user.Id, result.ProfileData.Id);
         }
 
         [Fact]
@@ -105,7 +84,7 @@ namespace AuctionServer.Tests.IntegrationalTests.AuctionServerTests.Controllers
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            ChangedDataDTO newData = new ChangedDataDTO() { Name = "UpdatedKactus", Email = "UpdatedEmail", Info = "I'm updated...", Surname = "UpdatedSurname", ImageUrl = "sadasda", Balance = 0 };
+            UserProfileDTO newData = new UserProfileDTO() { Name = "UpdatedKactus", Email = "UpdatedEmail", Info = "I'm updated...", Surname = "UpdatedSurname", ImageUrl = "sadasda", Balance = 0 };
             Model.User fakeUpdatedUser = new Model.User() { Id = userBeforeUpdate.Id, Name = "UpdatedKactus", Email = "UpdatedEmail", Info = "I'm updated...", Surname = "UpdatedSurname", ImageUrl = "sadasda", Balance = 0 };
 
             //Act
