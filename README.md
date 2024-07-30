@@ -6,12 +6,12 @@ AuctionClient is a WPF application. It consists of a registration window and a "
 
 In the images folder, we have 2 types of images:
 
-Images that are constant (for example, a guest profile image).
-Images that the server sends (profile images that the user uploads and saves).
+Images that are constant (for example, a guest profile image).<br>
+Images that the server sends (profile images that the user uploads and saves).<br>
 Every ViewModel contains a generic post/get method that sends data to the gateway. Other methods provide the name of the gateway method as a parameter and the data it needs to transfer. This post/get method also checks the success of the response.
 
 How Registration Works<br>
-After the user enters all required data for registration and it has been validated successfully, the request through the gateway goes to the IdentityService. There, it checks for user login and email uniqueness, hashes the password using the BCrypt library (PasswordHasherService), adds the user to the AuctionIdentity SQLServer database (which keeps only the login, hashed password, and email), and finally generates a token using SigningCredentials that makes a SymmetricSecurityKey based on a string in appsettings.json. That token is sent back to the client, where it is saved in a SQLite local database. The token contains a userId and expires in 12 hours.
+After the user enters all required data for registration and it has been validated successfully, the request through the gateway goes to the IdentityService. There, it checks for user login and email uniqueness, hashes the password using the BCrypt library (PasswordHasherService), adds the user to the AuctionIdentity SQLServer database (which keeps only the login, hashed password, and email), and finally generates a token using SigningCredentials that makes a SymmetricSecurityKey based on a string in appsettings.json. That token is sent back to the client, where it is saved in a SQLite local database. The token contains a userId and expires in 12 hours.<br>
 
 Every time the app launches, it checks if the token exists and is not expired, and if everything is correct, it launches the MainWindow without the need to log in manually. When the user exits their account, the token is deleted from the local database. If the user chooses to enter as a guest, they won't be able to use some functions. On the program side, they just won't have a token, so gateway methods that are marked as Authorized will send the request back.
 
