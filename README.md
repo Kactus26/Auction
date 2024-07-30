@@ -1,4 +1,4 @@
-<b>Small documentation about how some things work<b><br>
+<b>Small documentation about how some things work</b><br>
 First of all, Auction is a microservice multiplatform app that uses ASP.Net and WPF. Right now, the app has 4 services (AuctionClient - WPF client, AuctionGateway, AuctionIdentity - for Authorization and handling all things related to it, AuctionServer - the main server service that has most of the data), a solution for testing, and a library with common DTOs. The Gateway is used for authentication checking (when a request comes to the gateway, it takes the token from the request header and checks if it passes validation, meaning it's not expired and has the correct SigningKey), routing, and load balancing.
 
 AuctionClient<br>
