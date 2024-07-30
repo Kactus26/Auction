@@ -20,11 +20,11 @@ namespace AuctionGateway.Controllers
             _httpClient = httpClient.CreateClient("AuctionServer");
         }
 
+        [Authorize]
         [HttpGet("GetUserData")]
         public async Task<IActionResult> GetUserData(CancellationToken cancellationToken)
         {
-            string jwt = Request.Headers.Authorization!;
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt[7..]);
+            JWTIntoHeader();
 
             var response = await _httpClient.GetAsync($"Data/GetUserData", cancellationToken);
             if (!response.IsSuccessStatusCode)
@@ -36,8 +36,7 @@ namespace AuctionGateway.Controllers
         [HttpPost("AddUser")]
         public async Task<IActionResult> AddUserData(RegisterUserRequest userRequest, CancellationToken cancellationToken)
         {
-            string jwt = Request.Headers.Authorization!;
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt[7..]);
+            JWTIntoHeader();
 
             var response = await _httpClient.PostAsJsonAsync($"Data/AddUser", userRequest, cancellationToken);
             if (!response.IsSuccessStatusCode)
@@ -47,12 +46,11 @@ namespace AuctionGateway.Controllers
             return Ok(await response.Content.ReadAsStringAsync());
         }
 
-        [HttpPost("UpdateUserData")]
         [Authorize]
+        [HttpPost("UpdateUserData")]
         public async Task<IActionResult> UpdateUserData(UserDataWithImageDTO newData, CancellationToken cancellationToken)
         {
-            string jwt = Request.Headers.Authorization!;
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt[7..]);
+            JWTIntoHeader();
 
             var response = await _httpClient.PostAsJsonAsync($"Data/UpdateUserData", newData, cancellationToken);
             if (!response.IsSuccessStatusCode)
@@ -62,32 +60,10 @@ namespace AuctionGateway.Controllers
             return Ok(await response.Content.ReadAsStringAsync());
         }
 
-        [HttpPost("UploadImage")]
-        [Authorize]
-        public async Task<IActionResult> UploadImage([FromForm]IFormFile file)
+        private void JWTIntoHeader()
         {
             string jwt = Request.Headers.Authorization!;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt[7..]);
-
-            if (file == null || file.Length == 0)
-                return BadRequest("No file uploaded.");
-
-            var content = new MultipartFormDataContent();
-            using (var ms = new MemoryStream())
-            {
-                await file.CopyToAsync(ms);
-                var fileBytes = ms.ToArray();
-                var fileContent = new ByteArrayContent(fileBytes);
-
-                content.Add(fileContent, "file", file.FileName);
-
-                var response = await _httpClient.PostAsync("Data/UploadImage", content);
-                if (!response.IsSuccessStatusCode)
-                    return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
-
-                var result = await response.Content.ReadAsStringAsync();
-                return Ok(result);  
-            }
         }
     }
 }

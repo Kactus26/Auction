@@ -31,7 +31,6 @@ namespace AuctionClient.ViewModel.TabItems
         public string userImagePath;
         #endregion
         private byte[] ImageToSend { get; set; }
-        private bool IsGuest { get; set; } = false;
         private string? ErrorMessage {  get; set; }
         private const string pathToImages = "../../../Images/";
 
@@ -58,21 +57,22 @@ namespace AuctionClient.ViewModel.TabItems
 
             if (!response.IsSuccessStatusCode)
             {
-                ErrorMessage = await response.Content.ReadAsStringAsync();
-                MessageBox.Show(ErrorMessage);
+                if (response.ReasonPhrase == "Unauthorized")
+                    MessageBox.Show("Guest can't do this function");
+                else
+                {
+                    ErrorMessage = await response.Content.ReadAsStringAsync();
+                    MessageBox.Show(ErrorMessage);
+                }
                 return false;
             }
-            
             return true;
         }
 
         [RelayCommand]
         public async Task UpdateUserData()
         {
-            if (IsGuest) {
-                MessageBox.Show("Guest can't update his profile");
-                return;
-            } else if (Name.Length == 0 || SurName.Length == 0 || Email.Length == 0) {
+            if (Name.Length == 0 || SurName.Length == 0 || Email.Length == 0) {
                 MessageBox.Show("Name, Surname and Email have to be greater than 1 symbol");
             }
 
@@ -142,7 +142,6 @@ namespace AuctionClient.ViewModel.TabItems
             Email = "guest.guestov@gmail.guest";
             Description = "I'm just guest";
             UserImagePath = pathToImages + "Guest.jpg";
-            IsGuest = true;
         }
 
         [RelayCommand]
