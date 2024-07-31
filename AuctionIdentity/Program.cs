@@ -12,7 +12,7 @@ builder.Services.AddTransient<Seed>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasherService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJWTProvider, JWTProvider>();
-
+builder.Services.AddScoped<IMailService, MailService>();
 /*builder.Services.AddAutoMapper(typeof(IMappingPofile).Assembly);
 */
 

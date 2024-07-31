@@ -97,6 +97,7 @@ namespace AuctionClient.ViewModel
                 LoggedUser lu = db.Find<LoggedUser>(1)!;
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", lu.JWTToken);
                 await Post(registerUserRequest, "Data", "AddUser");
+                HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:7002/api/Identity/SendEmail");
             }
 
             ChangeWindow();

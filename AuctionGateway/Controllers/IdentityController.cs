@@ -1,4 +1,5 @@
-﻿using CommonDTO;
+﻿using Azure.Core;
+using CommonDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -16,6 +17,17 @@ namespace AuctionGateway.Controllers
         public IdentityController(IHttpClientFactory httpClient) 
         {
             _httpClient = httpClient.CreateClient("IdentityServer");
+        }
+
+        [HttpGet("SendEmail")]
+        public async Task<IActionResult> SendEmail(CancellationToken cancellationToken)
+        {
+            var response = await _httpClient.GetAsync($"User/SendEmail", cancellationToken);
+            if (!response.IsSuccessStatusCode)
+            {
+                return BadRequest(await response.Content.ReadAsStringAsync());
+            }
+            return Ok(await response.Content.ReadAsStringAsync());
         }
 
         [HttpPost("Registration")]

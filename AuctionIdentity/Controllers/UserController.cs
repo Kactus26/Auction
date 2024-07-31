@@ -13,13 +13,22 @@ namespace AuctionIdentity.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly IMailService _mailService;
         private readonly IJWTProvider _jwtProvider;
 
-        public UserController(IPasswordHasher passwordHasher, IUserRepository userRepository, IJWTProvider jwtProvider)
+        public UserController(IPasswordHasher passwordHasher, IUserRepository userRepository, IJWTProvider jwtProvider, IMailService mailService)
         {
             _passwordHasher = passwordHasher;
             _userRepository = userRepository;
             _jwtProvider = jwtProvider;
+            _mailService = mailService;
+        }
+
+        [HttpGet("SendEmail")]
+        public IActionResult SendEmail() 
+        {
+            _mailService.SendEmail();
+            return Ok();
         }
 
         [HttpPost("RegisterUser")]
@@ -71,12 +80,5 @@ namespace AuctionIdentity.Controllers
 
             return Ok(token);
         }
-
-/*        [HttpGet("TestAuth")]
-        public async Task<IActionResult> TestAuth()
-        {
-            return Ok("Method is working");
-        }*/
-
     }
 }
