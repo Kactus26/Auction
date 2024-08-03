@@ -2,6 +2,6 @@
 {
     public interface IMailService
     {
-        public void SendEmail(); 
+        public string SendEmail(string email); 
     }
 }

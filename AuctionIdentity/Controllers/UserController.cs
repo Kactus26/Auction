@@ -24,11 +24,11 @@ namespace AuctionIdentity.Controllers
             _mailService = mailService;
         }
 
-        [HttpGet("SendEmail")]
-        public IActionResult SendEmail() 
+        [HttpPost("SendEmail")]
+        public IActionResult SendEmail(RegisterUserRequest request) 
         {
-            _mailService.SendEmail();
-            return Ok();
+            string result = _mailService.SendEmail(request.Email);
+            return Ok(result);
         }
 
         [HttpPost("RegisterUser")]
@@ -37,7 +37,7 @@ namespace AuctionIdentity.Controllers
             if (!await _userRepository.CheckUserEmail(request.Email))
                 return BadRequest("User with this email already exists");
 
-            if(!await _userRepository.CheckUserLogin(request.Login))
+            if (!await _userRepository.CheckUserLogin(request.Login))
             {
                 return BadRequest("User with this login already exists");
             }

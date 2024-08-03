@@ -10,11 +10,11 @@ using Xunit;
 
 namespace AuctionServer.Tests.IntegrationalTests.AuctionServerTests.Controllers
 {
-    public class DataControllerTests : IntegrationTestBase, IClassFixture<WebApplicationFactory<Program>>
+    public class DataControllerTests : IntegrationTestBase, IClassFixture<WebApplicationFactory<ServerProgram>>
     {
         private readonly HttpClient _client;
 
-        public DataControllerTests(WebApplicationFactory<Program> factory)
+        public DataControllerTests(WebApplicationFactory<ServerProgram> factory)
         {
             _client = factory.CreateClient();
         }

@@ -41,6 +41,7 @@ namespace AuctionClient.ViewModel
             }
         }
 
+        #region Properties
         [ObservableProperty]
         private string login = "";
         [ObservableProperty]
@@ -55,6 +56,7 @@ namespace AuctionClient.ViewModel
         private string errorMessage = "";
         [ObservableProperty]
         private string errorMessageReg = "";
+        #endregion
 
         [RelayCommand]
         public async Task Registration()
@@ -97,7 +99,7 @@ namespace AuctionClient.ViewModel
                 LoggedUser lu = db.Find<LoggedUser>(1)!;
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", lu.JWTToken);
                 await Post(registerUserRequest, "Data", "AddUser");
-                HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:7002/api/Identity/SendEmail");
+                await Post(registerUserRequest, "Identity", "SendEmail");//ПОЧТАААААААА
             }
 
             ChangeWindow();

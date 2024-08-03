@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 
 namespace AuctionGateway.Controllers
@@ -19,10 +20,10 @@ namespace AuctionGateway.Controllers
             _httpClient = httpClient.CreateClient("IdentityServer");
         }
 
-        [HttpGet("SendEmail")]
-        public async Task<IActionResult> SendEmail(CancellationToken cancellationToken)
+        [HttpPost("SendEmail")]
+        public async Task<IActionResult> SendEmail(RegisterUserRequest email, CancellationToken cancellationToken)
         {
-            var response = await _httpClient.GetAsync($"User/SendEmail", cancellationToken);
+            var response = await _httpClient.PostAsJsonAsync($"User/SendEmail", email, cancellationToken);
             if (!response.IsSuccessStatusCode)
             {
                 return BadRequest(await response.Content.ReadAsStringAsync());
