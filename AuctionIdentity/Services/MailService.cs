@@ -11,14 +11,14 @@ namespace AuctionIdentity.Services
         public string SendEmail(string email)
         {
             var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("Your Name", "sasha.baginsky@gmail.com"));
-            message.To.Add(new MailboxAddress("Recipient Name", email));
-            message.Subject = "Test Email";
+            message.From.Add(new MailboxAddress("AuctionCEO", "sasha.baginsky@gmail.com"));
+            message.To.Add(new MailboxAddress("Favourite Client", email));
+            message.Subject = "Confirm your email";
 
-            // Тело письма
+            string password = GeneratePassword();
             message.Body = new TextPart("plain")
             {
-                Text = @"Hello, this is a test email!"
+                Text = $"This is your password: {password}"
             };
 
             // Отправка письма
@@ -40,10 +40,23 @@ namespace AuctionIdentity.Services
                     client.Disconnect(true);
                 } catch (Exception ex)
                 {
-                    return ex.ToString();
+                    return new (ex.ToString());
                 }
-                return "Email Send Succsessfully";
+                return new (password);
             }
+        }
+
+        private string GeneratePassword()
+        {
+            Random random = new Random();
+            char[] digits = new char[6];
+
+            for (int i = 0; i < 6; i++)
+            {
+                digits[i] = (char)('0' + random.Next(10));
+            }
+
+            return new string(digits);
         }
     }
 }

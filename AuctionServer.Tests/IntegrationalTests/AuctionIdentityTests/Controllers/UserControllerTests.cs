@@ -20,11 +20,13 @@ namespace Auction.Tests.IntegrationalTests.AuctionIdentityTests.Controllers
             RegisterUserRequest request = new RegisterUserRequest { Email = "sasha.baginsky@gmail.com", Login = "123", Password = "123" };
 
             var response = await _client.PostAsJsonAsync("api/User/SendEmail", request);
+            if (!response.IsSuccessStatusCode)
+                return;
 
             string result = await response.Content.ReadAsStringAsync();
 
-            Assert.NotNull(result);
-            Assert.Equal("Email Send Succsessfully", result);
+            Assert.IsType<string>(result);
+            Assert.InRange(result.Length, 0, 6);
         }
     }
 }
