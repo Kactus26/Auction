@@ -2,6 +2,11 @@
 
 namespace CommonDTO
 {
+    public class EmailDTO
+    {
+        public string Email { get; set; }
+    }
+
     public class UserProfileDTO
     {
         public int Id { get; set; }

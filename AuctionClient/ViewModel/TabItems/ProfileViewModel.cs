@@ -32,6 +32,8 @@ namespace AuctionClient.ViewModel.TabItems
         #endregion
         private byte[] ImageToSend { get; set; }
         private string? ErrorMessage {  get; set; }
+        private string? ConfirmEmailPassword {  get; set; }
+
         private const string pathToImages = "../../../Images/";
 
         private readonly HttpClient _httpClient;
@@ -142,6 +144,23 @@ namespace AuctionClient.ViewModel.TabItems
             Email = "guest.guestov@gmail.guest";
             Description = "I'm just guest";
             UserImagePath = pathToImages + "Guest.jpg";
+        }
+
+        [RelayCommand]
+        public async Task ConfirmEmail()
+        {
+            EmailDTO emailDTO = new EmailDTO { Email = Email };
+            var response = await _httpClient.PostAsJsonAsync(
+                $"https://localhost:7002/api/Identity/SendEmail", emailDTO);
+            if (!response.IsSuccessStatusCode)
+                MessageBox.Show(await response.Content.ReadAsStringAsync());
+            else
+                ConfirmEmailPassword = await response.Content.ReadAsStringAsync();
+        }
+
+        public void OpenModalWindow()
+        {
+            
         }
 
         [RelayCommand]

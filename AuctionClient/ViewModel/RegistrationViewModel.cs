@@ -3,12 +3,9 @@ using AuctionClient.View;
 using CommonDTO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Win32;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Reflection;
-using System.Security.Principal;
 using System.Text.RegularExpressions;
 using System.Windows;
 
@@ -16,7 +13,6 @@ namespace AuctionClient.ViewModel
 {
     public partial class RegistrationViewModel : ObservableObject
     {
-        private string ConfirmEmail {  get; set; }
         private readonly HttpClient _httpClient;
         ApplicationContext db = new ApplicationContext();
 
@@ -102,14 +98,6 @@ namespace AuctionClient.ViewModel
             {
                 LoggedUser lu = db.Find<LoggedUser>(1)!;
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", lu.JWTToken);
-                var response = await _httpClient.PostAsJsonAsync(
-                $"https://localhost:7002/api/Identity/SendEmail", registerUserRequest);
-                if (!response.IsSuccessStatusCode)
-                    MessageBox.Show(await response.Content.ReadAsStringAsync());
-                else
-                    ConfirmEmail = await response.Content.ReadAsStringAsync();
-
-                OpenModalWindow();
 
                 await Post(registerUserRequest, "Data", "AddUser");
             }
@@ -163,16 +151,9 @@ namespace AuctionClient.ViewModel
         [RelayCommand]
         private void ChangeWindow()
         {
-            
-            /*MainWindow mainWindow = new MainWindow();
+            MainWindow mainWindow = new MainWindow();
             mainWindow.Show();
-            System.Windows.Application.Current.Windows[0].Close();*/
-        }
-
-        private void OpenModalWindow()
-        {
-            ConfirmEmail r = new ConfirmEmail(ConfirmEmail);
-            r.Show();
+            System.Windows.Application.Current.Windows[0].Close();
         }
     }
 }

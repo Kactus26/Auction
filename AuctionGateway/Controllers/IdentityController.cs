@@ -21,7 +21,8 @@ namespace AuctionGateway.Controllers
         }
 
         [HttpPost("SendEmail")]
-        public async Task<IActionResult> SendEmail(RegisterUserRequest email, CancellationToken cancellationToken)
+        [Authorize]
+        public async Task<IActionResult> SendEmail(EmailDTO email, CancellationToken cancellationToken)
         {
             var response = await _httpClient.PostAsJsonAsync($"User/SendEmail", email, cancellationToken);
             if (!response.IsSuccessStatusCode)

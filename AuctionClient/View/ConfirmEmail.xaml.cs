@@ -19,9 +19,20 @@ namespace AuctionClient.View
     /// </summary>
     public partial class ConfirmEmail : Window
     {
+        public readonly string password;
         public ConfirmEmail(string password)
         {
+            this.password = password;
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if(CodeBox.Text == password)
+            {
+
+            }
+                
         }
     }
 }
