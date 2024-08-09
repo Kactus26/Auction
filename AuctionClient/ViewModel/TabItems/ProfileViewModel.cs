@@ -32,7 +32,6 @@ namespace AuctionClient.ViewModel.TabItems
         #endregion
         private byte[] ImageToSend { get; set; }
         private string? ErrorMessage {  get; set; }
-        private string? ConfirmEmailPassword {  get; set; }
 
         private const string pathToImages = "../../../Images/";
 
@@ -155,12 +154,25 @@ namespace AuctionClient.ViewModel.TabItems
             if (!response.IsSuccessStatusCode)
                 MessageBox.Show(await response.Content.ReadAsStringAsync());
             else
-                ConfirmEmailPassword = await response.Content.ReadAsStringAsync();
+            {
+                string ConfirmEmailPassword = await response.Content.ReadAsStringAsync();
+                OpenModalWindow(ConfirmEmailPassword);
+            }
         }
 
-        public void OpenModalWindow()
+        public void OpenModalWindow(string ConfirmEmailPassword)
         {
-            
+            ConfirmEmail modalWindow = new ConfirmEmail(ConfirmEmailPassword);
+
+            bool? result = modalWindow.ShowDialog();
+
+            if (result == true)
+            {
+                bool receivedData = modalWindow.IsConfirmed;
+                MessageBox.Show($"Email is successfully confirmed");
+            }
+            else
+                MessageBox.Show("Email is not confirmed(");
         }
 
         [RelayCommand]

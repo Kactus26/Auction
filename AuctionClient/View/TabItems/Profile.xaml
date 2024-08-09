@@ -47,7 +47,7 @@
           materialDesign:TextFieldAssist.UnderlineBrush="White"
           Style="{StaticResource MaterialDesignFloatingHintTextBox}" Grid.Row="1"/>
 
-        <Button Grid.Row="1" VerticalAlignment="Bottom" Content="Confirm Email" Command="{Binding }"/>
+        <Button Grid.Row="1" VerticalAlignment="Bottom" Content="Confirm Email" Command="{Binding ConfirmEmailCommand}"/>
 
         <TextBox Text="{Binding Description}" Margin="20,0,20,0"
           VerticalAlignment="Center" Grid.Row="2" Grid.ColumnSpan="2"
