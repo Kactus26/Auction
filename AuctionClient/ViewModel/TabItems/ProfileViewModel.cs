@@ -68,7 +68,7 @@ namespace AuctionClient.ViewModel.TabItems
                 return false;
             }
             return true;
-        }
+        }//Method usefull only if no data comes as response
 
         [RelayCommand]
         public async Task UpdateUserData()
@@ -156,11 +156,11 @@ namespace AuctionClient.ViewModel.TabItems
             else
             {
                 string ConfirmEmailPassword = await response.Content.ReadAsStringAsync();
-                OpenModalWindow(ConfirmEmailPassword);
+                await OpenModalWindow(ConfirmEmailPassword);
             }
         }
 
-        public void OpenModalWindow(string ConfirmEmailPassword)
+        public async Task OpenModalWindow(string ConfirmEmailPassword)
         {
             ConfirmEmail modalWindow = new ConfirmEmail(ConfirmEmailPassword);
 
@@ -169,7 +169,11 @@ namespace AuctionClient.ViewModel.TabItems
             if (result == true)
             {
                 bool receivedData = modalWindow.IsConfirmed;
-                MessageBox.Show($"Email is successfully confirmed");
+                HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:7002/api/Data/EmailIsConfirmed");
+                if (response.IsSuccessStatusCode)
+                    MessageBox.Show($"Email is successfully confirmed");
+                else
+                    MessageBox.Show($"{await response.Content.ReadAsStringAsync()}");
             }
             else
                 MessageBox.Show("Email is not confirmed(");

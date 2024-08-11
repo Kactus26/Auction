@@ -21,6 +21,19 @@ namespace AuctionGateway.Controllers
         }
 
         [Authorize]
+        [HttpGet("EmailIsConfirmed")]
+        public async Task<IActionResult> EmailIsConfirmed(CancellationToken cancellationToken)
+        {
+            JWTIntoHeader();
+
+            var response = await _httpClient.GetAsync("Data/EmailIsConfirmed", cancellationToken);
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
+        [Authorize]
         [HttpGet("GetUserData")]
         public async Task<IActionResult> GetUserData(CancellationToken cancellationToken)
         {

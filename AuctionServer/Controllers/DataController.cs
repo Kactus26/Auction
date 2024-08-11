@@ -29,6 +29,21 @@ namespace AuctionServer.Controllers
             _environment = environment;
         }
 
+        [HttpGet("EmailIsConfirmed")]
+        public async Task<IActionResult> EmailIsConfirmed()
+        {
+            int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
+            User user = await _dataRepository.GetUserDataByid(userId);
+
+            if (user == null)
+                return NotFound("User not found");
+
+            user.IsEmailConfirmed = true;
+            await _dataRepository.SaveChanges();
+
+            return Ok("Email is successfully confirmed");
+        }
+
         [HttpGet("GetUserData")]
         public async Task<IActionResult> GetUserData()
         {
