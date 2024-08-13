@@ -24,6 +24,8 @@ namespace AuctionClient.ViewModel.TabItems
         [ObservableProperty]
         public string email = "";
         [ObservableProperty]
+        public bool emailWarningEnabled = true;
+        [ObservableProperty]
         public string description = "";
         [ObservableProperty]
         public double balance;
@@ -73,10 +75,6 @@ namespace AuctionClient.ViewModel.TabItems
         [RelayCommand]
         public async Task UpdateUserData()
         {
-            if (Name.Length == 0 || SurName.Length == 0 || Email.Length == 0) {
-                MessageBox.Show("Name, Surname and Email have to be greater than 1 symbol");
-            }
-
             UserDataWithImageDTO newData = new UserDataWithImageDTO { ProfileData = new UserProfileDTO { Name = this.Name, Surname = this.SurName, Email = this.Email, Info = Description, Balance = this.Balance } };
             
             if(ImageToSend != null) 
@@ -106,16 +104,20 @@ namespace AuctionClient.ViewModel.TabItems
                 Email = user.ProfileData.Email;
                 Description = user.ProfileData.Info;
                 Balance = user.ProfileData.Balance;
+                EmailWarningEnabled = !user.ProfileData.IsEmailConfirmed;
 
-                string relativePath = pathToImages + "ProfileImage.png";
-                string absolutePath = System.IO.Path.GetFullPath(relativePath);
-
-                using (var stream = new FileStream(absolutePath, FileMode.Create, FileAccess.Write))
+                if (user.Image != null)
                 {
-                    stream.Write(user.Image);
-                }
+                    string relativePath = pathToImages + "ProfileImage.png";
+                    string absolutePath = System.IO.Path.GetFullPath(relativePath);
 
-                UserImagePath = absolutePath;
+                    using (var stream = new FileStream(absolutePath, FileMode.Create, FileAccess.Write))
+                    {
+                        stream.Write(user.Image);
+                    }
+
+                    UserImagePath = absolutePath;
+                }
             }
             else
                 MessageBox.Show("User data not found");
@@ -143,6 +145,7 @@ namespace AuctionClient.ViewModel.TabItems
             Email = "guest.guestov@gmail.guest";
             Description = "I'm just guest";
             UserImagePath = pathToImages + "Guest.jpg";
+            EmailWarningEnabled = false;
         }
 
         [RelayCommand]

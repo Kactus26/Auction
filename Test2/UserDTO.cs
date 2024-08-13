@@ -13,6 +13,7 @@ namespace CommonDTO
         public string Name { get; set; } = null!;
         public string Surname { get; set; } = String.Empty;
         public string Email { get; set; } = null!;
+        public bool IsEmailConfirmed { get; set; } = false;
         public string Info { get; set; } = String.Empty;
         public string? ImageUrl { get; set; }
         public double Balance { get; set; } = 0.00;
