@@ -10,11 +10,11 @@ using Xunit;
 
 namespace AuctionServer.Tests.IntegrationalTests.AuctionServerTests.Controllers
 {
-    public class DataControllerTests : IntegrationTestBase, IClassFixture<WebApplicationFactory<Program>>
+    public class DataControllerTests : IntegrationTestBase, IClassFixture<WebApplicationFactory<ServerProgram>>
     {
         private readonly HttpClient _client;
 
-        public DataControllerTests(WebApplicationFactory<Program> factory)
+        public DataControllerTests(WebApplicationFactory<ServerProgram> factory)
         {
             _client = factory.CreateClient();
         }
@@ -34,7 +34,7 @@ namespace AuctionServer.Tests.IntegrationalTests.AuctionServerTests.Controllers
         public async Task DataController_GetUserData_ReturnOk()
         {
             // Arrange
-            var user = new User { Id = 1, Login = "Kactus", Email = "Test@test", Password = "Test" };
+            var user = new User { Id = 1, Login = "Kactus", Password = "Test" };
             var token = _jwtProvider.GenerateToken(user);
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -54,7 +54,7 @@ namespace AuctionServer.Tests.IntegrationalTests.AuctionServerTests.Controllers
         {
             // Arrange
             RegisterUserRequest request = new RegisterUserRequest() { Login = "Kactus", Email = "Test@test", Password = "Test" }; //Email from here
-            var user = new User { Id = 10000, Login = "Kactus", Email = "Test@test", Password = "Test" }; //Id from here
+            var user = new User { Id = 10000, Login = "Kactus", Password = "Test" }; //Id from here
             var token = _jwtProvider.GenerateToken(user);
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -79,7 +79,7 @@ namespace AuctionServer.Tests.IntegrationalTests.AuctionServerTests.Controllers
             //Arrange
             Model.User userBeforeUpdate = await _dataContext.Users.AsNoTracking().FirstOrDefaultAsync();
 
-            var user = new User { Id = userBeforeUpdate.Id, Login = "Kactus", Email = "Test@test", Password = "Test" }; //Id from here
+            var user = new User { Id = userBeforeUpdate.Id, Login = "Kactus", Password = "Test" }; //Id from here
             var token = _jwtProvider.GenerateToken(user);
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

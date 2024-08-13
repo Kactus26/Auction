@@ -24,6 +24,8 @@ namespace AuctionClient.ViewModel.TabItems
         [ObservableProperty]
         public string email = "";
         [ObservableProperty]
+        public bool emailWarningEnabled = true;
+        [ObservableProperty]
         public string description = "";
         [ObservableProperty]
         public double balance;
@@ -32,6 +34,7 @@ namespace AuctionClient.ViewModel.TabItems
         #endregion
         private byte[] ImageToSend { get; set; }
         private string? ErrorMessage {  get; set; }
+
         private const string pathToImages = "../../../Images/";
 
         private readonly HttpClient _httpClient;
@@ -67,15 +70,11 @@ namespace AuctionClient.ViewModel.TabItems
                 return false;
             }
             return true;
-        }
+        }//Method usefull only if no data comes as response
 
         [RelayCommand]
         public async Task UpdateUserData()
         {
-            if (Name.Length == 0 || SurName.Length == 0 || Email.Length == 0) {
-                MessageBox.Show("Name, Surname and Email have to be greater than 1 symbol");
-            }
-
             UserDataWithImageDTO newData = new UserDataWithImageDTO { ProfileData = new UserProfileDTO { Name = this.Name, Surname = this.SurName, Email = this.Email, Info = Description, Balance = this.Balance } };
             
             if(ImageToSend != null) 
@@ -105,16 +104,20 @@ namespace AuctionClient.ViewModel.TabItems
                 Email = user.ProfileData.Email;
                 Description = user.ProfileData.Info;
                 Balance = user.ProfileData.Balance;
+                EmailWarningEnabled = !user.ProfileData.IsEmailConfirmed;
 
-                string relativePath = pathToImages + "ProfileImage.png";
-                string absolutePath = System.IO.Path.GetFullPath(relativePath);
-
-                using (var stream = new FileStream(absolutePath, FileMode.Create, FileAccess.Write))
+                if (user.Image != null)
                 {
-                    stream.Write(user.Image);
-                }
+                    string relativePath = pathToImages + "ProfileImage.png";
+                    string absolutePath = System.IO.Path.GetFullPath(relativePath);
 
-                UserImagePath = absolutePath;
+                    using (var stream = new FileStream(absolutePath, FileMode.Create, FileAccess.Write))
+                    {
+                        stream.Write(user.Image);
+                    }
+
+                    UserImagePath = absolutePath;
+                }
             }
             else
                 MessageBox.Show("User data not found");
@@ -142,6 +145,41 @@ namespace AuctionClient.ViewModel.TabItems
             Email = "guest.guestov@gmail.guest";
             Description = "I'm just guest";
             UserImagePath = pathToImages + "Guest.jpg";
+            EmailWarningEnabled = false;
+        }
+
+        [RelayCommand]
+        public async Task ConfirmEmail()
+        {
+            EmailDTO emailDTO = new EmailDTO { Email = Email };
+            var response = await _httpClient.PostAsJsonAsync(
+                $"https://localhost:7002/api/Identity/SendEmail", emailDTO);
+            if (!response.IsSuccessStatusCode)
+                MessageBox.Show(await response.Content.ReadAsStringAsync());
+            else
+            {
+                string ConfirmEmailPassword = await response.Content.ReadAsStringAsync();
+                await OpenModalWindow(ConfirmEmailPassword);
+            }
+        }
+
+        public async Task OpenModalWindow(string ConfirmEmailPassword)
+        {
+            ConfirmEmail modalWindow = new ConfirmEmail(ConfirmEmailPassword);
+
+            bool? result = modalWindow.ShowDialog();
+
+            if (result == true)
+            {
+                bool receivedData = modalWindow.IsConfirmed;
+                HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:7002/api/Data/EmailIsConfirmed");
+                if (response.IsSuccessStatusCode)
+                    MessageBox.Show($"Email is successfully confirmed");
+                else
+                    MessageBox.Show($"{await response.Content.ReadAsStringAsync()}");
+            }
+            else
+                MessageBox.Show("Email is not confirmed(");
         }
 
         [RelayCommand]

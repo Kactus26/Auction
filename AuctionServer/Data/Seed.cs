@@ -25,7 +25,7 @@ namespace AuctionServer.Data
             }
 
 
-            User user1 = new User() { Name = "Kactus", Email = "sasha.baginsky@gmail.com" };
+            User user1 = new User() { Name = "Kactus", Email = "sasha.baginsky@gmail.com", IsEmailConfirmed = true };
             User user2 = new User() { Name = "Odinson", Email = "javiest@xdd.com" };
 
             dataContext.Users.AddRange(user1, user2);

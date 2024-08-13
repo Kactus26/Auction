@@ -12,9 +12,7 @@ builder.Services.AddTransient<Seed>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasherService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IJWTProvider, JWTProvider>();
-
-/*builder.Services.AddAutoMapper(typeof(IMappingPofile).Assembly);
-*/
+builder.Services.AddScoped<IMailService, MailService>();
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
@@ -37,3 +35,7 @@ app.UseSwaggerUI();
 app.MapControllers();
 
 app.Run();
+
+public partial class IdentityProgram
+{
+}

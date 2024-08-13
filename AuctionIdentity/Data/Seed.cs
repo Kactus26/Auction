@@ -27,8 +27,8 @@ namespace AuctionIdentity.Data
                 return;
             }
 
-            User user1 = new User() { Login = "Kactus", Email="sasha.baginsky@gmail.com", Password = "1234"};
-            User user2 = new User() { Login = "Odinson", Email="javiest@xdd.com", Password = "52064208" };
+            User user1 = new User() { Login = "Kactus", Password = "12345"};
+            User user2 = new User() { Login = "Odinson", Password = "52064208" };
 
             user1.Password = _passwordHasher.GeneratePassword(user1.Password);
             user2.Password = _passwordHasher.GeneratePassword(user2.Password);

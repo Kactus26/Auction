@@ -13,22 +13,28 @@ namespace AuctionIdentity.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher _passwordHasher;
+        private readonly IMailService _mailService;
         private readonly IJWTProvider _jwtProvider;
 
-        public UserController(IPasswordHasher passwordHasher, IUserRepository userRepository, IJWTProvider jwtProvider)
+        public UserController(IPasswordHasher passwordHasher, IUserRepository userRepository, IJWTProvider jwtProvider, IMailService mailService)
         {
             _passwordHasher = passwordHasher;
             _userRepository = userRepository;
             _jwtProvider = jwtProvider;
+            _mailService = mailService;
+        }
+
+        [HttpPost("SendEmail")]
+        public IActionResult SendEmail(EmailDTO emailDTO) 
+        {
+            string result = _mailService.SendEmail(emailDTO.Email);
+            return Ok(result);
         }
 
         [HttpPost("RegisterUser")]
         public async Task<IActionResult> RegisterUser(RegisterUserRequest request)
         {
-            if (!await _userRepository.CheckUserEmail(request.Email))
-                return BadRequest("User with this email already exists");
-
-            if(!await _userRepository.CheckUserLogin(request.Login))
+            if (!await _userRepository.CheckUserLogin(request.Login))
             {
                 return BadRequest("User with this login already exists");
             }
@@ -38,7 +44,6 @@ namespace AuctionIdentity.Controllers
             User user = new User
             {
                 Login = request.Login,
-                Email = request.Email,
                 Password = hashedPassword
             };
 
@@ -71,12 +76,5 @@ namespace AuctionIdentity.Controllers
 
             return Ok(token);
         }
-
-/*        [HttpGet("TestAuth")]
-        public async Task<IActionResult> TestAuth()
-        {
-            return Ok("Method is working");
-        }*/
-
     }
 }

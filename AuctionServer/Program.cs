@@ -38,7 +38,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes
                         (builder.Configuration.GetRequiredSection("JWTOptions").GetValue<string>("SecretKey")!))
                     };
-                });
+                });//Delete?????????????
 
 var app = builder.Build();
 
@@ -61,6 +61,6 @@ app.MapControllers();
 
 app.Run();
 
-public partial class Program
+public partial class ServerProgram
 {
 }
