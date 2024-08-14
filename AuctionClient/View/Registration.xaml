@@ -14,7 +14,7 @@
 
     <TabControl
       Width="350" 
-      materialDesign:ColorZoneAssist.Background="#303030"
+      materialDesign:ColorZoneAssist.Background="#281B27"
       materialDesign:ColorZoneAssist.Foreground="White"
       materialDesign:ColorZoneAssist.Mode="Custom"
       Style="{StaticResource MaterialDesignFilledTabControl}">
@@ -39,12 +39,12 @@
                   Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
 
                 <Button Margin="90,270,90,0" Height="42" Content="Log In" FontSize="17"
-                Background="White" Foreground="Black" VerticalAlignment="Top" Command="{Binding AuthorizationCommand}"
-                Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="White"/>
+                Background="#8c72a9" Foreground="White" VerticalAlignment="Top" Command="{Binding AuthorizationCommand}"
+                Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="#8c72a9"/>
 
                 <Button Margin="90,340,90,0" Height="42" Content="Enter as guest" FontSize="17"
                 Background="#382536" Foreground="White" VerticalAlignment="Top" Command="{Binding ChangeWindowCommand}"
-                Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="White"/>
+                Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="#8c72a9"/>
 
                 <Label Content="{Binding ErrorMessage}" Foreground="Red" Margin="0,370,0,0" HorizontalAlignment="Center" FontSize="18"/>
 
@@ -92,8 +92,8 @@
 
                 <Button Margin="90,328,90,0" Height="42"
                     Command="{Binding RegistrationCommand}" FontSize="17"
-                    Content="Sign up" Background="White" Foreground="#382536" VerticalAlignment="Top"
-                    Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="White"/>
+                    Content="Sign up" Background="#8c72a9" Foreground="White" VerticalAlignment="Top"
+                    Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="#50669c"/>
 
                 <Label Content="{Binding ErrorMessageReg}" Foreground="Red" Margin="0,375,0,10" HorizontalAlignment="Center" FontSize="18"/>
 
