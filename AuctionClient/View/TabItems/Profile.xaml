@@ -41,9 +41,9 @@
           Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
         <Label Content="Email isn't confirmed" Grid.Row="1" VerticalAlignment="Top"
-            FontSize="20" Foreground="Purple" Margin="15,10,0,0" Visibility="{Binding EmailWarningEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            FontSize="20" Foreground="#8c72a9" Margin="15,5,0,0" Visibility="{Binding EmailWarningEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         
-        <TextBox Text="{Binding Email}" Margin="20,0,20,0"
+        <TextBox Text="{Binding Email}" Margin="20,0,180,10" Grid.ColumnSpan="2"
           Foreground="White" FontSize="20" VerticalAlignment="Center"
           materialDesign:HintAssist.Foreground="White"
           materialDesign:HintAssist.Hint="Email" BorderBrush="Gray"
@@ -51,7 +51,7 @@
           Style="{StaticResource MaterialDesignFloatingHintTextBox}" Grid.Row="1"/>
 
         <Button Grid.Row="1" VerticalAlignment="Bottom" Content="Confirm Email" Command="{Binding ConfirmEmailCommand}"
-                Margin="20,0,20,0" Height="30"/>
+                BorderBrush="#8c72a9" Background="Transparent" Foreground="White" Margin="20,0,20,0" Height="30"/>
 
         <TextBox Text="{Binding Description}" Margin="20,0,20,0"
           VerticalAlignment="Center" Grid.Row="2" Grid.ColumnSpan="2"
@@ -66,14 +66,16 @@
         <Label Content="{Binding Balance}" Grid.Column="1" Foreground="White"
         FontSize="20" Margin="85,28,0,65"/>
 
-        <Button Grid.Row="0" Grid.Column="2" Content="Upload Image" BorderBrush="White" Background="Transparent" Foreground="White" Command="{Binding UploadImageCommand}" Margin="0,-70,15,0"/>
+        <Button Grid.Row="0" Grid.Column="2" Content="Upload Image" BorderBrush="#8c72a9" Background="Transparent"
+                Foreground="White" Command="{Binding UploadImageCommand}" Margin="0,-70,15,0"/>
 
         <Image Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Source="{Binding UserImagePath}" Margin="0,70,20,0"/>
-        
-            
-        <Button Grid.Row="2" Grid.Column="2" Content="Update" BorderBrush="White" Background="White" 
-                Command="{Binding UpdateUserDataCommand}" Foreground="#FF8A8585" Margin="0,-50,15,0"/>
-        <Button Grid.Row="2" Grid.Column="2" Content="Exit" BorderBrush="White" Background="White" 
-                Command="{Binding ExitFromAccountCommand}" Foreground="#FF8A8585" Grid.ColumnSpan="2" Margin="0,60,15,0"/>
+
+
+        <Button Grid.Row="2" Grid.Column="2" Content="Update" BorderBrush="#8c72a9" Background="#8c72a9" 
+                Command="{Binding UpdateUserDataCommand}" Foreground="White" Margin="0,-50,15,0"/>
+
+        <Button Grid.Row="2" Grid.Column="2" Content="Exit from account" BorderBrush="#8c72a9" Background="#8c72a9" 
+                Command="{Binding ExitFromAccountCommand}" Foreground="White" Grid.ColumnSpan="2" Margin="0,60,15,0"/>
     </Grid>
 </UserControl>

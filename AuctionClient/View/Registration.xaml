@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:AuctionClient.ViewModel"
         mc:Ignorable="d"
-        Title="Registration" Height="520" Width="365" Background="#202020" ResizeMode="NoResize">
+        Title="Registration" Height="520" Width="365" Background="#382536" ResizeMode="NoResize">
 
     <Window.DataContext>
         <vm:RegistrationViewModel/>
@@ -14,7 +14,7 @@
 
     <TabControl
       Width="350" 
-      materialDesign:ColorZoneAssist.Background="ForestGreen"
+      materialDesign:ColorZoneAssist.Background="#281B27"
       materialDesign:ColorZoneAssist.Foreground="White"
       materialDesign:ColorZoneAssist.Mode="Custom"
       Style="{StaticResource MaterialDesignFilledTabControl}">
@@ -25,8 +25,8 @@
                   VerticalAlignment="Center" Margin="50,0,50,290"
                   Foreground="White" FontSize="20"
                   materialDesign:HintAssist.Foreground="White"
-                  materialDesign:HintAssist.Hint="Login" BorderBrush="ForestGreen"
-                  materialDesign:TextFieldAssist.UnderlineBrush="ForestGreen"
+                  materialDesign:HintAssist.Hint="Login" BorderBrush="White"
+                  materialDesign:TextFieldAssist.UnderlineBrush="White"
                   Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
                 <PasswordBox
@@ -34,17 +34,17 @@
                   VerticalAlignment="Center" Margin="50,0,50,90"
                   Foreground="White"
                   materialDesign:HintAssist.Foreground="White"
-                  materialDesign:HintAssist.Hint="Password" BorderBrush="ForestGreen"
-                  materialDesign:TextFieldAssist.UnderlineBrush="ForestGreen" PasswordChanged="PasswordChanged"
+                  materialDesign:HintAssist.Hint="Password" BorderBrush="White"
+                  materialDesign:TextFieldAssist.UnderlineBrush="White" PasswordChanged="PasswordChanged"
                   Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
 
                 <Button Margin="90,270,90,0" Height="42" Content="Log In" FontSize="17"
-                Background="ForestGreen" Foreground="White" VerticalAlignment="Top" Command="{Binding AuthorizationCommand}"
-                Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="ForestGreen"/>
+                Background="#8c72a9" Foreground="White" VerticalAlignment="Top" Command="{Binding AuthorizationCommand}"
+                Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="#8c72a9"/>
 
                 <Button Margin="90,340,90,0" Height="42" Content="Enter as guest" FontSize="17"
-                Background="#202020" Foreground="White" VerticalAlignment="Top" Command="{Binding ChangeWindowCommand}"
-                Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="ForestGreen"/>
+                Background="#382536" Foreground="White" VerticalAlignment="Top" Command="{Binding ChangeWindowCommand}"
+                Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="#8c72a9"/>
 
                 <Label Content="{Binding ErrorMessage}" Foreground="Red" Margin="0,370,0,0" HorizontalAlignment="Center" FontSize="18"/>
 
@@ -58,8 +58,8 @@
                     VerticalAlignment="Top" Margin="50,27,50,0"
                     Foreground="White" FontSize="20"
                     materialDesign:HintAssist.Foreground="White"
-                    materialDesign:HintAssist.Hint="Login" BorderBrush="ForestGreen"
-                    materialDesign:TextFieldAssist.UnderlineBrush="ForestGreen"
+                    materialDesign:HintAssist.Hint="Login" BorderBrush="White"
+                    materialDesign:TextFieldAssist.UnderlineBrush="White"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
                 <TextBox
@@ -67,8 +67,8 @@
                     VerticalAlignment="Top" Margin="50,91,50,0"
                     Foreground="White" FontSize="20"
                     materialDesign:HintAssist.Foreground="White"
-                    materialDesign:HintAssist.Hint="Email" BorderBrush="ForestGreen"
-                    materialDesign:TextFieldAssist.UnderlineBrush="ForestGreen"
+                    materialDesign:HintAssist.Hint="Email" BorderBrush="White"
+                    materialDesign:TextFieldAssist.UnderlineBrush="White"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
                 <PasswordBox
@@ -77,8 +77,8 @@
                     VerticalAlignment="Top" Margin="50,160,50,0"
                     Foreground="White"
                     materialDesign:HintAssist.Foreground="White"
-                    materialDesign:HintAssist.Hint="Password" BorderBrush="ForestGreen"
-                    materialDesign:TextFieldAssist.UnderlineBrush="ForestGreen"
+                    materialDesign:HintAssist.Hint="Password" BorderBrush="White"
+                    materialDesign:TextFieldAssist.UnderlineBrush="White"
                     Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" PasswordChanged="PasswordChangedReg"/>
 
                 <PasswordBox
@@ -86,14 +86,14 @@
                     VerticalAlignment="Top" Margin="50,232,50,0"
                     Foreground="White"
                     materialDesign:HintAssist.Foreground="White"
-                    materialDesign:HintAssist.Hint="Confirm password" BorderBrush="ForestGreen"
-                    materialDesign:TextFieldAssist.UnderlineBrush="ForestGreen" PasswordChanged="ConfPasswordChanged"
+                    materialDesign:HintAssist.Hint="Confirm password" BorderBrush="White"
+                    materialDesign:TextFieldAssist.UnderlineBrush="White" PasswordChanged="ConfPasswordChanged"
                     Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
 
                 <Button Margin="90,328,90,0" Height="42"
                     Command="{Binding RegistrationCommand}" FontSize="17"
-                    Content="Sign up" Background="ForestGreen" Foreground="White" VerticalAlignment="Top"
-                    Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="ForestGreen"/>
+                    Content="Sign up" Background="#8c72a9" Foreground="White" VerticalAlignment="Top"
+                    Style="{StaticResource MaterialDesignRaisedSecondaryDarkButton}" BorderBrush="#50669c"/>
 
                 <Label Content="{Binding ErrorMessageReg}" Foreground="Red" Margin="0,375,0,10" HorizontalAlignment="Center" FontSize="18"/>
 
