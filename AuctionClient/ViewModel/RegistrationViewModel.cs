@@ -8,11 +8,13 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.RegularExpressions;
 using System.Windows;
+using static System.Net.WebRequestMethods;
 
 namespace AuctionClient.ViewModel
 {
     public partial class RegistrationViewModel : ObservableObject
     {
+        private const string gatewayPort = "http://localhost:7002";
         private readonly HttpClient _httpClient;
         ApplicationContext db = new ApplicationContext();
 
@@ -119,7 +121,7 @@ namespace AuctionClient.ViewModel
         private async Task<bool> Post<T>(T request, string controllerName, string methodName)
          {
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
-                $"https://localhost:7002/api/{controllerName}/{methodName}", request);
+                $"{gatewayPort}/api/{controllerName}/{methodName}", request);
 
             if (!response.IsSuccessStatusCode && methodName == "Registration")
             {

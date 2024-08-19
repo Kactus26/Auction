@@ -10,6 +10,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["AuctionServer/AuctionServer.csproj", "AuctionServer/"]
+COPY ["Test2/CommonDTO.csproj", "Test2/"]
 RUN dotnet restore "./AuctionServer/AuctionServer.csproj"
 COPY . .
 WORKDIR "/src/AuctionServer"

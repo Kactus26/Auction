@@ -9,18 +9,19 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+COPY ["AuctionGateway/AuctionGateway.csproj", "AuctionGateway/"]
 COPY ["AuctionIdentity/AuctionIdentity.csproj", "AuctionIdentity/"]
 COPY ["Test2/CommonDTO.csproj", "Test2/"]
-RUN dotnet restore "./AuctionIdentity/AuctionIdentity.csproj"
+RUN dotnet restore "./AuctionGateway/AuctionGateway.csproj"
 COPY . .
-WORKDIR "/src/AuctionIdentity"
-RUN dotnet build "./AuctionIdentity.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/AuctionGateway"
+RUN dotnet build "./AuctionGateway.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./AuctionIdentity.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./AuctionGateway.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "AuctionIdentity.dll"]
+ENTRYPOINT ["dotnet", "AuctionGateway.dll"]

@@ -22,7 +22,9 @@ services:
         timeout: 3s
         retries: 10
         start_period: 10s
+
   server:
+    container_name: AuctionServer
     build:
       dockerfile: AuctionServer/Dockerfile
       context: .
@@ -32,15 +34,24 @@ services:
     depends_on:
         db:
             condition: service_healthy
-    
+
+  gateway:
+    container_name: AuctionGateway
+    build:
+      dockerfile: AuctionGateway/Dockerfile
+      context: .
+      target: final
+    ports:
+      - 7002:8080
 
   identity:
+    container_name: AuctionIdentity
     build:
       dockerfile: AuctionIdentity/Dockerfile
       context: .
       target: final
     ports:
-      - 8082:8082
+      - 8082:8080
     depends_on:
         db:
             condition: service_healthy

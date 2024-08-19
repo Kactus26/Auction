@@ -37,6 +37,8 @@ namespace AuctionClient.ViewModel.TabItems
 
         private const string pathToImages = "../../../Images/";
 
+        private const string gatewayPort = "http://localhost:7002";
+
         private readonly HttpClient _httpClient;
         ApplicationContext db = new ApplicationContext();
 
@@ -56,7 +58,7 @@ namespace AuctionClient.ViewModel.TabItems
         private async Task<bool> Post<T>(T request, string methodName)
         {
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync(
-                $"https://localhost:7002/api/Data/{methodName}", request);
+                $"{gatewayPort}/api/Data/{methodName}", request);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -70,7 +72,7 @@ namespace AuctionClient.ViewModel.TabItems
                 return false;
             }
             return true;
-        }//Method usefull only if no data comes as response
+        }//Method useful only if no data comes as response
 
         [RelayCommand]
         public async Task UpdateUserData()
@@ -86,7 +88,7 @@ namespace AuctionClient.ViewModel.TabItems
 
         private async void GetUserData()
         {
-            HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:7002/api/Data/GetUserData");
+            HttpResponseMessage response = await _httpClient.GetAsync($"{gatewayPort}/api/Data/GetUserData");
 
             if (!response.IsSuccessStatusCode)
             {
@@ -153,7 +155,7 @@ namespace AuctionClient.ViewModel.TabItems
         {
             EmailDTO emailDTO = new EmailDTO { Email = Email };
             var response = await _httpClient.PostAsJsonAsync(
-                $"https://localhost:7002/api/Identity/SendEmail", emailDTO);
+                $"{gatewayPort}/api/Identity/SendEmail", emailDTO);
             if (!response.IsSuccessStatusCode)
                 MessageBox.Show(await response.Content.ReadAsStringAsync());
             else
@@ -172,7 +174,7 @@ namespace AuctionClient.ViewModel.TabItems
             if (result == true)
             {
                 bool receivedData = modalWindow.IsConfirmed;
-                HttpResponseMessage response = await _httpClient.GetAsync("https://localhost:7002/api/Data/EmailIsConfirmed");
+                HttpResponseMessage response = await _httpClient.GetAsync($"{gatewayPort}/api/Data/EmailIsConfirmed");
                 if (response.IsSuccessStatusCode)
                     MessageBox.Show($"Email is successfully confirmed");
                 else

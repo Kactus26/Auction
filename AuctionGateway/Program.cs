@@ -9,6 +9,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+if (builder.Environment.IsProduction())
+{
+    builder.Configuration
+        .AddJsonFile("appsettings.gw.Production.json", optional: true, reloadOnChange: true);
+}
+else
+{
+    builder.Configuration.AddJsonFile("appsettings.gw.Development.json", optional: true, reloadOnChange: true);
+}
+
 builder.Services.AddHttpClient("IdentityServer", c =>
 {
     c.BaseAddress = new Uri(builder.Configuration.GetValue<string>("IdentityServerUrl")! + "/api/");
