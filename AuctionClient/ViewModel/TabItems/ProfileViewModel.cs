@@ -37,7 +37,7 @@ namespace AuctionClient.ViewModel.TabItems
 
         private const string pathToImages = "../../../Images/";
 
-        private const string gatewayPort = "http://localhost:7002";
+        private const string gatewayPort = "https://localhost:7002";
 
         private readonly HttpClient _httpClient;
         ApplicationContext db = new ApplicationContext();
@@ -173,10 +173,12 @@ namespace AuctionClient.ViewModel.TabItems
 
             if (result == true)
             {
-                bool receivedData = modalWindow.IsConfirmed;
                 HttpResponseMessage response = await _httpClient.GetAsync($"{gatewayPort}/api/Data/EmailIsConfirmed");
                 if (response.IsSuccessStatusCode)
+                {
+                    EmailWarningEnabled = false;
                     MessageBox.Show($"Email is successfully confirmed");
+                }
                 else
                     MessageBox.Show($"{await response.Content.ReadAsStringAsync()}");
             }
@@ -194,8 +196,6 @@ namespace AuctionClient.ViewModel.TabItems
                 db.SaveChanges();
             }
 
-            Registration regWindow = new Registration();
-            regWindow.Show();
             System.Windows.Application.Current.Windows[0].Close();
         }
     }

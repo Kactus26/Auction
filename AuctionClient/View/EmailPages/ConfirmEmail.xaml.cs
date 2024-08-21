@@ -19,7 +19,6 @@ namespace AuctionClient.View
     /// </summary>
     public partial class ConfirmEmail : Window
     {
-        public bool IsConfirmed { get; private set; }
         public readonly string password;
         public ConfirmEmail(string password)
         {
@@ -31,7 +30,6 @@ namespace AuctionClient.View
         {
             if (CodeBox.Text == password)
             {
-                IsConfirmed = true;
                 this.DialogResult = true;
                 this.Close();
             }

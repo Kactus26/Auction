@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Confirm Email" Background="#202020" Height="300" Width="500">
+        Title="Confirm Email" Background="#382536" Height="300" Width="500" ResizeMode="NoResize">
     
     <Grid>
         <Grid.RowDefinitions>

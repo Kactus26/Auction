@@ -30,13 +30,14 @@
                   Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
                 <PasswordBox
-                  FontSize="20" 
-                  VerticalAlignment="Center" Margin="50,0,50,90"
-                  Foreground="White"
+                  FontSize="20" VerticalAlignment="Center" Margin="50,0,50,90" Foreground="White"
                   materialDesign:HintAssist.Foreground="White"
                   materialDesign:HintAssist.Hint="Password" BorderBrush="White"
                   materialDesign:TextFieldAssist.UnderlineBrush="White" PasswordChanged="PasswordChanged"
                   Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
+
+                <Button Content="Forgot your password?" Margin="85,25,85,0" Foreground="White" Background="Transparent"
+                        BorderBrush="Transparent" Command="{Binding OpenModalWindowCommand}"/>
 
                 <Button Margin="90,270,90,0" Height="42" Content="Log In" FontSize="17"
                 Background="#8c72a9" Foreground="White" VerticalAlignment="Top" Command="{Binding AuthorizationCommand}"

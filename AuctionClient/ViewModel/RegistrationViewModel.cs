@@ -1,5 +1,6 @@
 ﻿using AuctionClient.Data;
 using AuctionClient.View;
+using AuctionClient.View.EmailPages;
 using CommonDTO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -14,7 +15,7 @@ namespace AuctionClient.ViewModel
 {
     public partial class RegistrationViewModel : ObservableObject
     {
-        private const string gatewayPort = "http://localhost:7002";
+        private const string gatewayPort = "https://localhost:7002";
         private readonly HttpClient _httpClient;
         ApplicationContext db = new ApplicationContext();
 
@@ -59,6 +60,21 @@ namespace AuctionClient.ViewModel
         [ObservableProperty]
         private string errorMessageReg = "";
         #endregion
+
+        [RelayCommand]
+        public async Task OpenModalWindow()
+        {
+            PasswordRecovery modalWindow = new PasswordRecovery();
+
+            bool? result = modalWindow.ShowDialog();
+
+            if (result == true)
+            {
+
+            }
+
+            return;
+        }
 
         [RelayCommand]
         public async Task Registration()
