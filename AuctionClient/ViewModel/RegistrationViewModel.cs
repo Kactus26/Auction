@@ -70,8 +70,10 @@ namespace AuctionClient.ViewModel
 
             if (result == true)
             {
-
+                MessageBox.Show("Password was changed successfully!");
             }
+            else
+                MessageBox.Show("Password wasn't changed(");
 
             return;
         }
