@@ -38,9 +38,7 @@ namespace AuctionServer.Repository
                     throw;
 
                 }
-
             }
-
         }
 
         public async Task SaveChanges()

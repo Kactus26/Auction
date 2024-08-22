@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommonDTO;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,8 @@ namespace AuctionClient.ViewModel.EmailPagesViewModel
 
         #endregion
 
+        private string EmailCode { get; set; }
+
         private HttpClient _httpClient;
 
         private const string gatewayPort = "https://localhost:7002";
@@ -39,11 +42,17 @@ namespace AuctionClient.ViewModel.EmailPagesViewModel
         {
             try
             {
-                string userId = await Post(Login, "Identity", "UserIdPasswordRecovery");
+                LoginDTO login = new() { Login = this.Login };
 
-                string isEmailConfirmed = await Post(userId, "Data", "IsEmailComfirmed");
+                int userId = System.Convert.ToInt32(await Post(login, "Identity", "UserIdPasswordRecovery"));
 
-                string code = await Post(userId, "Identity", "SendCodePasswordRecovery");
+                UserIdDTO userIdDTO = new() { Id = userId };
+
+                string email = await Post(userIdDTO, "Data", "IsEmailConfirmed");
+
+                EmailDTO emailDTO = new() { Email = email };
+
+                EmailCode = await Post(emailDTO, "Identity", "SendEmail");
 
             }
 

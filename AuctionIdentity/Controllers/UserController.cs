@@ -25,11 +25,23 @@ namespace AuctionIdentity.Controllers
             _mailService = mailService;
         }
 
+        [HttpPost("UserIdPasswordRecovery")]
+        public async Task<IActionResult> UserIdPasswordRecovery(LoginDTO login)
+        {
+            int? userId = await _userRepository.GetUserIdByLogin(login.Login);
+
+            if (userId == null)
+                return NotFound("The user with this login does't exist");
+
+            return Ok(userId);
+        }
+
+
         [HttpPost("SendEmail")]
         public IActionResult SendEmail(EmailDTO emailDTO) 
         {
-            string result = _mailService.SendEmail(emailDTO.Email);
-            return Ok(result);
+            string code = _mailService.SendEmail(emailDTO.Email);
+            return Ok(code);
         }
 
         [HttpPost("RegisterUser")]

@@ -40,6 +40,7 @@ namespace AuctionClient.ViewModel.TabItems
         private const string gatewayPort = "https://localhost:7002";
 
         private readonly HttpClient _httpClient;
+
         ApplicationContext db = new ApplicationContext();
 
         public ProfileViewModel()
@@ -154,8 +155,10 @@ namespace AuctionClient.ViewModel.TabItems
         public async Task ConfirmEmail()
         {
             EmailDTO emailDTO = new EmailDTO { Email = Email };
+
             var response = await _httpClient.PostAsJsonAsync(
                 $"{gatewayPort}/api/Identity/SendEmail", emailDTO);
+
             if (!response.IsSuccessStatusCode)
                 MessageBox.Show(await response.Content.ReadAsStringAsync());
             else

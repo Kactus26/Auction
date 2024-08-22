@@ -32,14 +32,6 @@ namespace AuctionIdentity.Repository
                 return false;
         }
 
-/*        public async Task<bool> CheckUserEmail(string email)
-        {
-            if (await _dataContext.Users.Where(x => x.Email == email).FirstOrDefaultAsync() == null)
-                return true;
-            else
-                return false;
-        }*/
-
         public async Task<User> GetUserByLogin(string login)
         {
             return await _dataContext.Users.FirstOrDefaultAsync(x => x.Login == login);
@@ -50,5 +42,12 @@ namespace AuctionIdentity.Repository
             await _dataContext.SaveChangesAsync();
         }
 
+        public Task<int> GetUserIdByLogin(string login)
+        {
+            return _dataContext.Users
+                .Where(x=>x.Login==login)
+                .Select(x=>x.Id)
+                .FirstOrDefaultAsync();
+        }
     }
 }
