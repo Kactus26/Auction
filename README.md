@@ -23,7 +23,5 @@ Every time the app launches, it checks if the token exists and is not expired, a
 
 <h3>If User forget his password, he can try to recover it.</h3>
 Click "Forget password" button on the authorization page. New modal page will be opend. User needs to write his login, after what program will send few request. 1. To find user id by login; 2. To find if his email was confirmed; 3. To send mail with code to his email. If anything goes wrong, user will be notifed about it dew to the cool try catch envelope. If you actually reading this check it out in AuctionClient PasswordRecoveryViewModel, i'm very proud. Then user needs to write the code that he now has and his new passwords.
-![image](https://github.com/user-attachments/assets/fb4a89dc-ad87-4734-a876-51376f297d8a)
-
 <b><h1>Testing</h1></b>
 In Auction.Test are located Unit and Integration tests. Integration tests connect to the real database, and after testing is done, roll back all changes. It has my own ChangeProperties method that, with the help of reflection, returns the object to its initial state. In this project, Integration tests also have the FluentAssertions library connected for better result checking. WebApplicationFactory is used there for the work of HttpClient. IntegrationTestBase has all necessary info for JWT creation work. For the work of Unit Tests, XUnit and Moq were connected, but I personally think that integration tests are more useful. For that reason, I have only a few unit tests, which I made just for learning purposes.
