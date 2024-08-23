@@ -18,7 +18,7 @@ namespace AuctionIdentity.Services
             string code = GeneratePassword();
             message.Body = new TextPart("plain")
             {
-                Text = $"This is your code: {code}"
+                Text = $"This is your code: {code}. If you don't know what is it all about, just ignore this message <3"
             };
 
             // Отправка письма

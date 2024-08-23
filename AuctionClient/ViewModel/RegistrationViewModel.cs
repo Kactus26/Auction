@@ -62,20 +62,10 @@ namespace AuctionClient.ViewModel
         #endregion
 
         [RelayCommand]
-        public async Task OpenModalWindow()
+        public void OpenModalWindow()
         {
-            PasswordRecovery modalWindow = new PasswordRecovery();
-
-            bool? result = modalWindow.ShowDialog();
-
-            if (result == true)
-            {
-                MessageBox.Show("Password was changed successfully!");
-            }
-            else
-                MessageBox.Show("Password wasn't changed(");
-
-            return;
+            PasswordRecovery modalWindow = new();
+            modalWindow.ShowDialog();
         }
 
         [RelayCommand]

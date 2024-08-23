@@ -21,6 +21,17 @@ namespace AuctionGateway.Controllers
             _httpClient = httpClient.CreateClient("IdentityServer");
         }
 
+        [HttpPost("NewPassword")]
+        public async Task<IActionResult> UserIdPasswordRecovery(ChangeUserPasswordDTO userDTO, CancellationToken cancellationToken)
+        {
+            var response = await _httpClient.PostAsJsonAsync($"User/NewPassword", userDTO, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
         [HttpPost("UserIdPasswordRecovery")]
         public async Task<IActionResult> UserIdPasswordRecovery(LoginDTO login, CancellationToken cancellationToken)
         {

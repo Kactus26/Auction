@@ -1,12 +1,8 @@
-﻿using CommonDTO;
+﻿using AuctionClient.Interfaces;
+using CommonDTO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace AuctionClient.ViewModel.EmailPagesViewModel
@@ -27,6 +23,7 @@ namespace AuctionClient.ViewModel.EmailPagesViewModel
         #endregion
 
         private string EmailCode { get; set; }
+        private int UserId { get; set; }
 
         private HttpClient _httpClient;
 
@@ -38,15 +35,48 @@ namespace AuctionClient.ViewModel.EmailPagesViewModel
         }
 
         [RelayCommand]
+        public async Task ChangePassword()
+        {
+            if(Code != EmailCode)
+            {
+                MessageBox.Show("Code is incorrect");
+                return;
+            } 
+            else if(Password.Length < 4)
+            {
+                MessageBox.Show("Password must be 4 symbols or more");
+                return;
+            }
+            else if (Password != ConfirmPassword)
+            {
+                MessageBox.Show("Passwords are not similar");
+                return;
+            } 
+
+            try
+            {
+                ChangeUserPasswordDTO passwordDTO = new() { Id = UserId, Password = this.Password };
+
+                string result = await Post(passwordDTO, "Identity", "NewPassword");
+                MessageBox.Show($"{result}. You may close this window)");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        [RelayCommand]
         public async Task SendCode()
         {
             try
             {
                 LoginDTO login = new() { Login = this.Login };
 
-                int userId = System.Convert.ToInt32(await Post(login, "Identity", "UserIdPasswordRecovery"));
+                UserId = System.Convert.ToInt32(await Post(login, "Identity", "UserIdPasswordRecovery"));
 
-                UserIdDTO userIdDTO = new() { Id = userId };
+                UserIdDTO userIdDTO = new() { Id = UserId };
 
                 string email = await Post(userIdDTO, "Data", "IsEmailConfirmed");
 
@@ -54,6 +84,7 @@ namespace AuctionClient.ViewModel.EmailPagesViewModel
 
                 EmailCode = await Post(emailDTO, "Identity", "SendEmail");
 
+                MessageBox.Show($"Code was send to your email - {email}");
             }
 
             catch (Exception ex) 

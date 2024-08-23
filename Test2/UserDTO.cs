@@ -2,12 +2,18 @@
 
 namespace CommonDTO
 {
+    public class ChangeUserPasswordDTO
+    {
+        public required int Id { get; set; }
+        public string Password { get; set; } = null!;
+    }
+
     public class LoginDTO//You can't just send string
     {
         public string Login { get; set; } = null!;
     }
 
-    public class UserIdDTO//You can't just send string
+    public class UserIdDTO//You can't just send int
     {
         public required int Id { get; set; }
     }

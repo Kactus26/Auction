@@ -25,6 +25,21 @@ namespace AuctionIdentity.Controllers
             _mailService = mailService;
         }
 
+        [HttpPost("NewPassword")]
+        public async Task<IActionResult> ChangeUserPassword(ChangeUserPasswordDTO userDTO)
+        {
+            User user = await _userRepository.GetUserById(userDTO.Id);
+
+            if (user == null) 
+                return NotFound("User with this Id not found");
+
+            user.Password = _passwordHasher.GeneratePassword(userDTO.Password);
+
+            await _userRepository.SaveChanges();
+
+            return Ok("User password successfully updated!");
+        }
+
         [HttpPost("UserIdPasswordRecovery")]
         public async Task<IActionResult> UserIdPasswordRecovery(LoginDTO login)
         {
