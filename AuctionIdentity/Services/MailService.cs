@@ -15,10 +15,10 @@ namespace AuctionIdentity.Services
             message.To.Add(new MailboxAddress("Favourite Client", email));
             message.Subject = "Confirm your email";
 
-            string password = GeneratePassword();
+            string code = GeneratePassword();
             message.Body = new TextPart("plain")
             {
-                Text = $"This is your password: {password}"
+                Text = $"This is your code: {code}. If you don't know what is it all about, just ignore this message <3"
             };
 
             // Отправка письма
@@ -38,11 +38,14 @@ namespace AuctionIdentity.Services
                     Console.WriteLine("Email sent successfully!");
 
                     client.Disconnect(true);
-                } catch (Exception ex)
+
+                } 
+                catch (Exception ex)
                 {
-                    return new (ex.ToString());
+                    return new (ex.Message);
                 }
-                return new (password);
+
+                return new (code);
             }
         }
 

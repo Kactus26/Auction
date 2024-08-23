@@ -21,15 +21,36 @@ namespace AuctionGateway.Controllers
             _httpClient = httpClient.CreateClient("IdentityServer");
         }
 
+        [HttpPost("NewPassword")]
+        public async Task<IActionResult> UserIdPasswordRecovery(ChangeUserPasswordDTO userDTO, CancellationToken cancellationToken)
+        {
+            var response = await _httpClient.PostAsJsonAsync($"User/NewPassword", userDTO, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
+        [HttpPost("UserIdPasswordRecovery")]
+        public async Task<IActionResult> UserIdPasswordRecovery(LoginDTO login, CancellationToken cancellationToken)
+        {
+            var response = await _httpClient.PostAsJsonAsync($"User/UserIdPasswordRecovery", login, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
         [HttpPost("SendEmail")]
-        [Authorize]
         public async Task<IActionResult> SendEmail(EmailDTO email, CancellationToken cancellationToken)
         {
             var response = await _httpClient.PostAsJsonAsync($"User/SendEmail", email, cancellationToken);
+
             if (!response.IsSuccessStatusCode)
-            {
                 return BadRequest(await response.Content.ReadAsStringAsync());
-            }
+
             return Ok(await response.Content.ReadAsStringAsync());
         }
 
@@ -37,10 +58,10 @@ namespace AuctionGateway.Controllers
         public async Task<IActionResult> RegistrationUser(RegisterUserRequest request, CancellationToken cancellationToken)
         {
             var response = await _httpClient.PostAsJsonAsync($"User/RegisterUser", request, cancellationToken);
+
             if (!response.IsSuccessStatusCode)
-            {
                 return BadRequest(await response.Content.ReadAsStringAsync());
-            }
+
             return Ok(await response.Content.ReadAsStringAsync());
         }
 
@@ -48,10 +69,10 @@ namespace AuctionGateway.Controllers
         public async Task<IActionResult> Authorization(AuthUserRequest request, CancellationToken cancellationToken)
         {
             var response = await _httpClient.PostAsJsonAsync($"User/AuthorizeUser", request, cancellationToken);
+
             if (!response.IsSuccessStatusCode)
-            {
                 return BadRequest(await response.Content.ReadAsStringAsync());
-            }
+
             return Ok(await response.Content.ReadAsStringAsync());
         }
 

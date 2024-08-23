@@ -2,9 +2,25 @@
 
 namespace CommonDTO
 {
-    public class EmailDTO
+    public class ChangeUserPasswordDTO
     {
-        public string Email { get; set; }
+        public required int Id { get; set; }
+        public string Password { get; set; } = null!;
+    }
+
+    public class LoginDTO//You can't just send string
+    {
+        public string Login { get; set; } = null!;
+    }
+
+    public class UserIdDTO//You can't just send int
+    {
+        public required int Id { get; set; }
+    }
+
+    public class EmailDTO//You can't just send string
+    {
+        public string Email { get; set; } = null!;
     }
 
     public class UserProfileDTO
@@ -25,7 +41,7 @@ namespace CommonDTO
         public byte[]? Image { get; set; }
     }
 
-    public class LotDTO
+    /*public class LotDTO
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
@@ -33,5 +49,5 @@ namespace CommonDTO
         public string Description { get; set; } = String.Empty;
         public double StartPrice { get; set; } = 1;
         public double CurrentPrice { get; set; } = 1;
-    }
+    }*/
 }

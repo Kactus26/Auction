@@ -1,14 +1,8 @@
 ﻿using AuctionServer.Interfaces;
 using AuctionServer.Model;
-using AuctionServer.Repository;
 using AutoMapper;
 using CommonDTO;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text.Json.Serialization;
 
 namespace AuctionServer.Controllers
 {
@@ -29,7 +23,21 @@ namespace AuctionServer.Controllers
             _environment = environment;
         }
 
-        [HttpGet("EmailIsConfirmed")]
+        [HttpPost("IsEmailConfirmed")]//Returns IsEmailConfirmed field
+        public async Task<IActionResult> IsEmailConfirmed(UserIdDTO userId)
+        {
+            User user = await _dataRepository.GetUserDataByid(userId.Id);
+
+            if(user == null)
+                return NotFound("The user with this id doesn't exist");
+
+            if (user.IsEmailConfirmed == false)
+                return BadRequest("The user with this id has not confirmed his email. If it's really your account, contact our support and don't be afraid!");
+
+            return Ok(user.Email);
+        }
+
+        [HttpGet("EmailIsConfirmed")]//Changes IsEmailConfirmed field
         public async Task<IActionResult> EmailIsConfirmed()
         {
             int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);

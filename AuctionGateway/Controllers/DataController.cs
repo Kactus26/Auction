@@ -20,13 +20,25 @@ namespace AuctionGateway.Controllers
             _httpClient = httpClient.CreateClient("AuctionServer");
         }
 
+        [HttpPost("IsEmailConfirmed")]//Returns IsEmailConfirmed field
+        public async Task<IActionResult> IsEmailConfirmed(UserIdDTO userId, CancellationToken cancellationToken)
+        {
+            var response = await _httpClient.PostAsJsonAsync("Data/IsEmailConfirmed", userId, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
         [Authorize]
-        [HttpGet("EmailIsConfirmed")]
+        [HttpGet("EmailIsConfirmed")]//Changes IsEmailConfirmed field
         public async Task<IActionResult> EmailIsConfirmed(CancellationToken cancellationToken)
         {
             JWTIntoHeader();
 
             var response = await _httpClient.GetAsync("Data/EmailIsConfirmed", cancellationToken);
+
             if (!response.IsSuccessStatusCode)
                 return BadRequest(await response.Content.ReadAsStringAsync());
 
@@ -40,6 +52,7 @@ namespace AuctionGateway.Controllers
             JWTIntoHeader();
 
             var response = await _httpClient.GetAsync($"Data/GetUserData", cancellationToken);
+
             if (!response.IsSuccessStatusCode)
                 return BadRequest(await response.Content.ReadAsStringAsync());
 
@@ -52,6 +65,7 @@ namespace AuctionGateway.Controllers
             JWTIntoHeader();
 
             var response = await _httpClient.PostAsJsonAsync($"Data/AddUser", userRequest, cancellationToken);
+
             if (!response.IsSuccessStatusCode)
             {
                 return BadRequest(await response.Content.ReadAsStringAsync());
@@ -66,6 +80,7 @@ namespace AuctionGateway.Controllers
             JWTIntoHeader();
 
             var response = await _httpClient.PostAsJsonAsync($"Data/UpdateUserData", newData, cancellationToken);
+
             if (!response.IsSuccessStatusCode)
             {
                 return BadRequest(await response.Content.ReadAsStringAsync());
