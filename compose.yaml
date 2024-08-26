@@ -29,6 +29,7 @@ services:
       dockerfile: AuctionServer/Dockerfile
       context: .
       target: final
+    user: root
     ports:
       - 8081:8080
     depends_on:

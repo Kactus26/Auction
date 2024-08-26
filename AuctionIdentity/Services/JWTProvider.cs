@@ -21,22 +21,28 @@ namespace AuctionIdentity.Services
 
         public string GenerateToken(User user)
         {
-            Claim[] claims = [new("userId", user.Id.ToString())];
+            try
+            {
+                Claim[] claims = [new("userId", user.Id.ToString())];
 
-            _options.SecretKey = _configuration.GetRequiredSection("JWTOptions").GetValue<string>("SecretKey")!;
-            _options.ExpiresHours = _configuration.GetRequiredSection("JWTOptions").GetValue<int>("ExpiresHours");
+                _options.SecretKey = _configuration.GetRequiredSection("JWTOptions").GetValue<string>("SecretKey")!;
+                _options.ExpiresHours = _configuration.GetRequiredSection("JWTOptions").GetValue<int>("ExpiresHours");
 
-            var signingCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey)),
-                SecurityAlgorithms.HmacSha256);
+                var signingCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey)),
+                    SecurityAlgorithms.HmacSha256);
 
-            var token = new JwtSecurityToken(
-                claims: claims,
-                signingCredentials: signingCredentials,
-                expires: DateTime.UtcNow.AddHours(_options.ExpiresHours));
+                var token = new JwtSecurityToken(
+                    claims: claims,
+                    signingCredentials: signingCredentials,
+                    expires: DateTime.UtcNow.AddHours(_options.ExpiresHours));
 
-            string tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
-            return tokenValue;
+                string tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
+                return tokenValue;
+            } catch (Exception ex)
+            {
+                return ex.Message;
+            }
         }
     }
 

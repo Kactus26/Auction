@@ -37,7 +37,7 @@ namespace AuctionClient.ViewModel.TabItems
 
         private const string pathToImages = "../../../Images/";
 
-        private const string gatewayPort = "https://localhost:7002";
+        private const string gatewayPort = "http://localhost:7002";
 
         private readonly HttpClient _httpClient;
 
@@ -72,6 +72,7 @@ namespace AuctionClient.ViewModel.TabItems
                 }
                 return false;
             }
+            var test = await response.Content.ReadAsStringAsync();
             return true;
         }//Method useful only if no data comes as response
 

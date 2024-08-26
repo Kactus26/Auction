@@ -91,44 +91,49 @@ namespace AuctionServer.Controllers
         [HttpPost("UpdateUserData")]
         public async Task<IActionResult> UpdateUserData(UserDataWithImageDTO newData)
         {
-            int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
-            User user = await _dataRepository.GetUserDataByid(userId);
+                int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
+                User user = await _dataRepository.GetUserDataByid(userId);
 
-            if(user == null) 
-                return NotFound("User not found");
+                if(user == null) 
+                    return NotFound("User not found");
 
-            user = _mapper.Map(newData.ProfileData, user);
-            user.Id = userId;
+                user = _mapper.Map(newData.ProfileData, user);
+                user.Id = userId;
 
-            if(newData.Image != null)
-            {
-                UploadImage(newData.Image, user);
-            }
+                if(newData.Image != null)
+                    UploadImage(newData.Image, user);
 
-            await _dataRepository.SaveChanges();
+                await _dataRepository.SaveChanges();
 
-            return Ok();
+                return Ok("Data updated");
         }
 
         private IActionResult UploadImage(byte[] image, User user)
-        {            
-            var uploadPath = Path.Combine(_environment.WebRootPath, "userImages");
-            if (!Directory.Exists(uploadPath))
-                Directory.CreateDirectory(uploadPath);
-
-            var filePath = Path.Combine(uploadPath, System.Convert.ToString(user.Id) + ".jpg");
-
-            if(Path.Exists(filePath))//Deletes previous user image
-                System.IO.File.Delete(filePath);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            try
             {
-                stream.Write(image);
+                var uploadPath = Path.Combine(_environment.WebRootPath, "userImages");
+                if (!Directory.Exists(uploadPath))
+                    Directory.CreateDirectory(uploadPath);
+
+                var filePath = Path.Combine(uploadPath, System.Convert.ToString(user.Id) + ".jpg");
+
+                if (Path.Exists(filePath))//Deletes previous user image
+                    System.IO.File.Delete(filePath);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    stream.Write(image);
+                }
+
+                user.ImageUrl = filePath;
+
+                return Ok("User Image successfully updated");
+
+            } catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
-
-            user.ImageUrl = filePath;
-
-            return Ok("User Image successfully updated");
         }
     }
 }
