@@ -17,11 +17,11 @@ namespace AuctionServer.Model
         public string Info { get; set; } = String.Empty;
         public string? ImageUrl { get; set; }
         public double Balance { get; set; } = 0.00;
-
-/*        public ICollection<User> Friends { get; set; }
-*/        
-        public ICollection<Lot> OwnLots { get; set; }
-        public ICollection<Lot> FollowingLots { get; set; }
-        public ICollection<LotInvesting> Investings { get; set; } 
+        public ICollection<Friendship> InitiatorFriendship { get; set; } = new List<Friendship>();
+        public ICollection<Friendship> TargetFriendship { get; set; } = new List<Friendship>();
+        public ICollection<Lot> OwnLots { get; set; } = new List<Lot>();
+        public ICollection<Lot> FollowingLots { get; set; } = new List<Lot>();
+        public ICollection<LotInvesting> Investings { get; set; } = new List<LotInvesting>();
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

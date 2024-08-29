@@ -15,7 +15,7 @@ namespace AuctionClient.ViewModel
 {
     public partial class RegistrationViewModel : ObservableObject
     {
-        private const string gatewayPort = "http://localhost:7002";
+        private const string gatewayPort = "https://localhost:7002";
         private readonly HttpClient _httpClient;
         ApplicationContext db = new ApplicationContext();
 

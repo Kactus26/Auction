@@ -37,7 +37,7 @@ namespace AuctionClient.ViewModel.TabItems
 
         private const string pathToImages = "../../../Images/";
 
-        private const string gatewayPort = "http://localhost:7002";
+        private const string gatewayPort = "https://localhost:7002";
 
         private readonly HttpClient _httpClient;
 
