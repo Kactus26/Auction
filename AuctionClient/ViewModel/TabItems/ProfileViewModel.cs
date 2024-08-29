@@ -35,6 +35,8 @@ namespace AuctionClient.ViewModel.TabItems
         private byte[] ImageToSend { get; set; }
         private string? ErrorMessage {  get; set; }
 
+        private string emailInDb;//Needs to ckeck if email is updated for it's IsConfirmed status
+
         private const string pathToImages = "../../../Images/";
 
         private const string gatewayPort = "https://localhost:7002";
@@ -79,9 +81,15 @@ namespace AuctionClient.ViewModel.TabItems
         [RelayCommand]
         public async Task UpdateUserData()
         {
-            UserDataWithImageDTO newData = new UserDataWithImageDTO { ProfileData = new UserProfileDTO { Name = this.Name, Surname = this.SurName, Email = this.Email, Info = Description, Balance = this.Balance } };
-            
-            if(ImageToSend != null) 
+            UserDataWithImageDTO newData = new UserDataWithImageDTO { ProfileData = new UserProfileDTO { Name = this.Name, Email = this.Email, Surname = this.SurName, Info = Description, Balance = this.Balance, IsEmailConfirmed = !this.EmailWarningEnabled} };
+
+            if (emailInDb != newData.ProfileData.Email)
+            {
+                newData.ProfileData.IsEmailConfirmed = false;
+                EmailWarningEnabled = true;
+            }
+
+            if (ImageToSend != null) 
                 newData.Image = ImageToSend;
 
             if(await Post(newData, "UpdateUserData"))
@@ -109,6 +117,8 @@ namespace AuctionClient.ViewModel.TabItems
                 Description = user.ProfileData.Info;
                 Balance = user.ProfileData.Balance;
                 EmailWarningEnabled = !user.ProfileData.IsEmailConfirmed;
+
+                emailInDb = Email;
 
                 if (user.Image != null)
                 {
@@ -181,6 +191,7 @@ namespace AuctionClient.ViewModel.TabItems
                 if (response.IsSuccessStatusCode)
                 {
                     EmailWarningEnabled = false;
+                    emailInDb = this.Email;
                     MessageBox.Show($"Email is successfully confirmed");
                 }
                 else

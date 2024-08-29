@@ -33,7 +33,7 @@ namespace AuctionServer.Data
 
             user1.InitiatorFriendship.Add(friendship);
 
-            dataContext.Users.AddRange(user1, user2);
+            dataContext.Users.AddRange(user1, user2, user3);
             dataContext.SaveChanges();
 
         }
