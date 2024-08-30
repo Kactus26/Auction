@@ -19,7 +19,7 @@ namespace AuctionServer.Tests.IntegrationalTests.AuctionServerTests.Controllers
             _client = factory.CreateClient();
         }
 
-        public static void ChangeProperties<T>(T target, T source)
+        private static void ChangeProperties<T>(T target, T source)
         {
             var properties = typeof(T).GetProperties().Where(p => p.CanRead && p.CanWrite && p.Name != "Id");
 

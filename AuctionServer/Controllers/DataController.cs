@@ -8,7 +8,7 @@ namespace AuctionServer.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class DataController : Controller
+    public class DataController : Controller//Shoud've called it UserDataController 
     {
         private readonly IDataRepository _dataRepository;
         private readonly IMapper _mapper;

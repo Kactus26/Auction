@@ -30,8 +30,10 @@ namespace AuctionServer.Data
             User user3 = new User() { Name = "Light", Surname = "Yagami" };
 
             Friendship friendship = new() { User = user1, Friend = user2 };
+            Friendship friendship2 = new() { User = user3, Friend = user2 };
 
             user1.InitiatorFriendship.Add(friendship);
+            user2.TargetFriendship.Add(friendship2);
 
             dataContext.Users.AddRange(user1, user2, user3);
             dataContext.SaveChanges();

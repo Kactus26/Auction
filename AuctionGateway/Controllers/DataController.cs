@@ -20,6 +20,20 @@ namespace AuctionGateway.Controllers
             _httpClient = httpClient.CreateClient("AuctionServer");
         }
 
+        [Authorize]
+        [HttpGet("GetUserFriends")]
+        public async Task<IActionResult> GetUserFriends(CancellationToken cancellationToken)
+        {
+            JWTIntoHeader();
+
+            var response = await _httpClient.GetAsync("Friends/GetUserFriends", cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
         [HttpPost("IsEmailConfirmed")]//Returns IsEmailConfirmed field
         public async Task<IActionResult> IsEmailConfirmed(UserIdDTO userId, CancellationToken cancellationToken)
         {

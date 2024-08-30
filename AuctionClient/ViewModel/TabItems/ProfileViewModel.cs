@@ -38,11 +38,8 @@ namespace AuctionClient.ViewModel.TabItems
         private string emailInDb;//Needs to ckeck if email is updated for it's IsConfirmed status
 
         private const string pathToImages = "../../../Images/";
-
         private const string gatewayPort = "https://localhost:7002";
-
         private readonly HttpClient _httpClient;
-
         ApplicationContext db = new ApplicationContext();
 
         public ProfileViewModel()
