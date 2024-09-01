@@ -20,6 +20,17 @@ namespace AuctionGateway.Controllers
             _httpClient = httpClient.CreateClient("AuctionServer");
         }
 
+        [HttpPost("FindUser")]
+        public async Task<IActionResult> FindUser(string userName, CancellationToken cancellationToken)
+        {
+            var response = await _httpClient.PostAsJsonAsync("Friends/FindUser", userName, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
         [Authorize]
         [HttpGet("GetUserFriends")]
         public async Task<IActionResult> GetUserFriends(CancellationToken cancellationToken)

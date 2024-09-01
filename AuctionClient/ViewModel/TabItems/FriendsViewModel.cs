@@ -8,11 +8,18 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Newtonsoft.Json;
+using AuctionServer.Model;
+using CommunityToolkit.Mvvm.Input;
 
 namespace AuctionClient.ViewModel.TabItems
 {
     public partial class FriendsViewModel : ObservableObject
     {
+        [ObservableProperty]
+        public string findUser;
+
+        ICollection<User>? UserFriends { get; set; }
         private const string gatewayPort = "https://localhost:7002";
         private readonly HttpClient _httpClient;
         ApplicationContext db = new ApplicationContext();
@@ -27,11 +34,25 @@ namespace AuctionClient.ViewModel.TabItems
                 MessageBox.Show("Guest doesn't have any friends(");
 
             GetUserFriends();
+
+
         }
 
-        private async Task GetUserFriends()
+        private async void GetUserFriends()
         {
             var response = await _httpClient.GetAsync($"{gatewayPort}/api/Data/GetUserFriends");
+            string responseContent = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                UserFriends =
+                    JsonConvert.DeserializeObject<ICollection<AuctionServer.Model.User>>(responseContent);
+            else
+                MessageBox.Show($"{responseContent}");
+        }
+
+        [RelayCommand]
+        public async Task FindUser()
+        {
+            var result = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/FindUser", FindUser);
         }
     }
 }

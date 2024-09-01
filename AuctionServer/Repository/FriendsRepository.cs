@@ -14,12 +14,18 @@ namespace AuctionServer.Repository
             _dataContext = dataContext;
         }
 
-        public async Task<ICollection<User>> GetUserFriendsByHisId(int userId)
+        public async Task<ICollection<User>> GetUserFriendsAndSendStatusByHisId(int userId)
         {
             return await _dataContext.Friendships
-                .Where(x=>x.FriendId == userId || x.UserId == userId)
+                .Where(x => x.FriendId == userId || x.UserId == userId)
+                .Where(y=>y.Relations == FriendStatus.Friend || y.Relations == FriendStatus.Send)
                 .Select(z=>z.UserId == userId ? z.Friend : z.User)
                 .ToListAsync();
         }
+
+/*        public async Task<ICollection<User>> GetUsersByName(string userName)
+        {
+            return await 
+        }*/
     }
 }

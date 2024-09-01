@@ -8,14 +8,13 @@
         public int FriendId { get; set; }
         public User Friend { get; set; } = null!;
 
-        public FriendStatus Relations { get; set; } = FriendStatus.None;
+        public FriendStatus Relations { get; set; }
     }
 
     public enum FriendStatus
     {
         Friend,
         Send,
-        None,
         Blocked
     }
 }

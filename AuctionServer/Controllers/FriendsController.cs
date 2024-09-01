@@ -15,11 +15,17 @@ namespace AuctionServer.Controllers
             _friendsRepository = friendsRepository;
         }
 
+/*        [HttpPost("FindUser")]
+        public async Task<IActionResult> FindUser(string userName)
+        {
+            ICollection<User> users = await _friendsRepository.GetUsersByName();
+        }*/
+
         [HttpGet("GetUserFriends")]
         public async Task<IActionResult> GetUserFriends()
         {
             int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
-            ICollection<User> friends = await _friendsRepository.GetUserFriendsByHisId(userId);
+            ICollection<User> friends = await _friendsRepository.GetUserFriendsAndSendStatusByHisId(userId);
 
             if (friends == null)
                 return NotFound("Friends not found");

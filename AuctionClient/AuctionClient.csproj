@@ -35,6 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AuctionServer\AuctionServer.csproj" />
     <ProjectReference Include="..\Test2\CommonDTO.csproj" />
   </ItemGroup>
 

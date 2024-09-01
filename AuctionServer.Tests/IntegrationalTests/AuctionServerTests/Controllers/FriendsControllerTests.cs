@@ -34,10 +34,10 @@ namespace Auction.Tests.IntegrationalTests.AuctionServerTests.Controllers
         }
 
         [Fact]
-        public async Task FriendsController_GetUserFriends_ReturnOk()
+        public async Task FriendsController_GetUserFriends_ReturnFriends()
         {
             // Arrange
-            var user = new User { Id = 3, Login = "Kactus", Password = "Test" };
+            var user = new User { Id = 1, Login = "Kactus", Password = "Test" };
             var token = _jwtProvider.GenerateToken(user);
 
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -50,7 +50,7 @@ namespace Auction.Tests.IntegrationalTests.AuctionServerTests.Controllers
 
             // Assert
             Assert.NotNull(result);
-            Assert.IsType<User>(result.FirstOrDefault());
+            Assert.IsType<AuctionServer.Model.User>(result.FirstOrDefault());
         }
     }
 }
