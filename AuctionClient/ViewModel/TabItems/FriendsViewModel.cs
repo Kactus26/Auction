@@ -6,13 +6,14 @@ using System.Windows;
 using Newtonsoft.Json;
 using AuctionServer.Model;
 using CommunityToolkit.Mvvm.Input;
+using CommonDTO;
 
 namespace AuctionClient.ViewModel.TabItems
 {
     public partial class FriendsViewModel : ObservableObject
     {
         [ObservableProperty]
-        public ICollection<User> friends;
+        public ICollection<UserDataWithImageDTO> friends;
         [ObservableProperty]
         public string name;
         [ObservableProperty]
@@ -29,12 +30,11 @@ namespace AuctionClient.ViewModel.TabItems
             LoggedUser lu = db.Find<LoggedUser>(1)!;
             if (lu != null)
             {
-
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", lu.JWTToken);
                 GetUserFriends();
             }
             else
-                Name = "Guest can't have any friends(";
+                Name = "Guest can't have any friends( But he can find other users";
 
         }
 
@@ -43,7 +43,7 @@ namespace AuctionClient.ViewModel.TabItems
             var response = await _httpClient.GetAsync($"{gatewayPort}/api/Data/GetUserFriends");
             string responseContent = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
-                Friends = JsonConvert.DeserializeObject<ICollection<AuctionServer.Model.User>>(responseContent);
+                Friends = JsonConvert.DeserializeObject<ICollection<UserDataWithImageDTO>>(responseContent);
             else
                 MessageBox.Show($"{responseContent}");
         }

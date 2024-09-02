@@ -1,5 +1,7 @@
 ﻿using AuctionServer.Interfaces;
 using AuctionServer.Model;
+using AutoMapper;
+using CommonDTO;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AuctionServer.Controllers
@@ -9,10 +11,12 @@ namespace AuctionServer.Controllers
     public class FriendsController : Controller
     {
         private readonly IFriendsRepository _friendsRepository;
+        private readonly IMapper _mapper;
 
-        public FriendsController(IFriendsRepository friendsRepository)
+        public FriendsController(IFriendsRepository friendsRepository, IMapper mapper)
         {
             _friendsRepository = friendsRepository;
+            _mapper = mapper;
         }
 
 /*        [HttpPost("FindUser")]
@@ -30,7 +34,23 @@ namespace AuctionServer.Controllers
             if (friends == null)
                 return NotFound("Friends not found");
 
-            return Ok(friends);
+            List<UserDataWithImageDTO> friendsWithImages = new List<UserDataWithImageDTO>();
+
+            foreach(User user in friends)
+            {
+                UserProfileDTO userData = _mapper.Map<UserProfileDTO>(user);
+                UserDataWithImageDTO friendWithImage = new UserDataWithImageDTO() { ProfileData = userData };
+
+                if(user.ImageUrl != null)
+                {
+                    byte[] image = System.IO.File.ReadAllBytes(user.ImageUrl);
+                    friendWithImage.Image = image;
+                }
+
+                friendsWithImages.Add(friendWithImage);
+            }
+
+            return Ok(friendsWithImages);
         }
     }
 }

@@ -45,12 +45,12 @@ namespace Auction.Tests.IntegrationalTests.AuctionServerTests.Controllers
             // Act
             var response = await _client.GetAsync("api/Friends/GetUserFriends");
             response.EnsureSuccessStatusCode();
-            ICollection<AuctionServer.Model.User> result = 
-                JsonConvert.DeserializeObject<ICollection<AuctionServer.Model.User>>(await response.Content.ReadAsStringAsync())!;
+            ICollection<UserDataWithImageDTO> result = 
+                JsonConvert.DeserializeObject<ICollection<UserDataWithImageDTO>>(await response.Content.ReadAsStringAsync())!;
 
             // Assert
             Assert.NotNull(result);
-            Assert.IsType<AuctionServer.Model.User>(result.FirstOrDefault());
+            Assert.IsType<UserDataWithImageDTO>(result.FirstOrDefault());
         }
     }
 }
