@@ -1,12 +1,7 @@
 ﻿using AuctionClient.Data;
 using CommunityToolkit.Mvvm.ComponentModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Headers;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using Newtonsoft.Json;
 using AuctionServer.Model;
@@ -16,6 +11,10 @@ namespace AuctionClient.ViewModel.TabItems
 {
     public partial class FriendsViewModel : ObservableObject
     {
+        [ObservableProperty]
+        public ICollection<User> friends;
+        [ObservableProperty]
+        public string name;
         [ObservableProperty]
         public string findUser;
 
@@ -29,12 +28,13 @@ namespace AuctionClient.ViewModel.TabItems
             _httpClient = new HttpClient();
             LoggedUser lu = db.Find<LoggedUser>(1)!;
             if (lu != null)
+            {
+
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", lu.JWTToken);
+                GetUserFriends();
+            }
             else
-                MessageBox.Show("Guest doesn't have any friends(");
-
-            GetUserFriends();
-
+                Name = "Guest can't have any friends(";
 
         }
 
@@ -43,16 +43,15 @@ namespace AuctionClient.ViewModel.TabItems
             var response = await _httpClient.GetAsync($"{gatewayPort}/api/Data/GetUserFriends");
             string responseContent = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
-                UserFriends =
-                    JsonConvert.DeserializeObject<ICollection<AuctionServer.Model.User>>(responseContent);
+                Friends = JsonConvert.DeserializeObject<ICollection<AuctionServer.Model.User>>(responseContent);
             else
                 MessageBox.Show($"{responseContent}");
         }
 
-        [RelayCommand]
+        /*[RelayCommand]
         public async Task FindUser()
         {
             var result = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/FindUser", FindUser);
-        }
+        }*/
     }
 }

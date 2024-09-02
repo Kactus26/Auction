@@ -26,7 +26,7 @@
                 <t:Profile/>
             </TabItem>
             <TabItem Header="Friends">
-
+                <t:Friends/>
             </TabItem>
         </TabControl>
     </Grid>
