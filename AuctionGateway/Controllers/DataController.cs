@@ -32,12 +32,12 @@ namespace AuctionGateway.Controllers
         }
 
         [Authorize]
-        [HttpGet("GetUserFriends")]
-        public async Task<IActionResult> GetUserFriends(CancellationToken cancellationToken)
+        [HttpPost("GetUserFriends")]
+        public async Task<IActionResult> GetUserFriends(PaginationDTO paginationDTO, CancellationToken cancellationToken)
         {
             JWTIntoHeader();
 
-            var response = await _httpClient.GetAsync("Friends/GetUserFriends", cancellationToken);
+            var response = await _httpClient.PostAsJsonAsync("Friends/GetUserFriends", paginationDTO, cancellationToken);
 
             if (!response.IsSuccessStatusCode)
                 return BadRequest(await response.Content.ReadAsStringAsync());

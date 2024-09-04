@@ -15,21 +15,22 @@
     </UserControl.DataContext>
 
     <UserControl.Resources>
+
         <Style TargetType="ListViewItem">
-            <Setter Property="Padding" Value="10"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="BorderBrush" Value="#CCCCCC"/>
-            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListViewItem">
-                        <Border Background="{TemplateBinding Background}" 
-                            BorderBrush="{TemplateBinding BorderBrush}" 
-                            BorderThickness="{TemplateBinding BorderThickness}" 
-                            CornerRadius="5">
-                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
@@ -64,14 +65,6 @@
                                 </Path.RenderTransform>
                             </Path>
                         </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#005A9E"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="#00417E"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -90,29 +83,21 @@
                         <Grid>
                             <!-- Фон кнопки -->
                             <Border Background = "#8c72a9" 
-                        BorderBrush="{TemplateBinding BorderBrush}" 
-                        BorderThickness="1" 
-                        CornerRadius="25">
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="1" 
+                                CornerRadius="25">
                             </Border>
                             <!-- Стрелка -->
                             <Path Data="M 0 0 L 10 5 L 0 10 Z"
-                      Fill="{TemplateBinding Foreground}"
-                      HorizontalAlignment="Center"
-                      VerticalAlignment="Center"
-                      RenderTransformOrigin="0.5,0.5">
+                                Fill="{TemplateBinding Foreground}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                RenderTransformOrigin="0.5,0.5">
                                 <Path.RenderTransform>
                                     <RotateTransform Angle="180" />
                                 </Path.RenderTransform>
                             </Path>
                         </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#005A9E"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter Property="Background" Value="#00417E"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -134,34 +119,88 @@
                   materialDesign:HintAssist.Hint="Name" BorderBrush="Gray"
                   materialDesign:TextFieldAssist.UnderlineBrush="White"
                   Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
-            <Button Width="150px" Margin="20,5,0,0" Content="Find user" BorderBrush="#8c72a9" Background="#8c72a9"/>
+            <Button Width="150px" Margin="20,5,0,0" Content="Find user" BorderBrush="#8c72a9" Background="#8c72a9" />
         </StackPanel>
-        <ListView ItemsSource="{Binding Friends}" Grid.Row="1">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <Border Background="White" CornerRadius="5" Padding="10" Margin="5">
+        <ListView ItemsSource="{Binding Friends1}" Grid.Row="0" Grid.RowSpan="2" Margin="0,65,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                    <Border Background="White" CornerRadius="5" Width="190" Padding="0,10,0,10" Margin="20,20,0,0">
                         <StackPanel Orientation="Horizontal">
-                            <!-- Изображение профиля -->
-                            <Image Width="100" Height="100">
-                                <Image.Source>
-                                    <Binding Path="Image" Converter="{StaticResource ByteArrayToImageConverter}"/>
-                                </Image.Source>
-                            </Image>
+                                <!-- Изображение профиля -->
+                                <Image Width="100" Height="100">
+                                    <Image.Source>
+                                        <Binding Path="Image" Converter="{StaticResource ByteArrayToImageConverter}"/>
+                                    </Image.Source>
+                                </Image>
+
+                                <StackPanel VerticalAlignment="Center">
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <TextBlock TextWrapping="Wrap" MaxWidth="70" Text="{Binding ProfileData.Name}" FontWeight="Bold" FontSize="16"/>
+                                </ScrollViewer>
+                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                    <TextBlock TextWrapping="Wrap" MaxWidth="70" Text="{Binding ProfileData.Surname}" FontSize="14" Foreground="Gray"/>
+                                </ScrollViewer>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        <ListView ItemsSource="{Binding Friends2}" Grid.Row="1" Margin="0,120,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  ScrollViewer.VerticalScrollBarVisibility="Disabled">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Background="White" CornerRadius="5" Width="190" Padding="0,10,0,10" Margin="20,20,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                <!-- Изображение профиля -->
+                                <Image Width="100" Height="100">
+                                    <Image.Source>
+                                        <Binding Path="Image" Converter="{StaticResource ByteArrayToImageConverter}"/>
+                                    </Image.Source>
+                                </Image>
 
                             <StackPanel VerticalAlignment="Center">
-                                <TextBlock Text="{Binding ProfileData.Name}" FontWeight="Bold" FontSize="16"/>
-                                <TextBlock Text="{Binding ProfileData.Surname}" FontSize="14" Foreground="Gray"/>
+                                <!-- Верхний ScrollViewer с ограниченной высотой -->
+                                <Grid Height="80">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <Grid VerticalAlignment="Center">
+                                            <TextBlock TextWrapping="Wrap" MaxWidth="70" Text="{Binding ProfileData.Name}" Padding="0,20,0,0" FontWeight="Bold" FontSize="16" VerticalAlignment="Center" TextAlignment="Center"/>
+                                        </Grid>
+                                    </ScrollViewer>
+                                </Grid>
+
+                                <!-- Нижний ScrollViewer с ограниченной высотой -->
+                                <Grid Height="80">
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <Grid VerticalAlignment="Center">
+                                            <TextBlock TextWrapping="Wrap" MaxWidth="70" Text="{Binding ProfileData.Surname}" FontSize="14" Foreground="Gray" VerticalAlignment="Center" TextAlignment="Center"/>
+                                        </Grid>
+                                    </ScrollViewer>
+                                </Grid>
                             </StackPanel>
                         </StackPanel>
-                    </Border>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Width="40" Height="40" Style="{StaticResource LeftArrowButton}" Margin="0,0,5,0"/>
-            <Label Content="1/2" Foreground="White" FontSize="20" VerticalAlignment="Center" Margin="0,0,0,5"/>
-            <Button Width="40" Height="40" Style="{StaticResource RightArrowButton}" ToolTip="Next" Margin="10,0,0,0"/>
+            <Button Width="40" Height="40" Command="{Binding PreviousPageCommand}" Style="{StaticResource LeftArrowButton}" Margin="0,0,5,0" Cursor="Hand"/>
+            <TextBox Text="{Binding CurrentPage}" Foreground="White" FontSize="20" VerticalAlignment="Center" Margin="0,0,0,5"/>
+            <Button Width="40" Height="40" Command="{Binding NextPageCommand}" Style="{StaticResource RightArrowButton}" ToolTip="Next" Margin="10,0,0,0" Cursor="Hand"/>
         </StackPanel>
     </Grid>
 

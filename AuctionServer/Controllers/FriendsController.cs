@@ -25,11 +25,14 @@ namespace AuctionServer.Controllers
             ICollection<User> users = await _friendsRepository.GetUsersByName();
         }*/
 
-        [HttpGet("GetUserFriends")]
-        public async Task<IActionResult> GetUserFriends()
+        [HttpPost("GetUserFriends")]
+        public async Task<IActionResult> GetUserFriends(PaginationDTO paginationDTO)
         {
             int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
-            ICollection<User> friends = await _friendsRepository.GetUserFriendsAndSendStatusByHisId(userId);
+            ICollection<User> friends = await _friendsRepository.GetUserFriendsByIdWithPagination(userId, paginationDTO.CurrentPage, paginationDTO.PageSize);
+
+            int startIndex = (paginationDTO.PageSize * paginationDTO.CurrentPage) - paginationDTO.PageSize;
+            var test = friends.Count % paginationDTO.PageSize;
 
             if (friends == null)
                 return NotFound("Friends not found");

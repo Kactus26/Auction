@@ -94,6 +94,8 @@ namespace AuctionServer.Controllers
                 int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
                 User user = await _dataRepository.GetUserDataByid(userId);
 
+                string imgUrl = user.ImageUrl;
+
                 if(user == null) 
                     return NotFound("User not found");
 
@@ -102,6 +104,8 @@ namespace AuctionServer.Controllers
 
                 if(newData.Image != null)
                     UploadImage(newData.Image, user);
+                else
+                    user.ImageUrl = imgUrl;//imageUrl generates only in UploadImage(), that's why need to set it manually
 
                 await _dataRepository.SaveChanges();
 

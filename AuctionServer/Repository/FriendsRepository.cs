@@ -14,12 +14,14 @@ namespace AuctionServer.Repository
             _dataContext = dataContext;
         }
 
-        public async Task<ICollection<User>> GetUserFriendsAndSendStatusByHisId(int userId)
+        public async Task<ICollection<User>> GetUserFriendsByIdWithPagination(int userId, int currentPages, int pageSize)
         {
             return await _dataContext.Friendships
                 .Where(x => x.FriendId == userId || x.UserId == userId)
                 .Where(y=>y.Relations == FriendStatus.Friend || y.Relations == FriendStatus.Send)
                 .Select(z=>z.UserId == userId ? z.Friend : z.User)
+                .Skip((currentPages - 1) * pageSize)  // Пропускаем элементы до текущей страницы
+                .Take(pageSize)                      // Выбираем только нужное количество элементов
                 .ToListAsync();
         }
 
