@@ -53,6 +53,9 @@ namespace AuctionClient.ViewModel.TabItems
 
         private async void GetUserFriends()
         {
+            if (CurrentPage.Any(d => !char.IsDigit(d)))
+                return;
+
             PaginationDTO paginationDTO = new PaginationDTO() { CurrentPage = System.Convert.ToInt32(CurrentPage), PageSize = pageSize};
             var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/GetUserFriends", paginationDTO);
             string responseContent = await response.Content.ReadAsStringAsync();
@@ -80,6 +83,9 @@ namespace AuctionClient.ViewModel.TabItems
         [RelayCommand]
         public void NextPage()
         {
+            if (CurrentPage.Any(d => !char.IsDigit(d)))
+                return;
+
             int curPage = int.Parse(CurrentPage);
             curPage++;
             CurrentPage = curPage.ToString();
@@ -88,7 +94,13 @@ namespace AuctionClient.ViewModel.TabItems
         [RelayCommand]
         public void PreviousPage()
         {
+            if (CurrentPage.Any(d => !char.IsDigit(d)))
+                return;
+
             int curPage = int.Parse(CurrentPage);
+            if (curPage <= 1)
+                return;
+
             curPage--;
             CurrentPage = curPage.ToString();
         }
