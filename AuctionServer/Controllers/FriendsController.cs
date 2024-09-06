@@ -19,11 +19,18 @@ namespace AuctionServer.Controllers
             _mapper = mapper;
         }
 
-/*        [HttpPost("FindUser")]
-        public async Task<IActionResult> FindUser(string userName)
+        [HttpPost("FindUser")]
+        public async Task<IActionResult> FindUser(PaginationUserSearchDTO userSearchDTO)
         {
-            ICollection<User> users = await _friendsRepository.GetUsersByName();
-        }*/
+            ICollection<User> searchResult = await _friendsRepository.GetUsersByName(userSearchDTO.Name, userSearchDTO.Surname, userSearchDTO.CurrentPage, userSearchDTO.PageSize);
+
+            if (searchResult == null)
+                return NotFound("Users with this name & surname don't exists");
+
+            List<UserDataWithImageDTO> usersFound = UserIntoUserWithImageDTO(searchResult); 
+
+            return Ok(usersFound);
+        }
 
         [HttpPost("GetUserFriends")]
         public async Task<IActionResult> GetUserFriends(PaginationDTO paginationDTO)
@@ -31,20 +38,24 @@ namespace AuctionServer.Controllers
             int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
             ICollection<User> friends = await _friendsRepository.GetUserFriendsByIdWithPagination(userId, paginationDTO.CurrentPage, paginationDTO.PageSize);
 
-            int startIndex = (paginationDTO.PageSize * paginationDTO.CurrentPage) - paginationDTO.PageSize;
-            var test = friends.Count % paginationDTO.PageSize;
-
             if (friends == null)
                 return NotFound("Friends not found");
 
+            List<UserDataWithImageDTO> friendsWithImages = UserIntoUserWithImageDTO(friends);
+
+            return Ok(friendsWithImages);
+        }
+
+        private List<UserDataWithImageDTO> UserIntoUserWithImageDTO(ICollection<User> friends)
+        {
             List<UserDataWithImageDTO> friendsWithImages = new List<UserDataWithImageDTO>();
 
-            foreach(User user in friends)
+            foreach (User user in friends)
             {
                 UserProfileDTO userData = _mapper.Map<UserProfileDTO>(user);
                 UserDataWithImageDTO friendWithImage = new UserDataWithImageDTO() { ProfileData = userData };
 
-                if(user.ImageUrl != null)
+                if (user.ImageUrl != null)
                 {
                     byte[] image = System.IO.File.ReadAllBytes(user.ImageUrl);
                     friendWithImage.Image = image;
@@ -52,8 +63,7 @@ namespace AuctionServer.Controllers
 
                 friendsWithImages.Add(friendWithImage);
             }
-
-            return Ok(friendsWithImages);
+            return friendsWithImages;
         }
     }
 }

@@ -9,6 +9,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommonDTO;
 using AuctionClient.View.TabItems;
 using System.Collections.ObjectModel;
+using Azure;
 
 namespace AuctionClient.ViewModel.TabItems
 {
@@ -20,6 +21,8 @@ namespace AuctionClient.ViewModel.TabItems
         public ObservableCollection<UserDataWithImageDTO> friends2 = new ObservableCollection<UserDataWithImageDTO>();
         [ObservableProperty]
         public string name;
+        [ObservableProperty]
+        public string surname;
         [ObservableProperty]
         public string findUser;
         [ObservableProperty]
@@ -61,23 +64,27 @@ namespace AuctionClient.ViewModel.TabItems
             string responseContent = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                Friends1.Clear();
-                Friends2.Clear();
-
                 List<UserDataWithImageDTO> all = JsonConvert.DeserializeObject<List<UserDataWithImageDTO>>(responseContent);
-
-                int index = 0;
-                while(index < all.Count)
-                {
-                    if (index <= 2)
-                        Friends1.Add(all[index]);
-                    else
-                        Friends2.Add(all[index]);
-                    index++;
-                }
+                UsersAllocation(all);
             }
             else
                 MessageBox.Show($"{responseContent}");
+        }
+
+        private void UsersAllocation(List<UserDataWithImageDTO> all)
+        {
+            Friends1.Clear();
+            Friends2.Clear();
+
+            int index = 0;
+            while (index < all.Count)
+            {
+                if (index <= 2)
+                    Friends1.Add(all[index]);
+                else
+                    Friends2.Add(all[index]);
+                index++;
+            }
         }
 
         [RelayCommand]
@@ -105,10 +112,21 @@ namespace AuctionClient.ViewModel.TabItems
             CurrentPage = curPage.ToString();
         }
 
-        /*[RelayCommand]
-        public async Task FindUser()
+        [RelayCommand]
+        public async Task Search()
         {
-            var result = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/FindUser", FindUser);
-        }*/
+            PaginationUserSearchDTO userSearchDTO = new PaginationUserSearchDTO() { Name = this.Name, Surname = this.Surname, CurrentPage = int.Parse(CurrentPage), PageSize = pageSize };
+            var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/FindUser", userSearchDTO);
+            string responseContent = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                List<UserDataWithImageDTO> all = JsonConvert.DeserializeObject<List<UserDataWithImageDTO>>(responseContent);
+                UsersAllocation(all);
+            }
+            else
+                MessageBox.Show($"{responseContent}");
+
+            return;
+        }
     }
 }

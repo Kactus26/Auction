@@ -21,9 +21,9 @@ namespace AuctionGateway.Controllers
         }
 
         [HttpPost("FindUser")]
-        public async Task<IActionResult> FindUser(string userName, CancellationToken cancellationToken)
+        public async Task<IActionResult> FindUser(PaginationUserSearchDTO userSearchDTO, CancellationToken cancellationToken)
         {
-            var response = await _httpClient.PostAsJsonAsync("Friends/FindUser", userName, cancellationToken);
+            var response = await _httpClient.PostAsJsonAsync("Friends/FindUser", userSearchDTO, cancellationToken);
 
             if (!response.IsSuccessStatusCode)
                 return BadRequest(await response.Content.ReadAsStringAsync());

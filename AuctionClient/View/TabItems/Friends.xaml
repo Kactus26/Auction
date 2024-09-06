@@ -113,13 +113,22 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal">
-            <TextBox Text="{Binding Name}" Width="470px" Height="60px" VerticalAlignment="Top" 
+            <TextBox Text="{Binding Name}" Width="200px" Height="60px" VerticalAlignment="Top" 
                   Foreground="White" FontSize="20" Margin="20,0,0,0"
                   materialDesign:HintAssist.Foreground="White"
                   materialDesign:HintAssist.Hint="Name" BorderBrush="Gray"
                   materialDesign:TextFieldAssist.UnderlineBrush="White"
                   Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
-            <Button Width="150px" Margin="20,5,0,0" Content="Find user" BorderBrush="#8c72a9" Background="#8c72a9" />
+            
+            <TextBox Text="{Binding Surname}" Width="250px" Height="60px" VerticalAlignment="Top" 
+                  Foreground="White" FontSize="20" Margin="20,0,0,0"
+                  materialDesign:HintAssist.Foreground="White"
+                  materialDesign:HintAssist.Hint="Surname" BorderBrush="Gray"
+                  materialDesign:TextFieldAssist.UnderlineBrush="White"
+                  Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+
+
+            <Button Width="150px" Margin="20,5,0,0" Command="{Binding SearchCommand}" Content="Find user" BorderBrush="#8c72a9" Background="#8c72a9" />
         </StackPanel>
         <ListView ItemsSource="{Binding Friends1}" Grid.Row="0" Grid.RowSpan="2" Margin="0,65,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   ScrollViewer.VerticalScrollBarVisibility="Disabled">
