@@ -34,6 +34,14 @@ namespace AuctionServer.Data
             User user7 = new User() { Name = "N" };
             User user8 = new User() { Name = "Dzin" };
             User user9 = new User() { Name = "Tataruta" };
+            User zero1 = new User() { Name = "Dumb1" };
+            User zero2 = new User() { Name = "Dumb2" };
+            User zero3 = new User() { Name = "Dumb3" };
+            User zero4 = new User() { Name = "Dumb4" };
+            User zero5 = new User() { Name = "Dumb5" };
+            User zero6 = new User() { Name = "Dumb6" };
+            User zero7 = new User() { Name = "Dumb7" };
+
 
             Friendship friendship = new() { User = user1, Friend = user2, Relations = FriendStatus.Friend };
             Friendship friendship2 = new() { User = user3, Friend = user2, Relations = FriendStatus.Friend };
@@ -55,7 +63,7 @@ namespace AuctionServer.Data
 
 
 
-            dataContext.Users.AddRange(user1, user2, user3, user4, user5, user6);
+            dataContext.Users.AddRange(user1, user2, user3, user4, user5, user6, zero1, zero2, zero3, zero4, zero5, zero6, zero7);
             dataContext.SaveChanges();
 
         }

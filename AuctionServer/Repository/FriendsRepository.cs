@@ -18,8 +18,8 @@ namespace AuctionServer.Repository
         {
             return await _dataContext.Friendships
                 .Where(x => x.FriendId == userId || x.UserId == userId)
-                .Where(y=>y.Relations == FriendStatus.Friend || y.Relations == FriendStatus.Send)
-                .Select(z=>z.UserId == userId ? z.Friend : z.User)
+                .Where(y => y.Relations == FriendStatus.Friend || y.Relations == FriendStatus.Send)
+                .Select(z => z.UserId == userId ? z.Friend : z.User)
                 .Skip((currentPages - 1) * pageSize)
                 .Take(pageSize)                      
                 .ToListAsync();
@@ -30,7 +30,6 @@ namespace AuctionServer.Repository
 
             return await _dataContext.Users
                 .Where(u => (name != null ? u.Name.Contains(name) : true) && (surname != null ? u.Surname.Contains(surname) : true))
-                .OrderBy(u => u.Surname)
                 .Skip((currentPages - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

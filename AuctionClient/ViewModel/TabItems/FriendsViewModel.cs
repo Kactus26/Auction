@@ -27,8 +27,9 @@ namespace AuctionClient.ViewModel.TabItems
         public string findUser;
         [ObservableProperty]
         public string currentPage = "1";
-        private const int pageSize = 6; 
-
+        private const int pageSize = 6;
+        private bool IsSearch = false;
+        //Сделай отдельное бул поле для IsSearchResult и кнопку для возвращения к своиим Friedns
 
         ICollection<User>? UserFriends { get; set; }
         private const string gatewayPort = "https://localhost:7002";
@@ -56,6 +57,9 @@ namespace AuctionClient.ViewModel.TabItems
 
         private async void GetUserFriends()
         {
+            if (IsSearch)
+                return;
+
             if (CurrentPage.Any(d => !char.IsDigit(d)))
                 return;
 
@@ -66,6 +70,7 @@ namespace AuctionClient.ViewModel.TabItems
             {
                 List<UserDataWithImageDTO> all = JsonConvert.DeserializeObject<List<UserDataWithImageDTO>>(responseContent);
                 UsersAllocation(all);
+                IsSearch = false;
             }
             else
                 MessageBox.Show($"{responseContent}");
@@ -96,6 +101,12 @@ namespace AuctionClient.ViewModel.TabItems
             int curPage = int.Parse(CurrentPage);
             curPage++;
             CurrentPage = curPage.ToString();
+
+            if (IsSearch)
+            {
+                Search(curPage);
+                return;
+            }            
         }
 
         [RelayCommand]
@@ -110,18 +121,29 @@ namespace AuctionClient.ViewModel.TabItems
 
             curPage--;
             CurrentPage = curPage.ToString();
+
+            if (IsSearch)
+            {
+                Search(curPage);
+                return;
+            }
         }
 
         [RelayCommand]
-        public async Task Search()
+        public async Task Search(int? changePage)
         {
             PaginationUserSearchDTO userSearchDTO = new PaginationUserSearchDTO() { Name = this.Name, Surname = this.Surname, CurrentPage = int.Parse(CurrentPage), PageSize = pageSize };
+
+            if (changePage != null)
+                userSearchDTO.CurrentPage = changePage.Value;
+
             var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/FindUser", userSearchDTO);
             string responseContent = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
                 List<UserDataWithImageDTO> all = JsonConvert.DeserializeObject<List<UserDataWithImageDTO>>(responseContent);
                 UsersAllocation(all);
+                IsSearch = true;
             }
             else
                 MessageBox.Show($"{responseContent}");
