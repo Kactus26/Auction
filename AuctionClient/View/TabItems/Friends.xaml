@@ -128,9 +128,9 @@
                   Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
 
-            <Button Width="150px" Margin="20,5,0,0" Command="{Binding SearchCommand}" Content="Find user" BorderBrush="#8c72a9" Background="#8c72a9" />
+            <Button Width="150px" Margin="20,5,0,0" Command="{Binding SearchButtonCommand}" Content="Find user" BorderBrush="#8c72a9" Background="#8c72a9" />
         </StackPanel>
-        <ListView ItemsSource="{Binding Friends1}" Grid.Row="0" Grid.RowSpan="2" Margin="0,65,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+        <ListView ItemsSource="{Binding Friends1}" Grid.Row="0" Grid.RowSpan="2" Margin="0,65,10,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -204,8 +204,9 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        
 
+        <Button Grid.Row="2" Width="150" HorizontalAlignment="Left" Margin="20,0,0,0" Content="Your Friends" BorderBrush="#8c72a9" Background="Transparent"
+                Foreground="White" Command="{Binding UserFriendsButtonCommand}"/>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Width="40" Height="40" Command="{Binding PreviousPageCommand}" Style="{StaticResource LeftArrowButton}" Margin="0,0,5,0" Cursor="Hand"/>
             <TextBox Text="{Binding CurrentPage}" Foreground="White" FontSize="20" VerticalAlignment="Center" Margin="0,0,0,5"/>

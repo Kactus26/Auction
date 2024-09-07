@@ -15,23 +15,21 @@ namespace AuctionClient.ViewModel.TabItems
 {
     public partial class FriendsViewModel : ObservableObject
     {
+        #region ObservableProperties
         [ObservableProperty]
         public ObservableCollection<UserDataWithImageDTO> friends1 = new ObservableCollection<UserDataWithImageDTO>();
         [ObservableProperty]
         public ObservableCollection<UserDataWithImageDTO> friends2 = new ObservableCollection<UserDataWithImageDTO>();
         [ObservableProperty]
-        public string name;
+        public string? name;
         [ObservableProperty]
-        public string surname;
-        [ObservableProperty]
-        public string findUser;
+        public string? surname;
         [ObservableProperty]
         public string currentPage = "1";
-        private const int pageSize = 6;
-        private bool IsSearch = false;
-        //Сделай отдельное бул поле для IsSearchResult и кнопку для возвращения к своиим Friedns
+        #endregion
 
-        ICollection<User>? UserFriends { get; set; }
+        private const int pageSize = 6;
+        private bool IsSearch = false;//After trying to change page OnCurPageChanged method executes, that's why this variable exists
         private const string gatewayPort = "https://localhost:7002";
         private readonly HttpClient _httpClient;
         ApplicationContext db = new ApplicationContext();
@@ -55,11 +53,29 @@ namespace AuctionClient.ViewModel.TabItems
 
         }
 
-        private async void GetUserFriends()
+        [RelayCommand]
+        public async Task UserFriendsButton()
+        {
+            CurrentPage = "1";
+            IsSearch = false;
+            await GetUserFriends();
+        }
+
+        [RelayCommand]
+        public async Task SearchButton()
+        {
+            CurrentPage = "1";
+            await Search();
+        }
+
+        private async Task GetUserFriends()
         {
             if (IsSearch)
+            {
+                await Search();
                 return;
-
+            }
+                
             if (CurrentPage.Any(d => !char.IsDigit(d)))
                 return;
 
@@ -68,7 +84,7 @@ namespace AuctionClient.ViewModel.TabItems
             string responseContent = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                List<UserDataWithImageDTO> all = JsonConvert.DeserializeObject<List<UserDataWithImageDTO>>(responseContent);
+                List<UserDataWithImageDTO>? all = JsonConvert.DeserializeObject<List<UserDataWithImageDTO>>(responseContent);
                 UsersAllocation(all);
                 IsSearch = false;
             }
@@ -101,12 +117,6 @@ namespace AuctionClient.ViewModel.TabItems
             int curPage = int.Parse(CurrentPage);
             curPage++;
             CurrentPage = curPage.ToString();
-
-            if (IsSearch)
-            {
-                Search(curPage);
-                return;
-            }            
         }
 
         [RelayCommand]
@@ -121,27 +131,17 @@ namespace AuctionClient.ViewModel.TabItems
 
             curPage--;
             CurrentPage = curPage.ToString();
-
-            if (IsSearch)
-            {
-                Search(curPage);
-                return;
-            }
         }
 
-        [RelayCommand]
-        public async Task Search(int? changePage)
+        private async Task Search()
         {
             PaginationUserSearchDTO userSearchDTO = new PaginationUserSearchDTO() { Name = this.Name, Surname = this.Surname, CurrentPage = int.Parse(CurrentPage), PageSize = pageSize };
-
-            if (changePage != null)
-                userSearchDTO.CurrentPage = changePage.Value;
 
             var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/FindUser", userSearchDTO);
             string responseContent = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                List<UserDataWithImageDTO> all = JsonConvert.DeserializeObject<List<UserDataWithImageDTO>>(responseContent);
+                List<UserDataWithImageDTO>? all = JsonConvert.DeserializeObject<List<UserDataWithImageDTO>>(responseContent);
                 UsersAllocation(all);
                 IsSearch = true;
             }
