@@ -23,5 +23,18 @@ namespace AuctionClient.View
         {
             InitializeComponent();
         }
+
+        public void AddNewTab(UserControl userControl, string header)
+        {
+            TabItem newTabItem = new TabItem()
+            {
+                Header = header,
+                Content = userControl
+            };
+
+            MainTabControl.Items.Add(newTabItem);
+            MainTabControl.SelectedItem = newTabItem;
+        }
+
     }
 }

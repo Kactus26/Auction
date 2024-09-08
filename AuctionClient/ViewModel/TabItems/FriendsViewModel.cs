@@ -10,6 +10,8 @@ using CommonDTO;
 using AuctionClient.View.TabItems;
 using System.Collections.ObjectModel;
 using Azure;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace AuctionClient.ViewModel.TabItems
 {
@@ -150,5 +152,6 @@ namespace AuctionClient.ViewModel.TabItems
 
             return;
         }
+
     }
 }

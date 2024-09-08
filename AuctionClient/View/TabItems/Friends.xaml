@@ -130,8 +130,8 @@
 
             <Button Width="150px" Margin="20,5,0,0" Command="{Binding SearchButtonCommand}" Content="Find user" BorderBrush="#8c72a9" Background="#8c72a9" />
         </StackPanel>
-        <ListView ItemsSource="{Binding Friends1}" Grid.Row="0" Grid.RowSpan="2" Margin="0,65,10,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                  ScrollViewer.VerticalScrollBarVisibility="Disabled">
+        <ListView ItemsSource="{Binding Friends1}" SelectionChanged="UsersListView1_SelectionChanged" Name="ListView1" Grid.Row="0" Grid.RowSpan="2" Margin="0,65,10,0" 
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel Orientation="Horizontal" />
@@ -148,7 +148,7 @@
                                     </Image.Source>
                                 </Image>
 
-                                <StackPanel VerticalAlignment="Center">
+                            <StackPanel VerticalAlignment="Center">
                                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                                     <TextBlock TextWrapping="Wrap" MaxWidth="70" Text="{Binding ProfileData.Name}" FontWeight="Bold" FontSize="16"/>
                                 </ScrollViewer>
@@ -162,7 +162,8 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-        <ListView ItemsSource="{Binding Friends2}" Grid.Row="1" Margin="0,120,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+        <ListView ItemsSource="{Binding Friends2}" SelectionChanged="UsersListView2_SelectionChanged" Name="ListView2"
+                  Grid.Row="1" Margin="0,120,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
                   ScrollViewer.VerticalScrollBarVisibility="Disabled">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -212,6 +213,7 @@
             <TextBox Text="{Binding CurrentPage}" Foreground="White" FontSize="20" VerticalAlignment="Center" Margin="0,0,0,5"/>
             <Button Width="40" Height="40" Command="{Binding NextPageCommand}" Style="{StaticResource RightArrowButton}" ToolTip="Next" Margin="10,0,0,0" Cursor="Hand"/>
         </StackPanel>
+
     </Grid>
 
 </UserControl>
