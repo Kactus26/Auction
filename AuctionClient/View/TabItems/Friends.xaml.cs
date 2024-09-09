@@ -1,19 +1,8 @@
-﻿using AuctionServer.Model;
+﻿using AuctionClient.ViewModel.TabItems;
 using CommonDTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace AuctionClient.View.TabItems
 {
@@ -44,7 +33,10 @@ namespace AuctionClient.View.TabItems
         private void AddNewTab(UserDataWithImageDTO selectedUser)
         {
             string userName = selectedUser.ProfileData.Name;
-            Profile newProfile = new Profile();
+
+            var friendsDataVM = new FriendDataViewModel(selectedUser);
+
+            FriendData newProfile = new FriendData() { DataContext = friendsDataVM };
 
             var mainControl = FindParent<MainWindow>(this);
 
@@ -53,6 +45,7 @@ namespace AuctionClient.View.TabItems
                 mainControl.AddNewTab(newProfile, userName);
             }
         }
+
 
         private T FindParent<T>(DependencyObject child) where T : DependencyObject
         {

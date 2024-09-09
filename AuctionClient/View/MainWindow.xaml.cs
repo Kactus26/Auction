@@ -29,7 +29,7 @@ namespace AuctionClient.View
             TabItem newTabItem = new TabItem()
             {
                 Header = header,
-                Content = userControl
+                Content = userControl                
             };
 
             MainTabControl.Items.Add(newTabItem);
