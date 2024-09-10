@@ -43,18 +43,19 @@
         <Label Content="Email isn't confirmed" Grid.Row="1" VerticalAlignment="Top"
             FontSize="20" Foreground="#8c72a9" Margin="15,5,0,0" Visibility="{Binding EmailWarningEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         
-        <TextBox Text="{Binding Email}" Margin="20,0,180,10" Grid.ColumnSpan="2"
+        <TextBox Text="{Binding Email}" Margin="20,0,180,80" Grid.ColumnSpan="2"
           Foreground="White" FontSize="20" VerticalAlignment="Center"
           materialDesign:HintAssist.Foreground="White"
           materialDesign:HintAssist.Hint="Email" BorderBrush="Gray"
           materialDesign:TextFieldAssist.UnderlineBrush="White"
-          Style="{StaticResource MaterialDesignFloatingHintTextBox}" Grid.Row="1"/>
+          Style="{StaticResource MaterialDesignFloatingHintTextBox}" Grid.Row="2"/>
 
-        <Button Grid.Row="1" VerticalAlignment="Bottom" Content="Confirm Email" Command="{Binding ConfirmEmailCommand}"
-                BorderBrush="#8c72a9" Background="Transparent" Foreground="White" Margin="20,0,20,0" Height="30"/>
+        <Button Grid.Row="2" VerticalAlignment="Bottom" Content="Confirm Email" Command="{Binding ConfirmEmailCommand}" 
+                Visibility="{Binding EmailWarningEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"
+                BorderBrush="#8c72a9" Background="Transparent" Foreground="White" Margin="20,0,20,35" Height="30"/>
 
         <TextBox Text="{Binding Description}" Margin="20,0,20,0"
-          VerticalAlignment="Center" Grid.Row="2" Grid.ColumnSpan="2"
+          VerticalAlignment="Center" Grid.Row="1" Grid.ColumnSpan="2"
           Foreground="White" FontSize="20" TextWrapping="Wrap"
           materialDesign:HintAssist.Foreground="White"
           materialDesign:HintAssist.Hint="Description" BorderBrush="Gray"

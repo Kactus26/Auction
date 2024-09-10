@@ -59,6 +59,14 @@ namespace AuctionClient.ViewModel.TabItems
         }
 
         [RelayCommand]
+        public async Task UserInvitationsButton()
+        {
+            CurrentPage = "1";
+            IsSearch = false;//hz
+            
+        }
+
+        [RelayCommand]
         public async Task SearchButton()
         {
             CurrentPage = "1";

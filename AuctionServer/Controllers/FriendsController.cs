@@ -3,6 +3,7 @@ using AuctionServer.Model;
 using AutoMapper;
 using CommonDTO;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace AuctionServer.Controllers
 {
@@ -22,7 +23,17 @@ namespace AuctionServer.Controllers
         [HttpPost("FindUser")]
         public async Task<IActionResult> FindUser(PaginationUserSearchDTO userSearchDTO)
         {
-            ICollection<User> searchResult = await _friendsRepository.GetUsersByName(userSearchDTO.Name, userSearchDTO.Surname, userSearchDTO.CurrentPage, userSearchDTO.PageSize);
+            int? userId = null;
+
+            try
+            {
+                userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
+            } catch(Exception ex)
+            {
+                //If user have exception here, it means that he has no token and he is guest;
+            }
+
+            ICollection<User> searchResult = await _friendsRepository.GetUsersByName(userId, userSearchDTO.Name, userSearchDTO.Surname, userSearchDTO.CurrentPage, userSearchDTO.PageSize);
 
             if (searchResult == null)
                 return NotFound("Users with this name & surname don't exists");

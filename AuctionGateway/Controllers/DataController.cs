@@ -23,6 +23,8 @@ namespace AuctionGateway.Controllers
         [HttpPost("FindUser")]
         public async Task<IActionResult> FindUser(PaginationUserSearchDTO userSearchDTO, CancellationToken cancellationToken)
         {
+            JWTIntoHeader();
+
             var response = await _httpClient.PostAsJsonAsync("Friends/FindUser", userSearchDTO, cancellationToken);
 
             if (!response.IsSuccessStatusCode)
@@ -116,6 +118,8 @@ namespace AuctionGateway.Controllers
         private void JWTIntoHeader()
         {
             string jwt = Request.Headers.Authorization!;
+            if (jwt == null)
+                return;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt[7..]);
         }
     }

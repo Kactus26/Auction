@@ -45,12 +45,21 @@ namespace AuctionServer.Data
 
             Friendship friendship = new() { User = user1, Friend = user2, Relations = FriendStatus.Friend };
             Friendship friendship2 = new() { User = user3, Friend = user2, Relations = FriendStatus.Friend };
-            Friendship friendship3 = new() { User = user2, Friend = user4, Relations = FriendStatus.Friend };
+            Friendship friendship3 = new() { User = user2, Friend = user4, Relations = FriendStatus.Blocked };
             Friendship friendship4 = new() { User = user2, Friend = user5, Relations = FriendStatus.Friend };
             Friendship friendship5 = new() { User = user2, Friend = user6, Relations = FriendStatus.Friend };
             Friendship friendship6 = new() { User = user2, Friend = user7, Relations = FriendStatus.Friend };
             Friendship friendship7 = new() { User = user2, Friend = user8, Relations = FriendStatus.Friend };
             Friendship friendship8 = new() { User = user2, Friend = user9, Relations = FriendStatus.Friend };
+
+            Friendship friendship9 = new() { User = user2, Friend = zero1, Relations = FriendStatus.Send };
+            Friendship friendship10 = new() { User = user2, Friend = zero2, Relations = FriendStatus.Send };
+            Friendship friendship11 = new() { User = user2, Friend = zero3, Relations = FriendStatus.Send };
+            Friendship friendship12 = new() { User = user2, Friend = zero4, Relations = FriendStatus.Send };
+            Friendship friendship13 = new() { User = user2, Friend = zero5, Relations = FriendStatus.Send };
+            Friendship friendship14 = new() { User = user2, Friend = zero6, Relations = FriendStatus.Send };
+            Friendship friendship15 = new() { User = user2, Friend = zero7, Relations = FriendStatus.Send };
+
 
             user1.InitiatorFriendship.Add(friendship);
             user2.TargetFriendship.Add(friendship2);
@@ -60,7 +69,13 @@ namespace AuctionServer.Data
             user2.InitiatorFriendship.Add(friendship6);
             user2.InitiatorFriendship.Add(friendship7);
             user2.InitiatorFriendship.Add(friendship8);
-
+            user2.InitiatorFriendship.Add(friendship9);
+            user2.InitiatorFriendship.Add(friendship10);
+            user2.InitiatorFriendship.Add(friendship11);
+            user2.InitiatorFriendship.Add(friendship12);
+            user2.InitiatorFriendship.Add(friendship13);
+            user2.InitiatorFriendship.Add(friendship14);
+            user2.InitiatorFriendship.Add(friendship15);
 
 
             dataContext.Users.AddRange(user1, user2, user3, user4, user5, user6, zero1, zero2, zero3, zero4, zero5, zero6, zero7);

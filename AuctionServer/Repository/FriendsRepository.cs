@@ -18,21 +18,33 @@ namespace AuctionServer.Repository
         {
             return await _dataContext.Friendships
                 .Where(x => x.FriendId == userId || x.UserId == userId)
-                .Where(y => y.Relations == FriendStatus.Friend || y.Relations == FriendStatus.Send)
+                .Where(y => y.Relations == FriendStatus.Friend)
                 .Select(z => z.UserId == userId ? z.Friend : z.User)
                 .Skip((currentPages - 1) * pageSize)
                 .Take(pageSize)                      
                 .ToListAsync();
         }
 
-        public async Task<ICollection<User>> GetUsersByName(string? name, string? surname, int currentPages, int pageSize)
+        public async Task<ICollection<User>> GetUsersByName(int? userId, string? name, string? surname, int currentPages, int pageSize)
         {
-
-            return await _dataContext.Users
-                .Where(u => (name != null ? u.Name.Contains(name) : true) && (surname != null ? u.Surname.Contains(surname) : true))
-                .Skip((currentPages - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+            if(userId != null)
+                return await _dataContext.Users
+                    .Where(u => (name != null ? u.Name.Contains(name) : true) 
+                    && (surname != null ? u.Surname.Contains(surname) : true)
+                    && !_dataContext.Friendships.Any(f =>
+                            (f.UserId == userId && f.FriendId == u.Id ||
+                             f.FriendId == userId && f.UserId == u.Id)
+                            && f.Relations == FriendStatus.Blocked))
+                    .Skip((currentPages - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+            else
+                return await _dataContext.Users
+                    .Where(u => (name != null ? u.Name.Contains(name) : true)
+                    && (surname != null ? u.Surname.Contains(surname) : true))
+                    .Skip((currentPages - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
         }
     }
 }
