@@ -20,6 +20,22 @@ namespace AuctionServer.Controllers
             _mapper = mapper;
         }
 
+        [HttpPost("FindUserInvitations")]
+        public async Task<IActionResult> FindUserInvitations(PaginationDTO paginationDTO)
+        {
+            int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
+
+            ICollection<User> userInvitations = 
+                await _friendsRepository.GetUserInvitations(userId, paginationDTO.CurrentPage, paginationDTO.PageSize);
+
+            if (userInvitations == null)
+                return Ok("You have no invitations");
+
+            List<UserDataWithImageDTO> userInvitationsWithImage = UserIntoUserWithImageDTO(userInvitations);
+
+            return Ok(userInvitationsWithImage);
+        }
+
         [HttpPost("FindUser")]
         public async Task<IActionResult> FindUser(PaginationUserSearchDTO userSearchDTO)
         {

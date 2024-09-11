@@ -26,7 +26,8 @@ namespace AuctionClient.ViewModel.TabItems
         #endregion
 
         private const int pageSize = 6;
-        private bool IsSearch = false;//After trying to change page OnCurPageChanged method executes, that's why this variable exists
+        private char TypeOfUsers = 'f';//After trying to change page OnCurPageChanged method executes, that's why this variable exists 
+        //f-friends, s-search, i-invitations 
         private const string gatewayPort = "https://localhost:7002";
         private readonly HttpClient _httpClient;
         ApplicationContext db = new ApplicationContext();
@@ -46,7 +47,7 @@ namespace AuctionClient.ViewModel.TabItems
                 GetUserFriends();
             }
             else
-                Name = "Guest can't have any friends( But he can find other users";
+                Name = "Guest can't have any friends(";
 
         }
 
@@ -54,7 +55,7 @@ namespace AuctionClient.ViewModel.TabItems
         public async Task UserFriendsButton()
         {
             CurrentPage = "1";
-            IsSearch = false;
+            TypeOfUsers = 'f';
             await GetUserFriends();
         }
 
@@ -62,8 +63,27 @@ namespace AuctionClient.ViewModel.TabItems
         public async Task UserInvitationsButton()
         {
             CurrentPage = "1";
-            IsSearch = false;//hz
-            
+            TypeOfUsers = 'i';
+            await UserInvitations();
+        }
+
+        private async Task UserInvitations()
+        {
+            PaginationDTO paginationDTO = new PaginationDTO() { CurrentPage = int.Parse(CurrentPage), PageSize = pageSize };
+
+            var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/FindUserInvitations", paginationDTO);
+            string responseContent = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+            {
+                List<UserDataWithImageDTO>? all = JsonConvert.DeserializeObject<List<UserDataWithImageDTO>>(responseContent);
+                UsersAllocation(all);
+                TypeOfUsers = 'i';
+            }
+            else
+                MessageBox.Show($"{responseContent}");
+
+            return;
+
         }
 
         [RelayCommand]
@@ -75,11 +95,16 @@ namespace AuctionClient.ViewModel.TabItems
 
         private async Task GetUserFriends()
         {
-            if (IsSearch)
+            switch (TypeOfUsers)
             {
-                await Search();
-                return;
+                case 's':
+                    await Search();
+                    return;
+                case 'i':
+                    await UserInvitations();
+                    return;
             }
+                
                 
             if (CurrentPage.Any(d => !char.IsDigit(d)))
                 return;
@@ -91,7 +116,7 @@ namespace AuctionClient.ViewModel.TabItems
             {
                 List<UserDataWithImageDTO>? all = JsonConvert.DeserializeObject<List<UserDataWithImageDTO>>(responseContent);
                 UsersAllocation(all);
-                IsSearch = false;
+                TypeOfUsers = 'f';//ybrat??
             }
             else
                 MessageBox.Show($"{responseContent}");
@@ -148,7 +173,7 @@ namespace AuctionClient.ViewModel.TabItems
             {
                 List<UserDataWithImageDTO>? all = JsonConvert.DeserializeObject<List<UserDataWithImageDTO>>(responseContent);
                 UsersAllocation(all);
-                IsSearch = true;
+                TypeOfUsers = 's';
             }
             else
                 MessageBox.Show($"{responseContent}");
