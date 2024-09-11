@@ -20,6 +20,20 @@ namespace AuctionGateway.Controllers
             _httpClient = httpClient.CreateClient("AuctionServer");
         }
 
+        [HttpPost("GetUsersFriendshipStatus")]
+        [Authorize]
+        public async Task<IActionResult> GetUsersFriendshipStatus(UserIdDTO userIdDTO, CancellationToken cancellationToken)
+        {
+            JWTIntoHeader();
+
+            var response = await _httpClient.PostAsJsonAsync("Friends/GetUsersFriendshipStatus", userIdDTO, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
         [HttpPost("FindUserInvitations")]
         [Authorize]
         public async Task<IActionResult> FindUserInvitations(PaginationDTO paginationDTO, CancellationToken cancellationToken)

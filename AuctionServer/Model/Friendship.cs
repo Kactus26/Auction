@@ -8,7 +8,7 @@
         public int FriendId { get; set; }
         public User Friend { get; set; } = null!;
 
-        public FriendStatus Relations { get; set; }
+        public FriendStatus? Relations { get; set; }
     }
 
     public enum FriendStatus

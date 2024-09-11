@@ -57,7 +57,8 @@
       Style="{StaticResource MaterialDesignFloatingHintTextBox}" Height="100"/>
 
         <Button Grid.Column="1" Content="Add Friend" BorderBrush="#8c72a9" Background="#8c72a9" 
-                Command="{Binding UpdateUserDataCommand}" Foreground="White" Margin="15,-50,15,0"/>
+                Command="{Binding UpdateUserDataCommand}" Foreground="White" Margin="15,-50,15,0"
+                Visibility="{Binding IsAddFriendEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
         <Image Grid.Row="0" Grid.RowSpan="3" Grid.Column="2">
             <Image.Source>

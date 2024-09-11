@@ -162,7 +162,8 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-        <ListView ItemsSource="{Binding Friends2}" SelectionChanged="UsersListView2_SelectionChanged" Name="ListView2"
+        <ListView ItemsSource="{Binding Friends2}" SelectionChanged="UsersListView2_SelectionChanged"
+                  Name="ListView2"
                   Grid.Row="1" Margin="0,120,0,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
                   ScrollViewer.VerticalScrollBarVisibility="Disabled">
             <ListView.ItemsPanel>

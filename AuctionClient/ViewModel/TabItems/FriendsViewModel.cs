@@ -26,11 +26,18 @@ namespace AuctionClient.ViewModel.TabItems
         #endregion
 
         private const int pageSize = 6;
-        private char TypeOfUsers = 'f';//After trying to change page OnCurPageChanged method executes, that's why this variable exists 
+        private TypeOfUserFriendsOnPage typeOfUsers = TypeOfUserFriendsOnPage.Friends;//After trying to change page OnCurPageChanged method executes, that's why this variable exists 
         //f-friends, s-search, i-invitations 
         private const string gatewayPort = "https://localhost:7002";
         private readonly HttpClient _httpClient;
         ApplicationContext db = new ApplicationContext();
+
+        public enum TypeOfUserFriendsOnPage
+        {
+            Friends,
+            Search,
+            Invitations
+        }
 
         partial void OnCurrentPageChanged(string value)
         {
@@ -55,7 +62,7 @@ namespace AuctionClient.ViewModel.TabItems
         public async Task UserFriendsButton()
         {
             CurrentPage = "1";
-            TypeOfUsers = 'f';
+            typeOfUsers = TypeOfUserFriendsOnPage.Friends;
             await GetUserFriends();
         }
 
@@ -63,7 +70,7 @@ namespace AuctionClient.ViewModel.TabItems
         public async Task UserInvitationsButton()
         {
             CurrentPage = "1";
-            TypeOfUsers = 'i';
+            typeOfUsers = TypeOfUserFriendsOnPage.Invitations;
             await UserInvitations();
         }
 
@@ -77,7 +84,7 @@ namespace AuctionClient.ViewModel.TabItems
             {
                 List<UserDataWithImageDTO>? all = JsonConvert.DeserializeObject<List<UserDataWithImageDTO>>(responseContent);
                 UsersAllocation(all);
-                TypeOfUsers = 'i';
+                typeOfUsers = TypeOfUserFriendsOnPage.Invitations;
             }
             else
                 MessageBox.Show($"{responseContent}");
@@ -95,12 +102,12 @@ namespace AuctionClient.ViewModel.TabItems
 
         private async Task GetUserFriends()
         {
-            switch (TypeOfUsers)
+            switch (typeOfUsers)
             {
-                case 's':
+                case TypeOfUserFriendsOnPage.Search:
                     await Search();
                     return;
-                case 'i':
+                case TypeOfUserFriendsOnPage.Invitations:
                     await UserInvitations();
                     return;
             }
@@ -116,7 +123,7 @@ namespace AuctionClient.ViewModel.TabItems
             {
                 List<UserDataWithImageDTO>? all = JsonConvert.DeserializeObject<List<UserDataWithImageDTO>>(responseContent);
                 UsersAllocation(all);
-                TypeOfUsers = 'f';//ybrat??
+                typeOfUsers = TypeOfUserFriendsOnPage.Friends;
             }
             else
                 MessageBox.Show($"{responseContent}");
@@ -173,7 +180,7 @@ namespace AuctionClient.ViewModel.TabItems
             {
                 List<UserDataWithImageDTO>? all = JsonConvert.DeserializeObject<List<UserDataWithImageDTO>>(responseContent);
                 UsersAllocation(all);
-                TypeOfUsers = 's';
+                typeOfUsers = TypeOfUserFriendsOnPage.Search;
             }
             else
                 MessageBox.Show($"{responseContent}");

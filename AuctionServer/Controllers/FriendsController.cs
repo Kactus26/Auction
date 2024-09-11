@@ -20,6 +20,21 @@ namespace AuctionServer.Controllers
             _mapper = mapper;
         }
 
+        [HttpPost("GetUsersFriendshipStatus")]
+        public async Task<IActionResult> GetUsersFriendshipStatus(UserIdDTO userIdDTO)
+        {
+            int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
+            int friendId = userIdDTO.Id;
+
+            FriendStatus? friendsStatus = await _friendsRepository.GetFriendStatus(userId, friendId);
+
+            if (friendsStatus == null)
+                return Ok("Users are not related");
+
+            return Ok(friendsStatus);
+        }
+
+
         [HttpPost("FindUserInvitations")]
         public async Task<IActionResult> FindUserInvitations(PaginationDTO paginationDTO)
         {

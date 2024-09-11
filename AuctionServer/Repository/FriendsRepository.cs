@@ -14,6 +14,15 @@ namespace AuctionServer.Repository
             _dataContext = dataContext;
         }
 
+        public async Task<FriendStatus?> GetFriendStatus(int id, int anotherUserId)
+        {
+            return await _dataContext.Friendships
+                .Where(x => x.UserId == id || x.UserId == anotherUserId)
+                .Where(y => y.FriendId == anotherUserId || y.FriendId == id)
+                .Select(z => z.Relations)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<ICollection<User>> GetUserFriendsByIdWithPagination(int userId, int currentPages, int pageSize)
         {
             return await _dataContext.Friendships
