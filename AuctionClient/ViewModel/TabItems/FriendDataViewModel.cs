@@ -24,7 +24,8 @@ namespace AuctionClient.ViewModel.TabItems
         public byte[] image;
         [ObservableProperty]
         public bool isAddFriendEnabled = true;
-
+        [ObservableProperty]
+        public bool isRemoveFriendEnabled = false;
         #endregion
 
         private readonly int userId;
@@ -49,7 +50,10 @@ namespace AuctionClient.ViewModel.TabItems
                 UsersFriendshipStatus();
             }
             else
+            {
                 isAddFriendEnabled = false;
+                isRemoveFriendEnabled = false;
+            }
         }
 
         private async Task UsersFriendshipStatus()
@@ -61,7 +65,11 @@ namespace AuctionClient.ViewModel.TabItems
             if (response.IsSuccessStatusCode)
             {
                 if (responseContent == "0" || responseContent == "2")
+                {
                     IsAddFriendEnabled = false;
+                    IsRemoveFriendEnabled = true;
+                }
+                    
             }
         }
     }
