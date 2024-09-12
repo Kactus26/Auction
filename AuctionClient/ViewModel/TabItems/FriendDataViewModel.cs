@@ -24,6 +24,7 @@ namespace AuctionClient.ViewModel.TabItems
         public byte[] image;
         [ObservableProperty]
         public bool isAddFriendEnabled = true;
+
         #endregion
 
         private readonly int userId;

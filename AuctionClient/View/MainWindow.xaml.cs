@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace AuctionClient.View
 {
@@ -36,5 +37,13 @@ namespace AuctionClient.View
             MainTabControl.SelectedItem = newTabItem;
         }
 
+        public void RemoveNewTab(string header)
+        {
+            var tabToRemove = MainTabControl.Items
+            .OfType<TabItem>()
+            .FirstOrDefault(tab => tab.Header.ToString() == header);
+
+            MainTabControl.Items.Remove(tabToRemove);
+        }
     }
 }

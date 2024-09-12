@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace AuctionClient.View.TabItems
 {
@@ -24,6 +25,30 @@ namespace AuctionClient.View.TabItems
         public FriendData()
         {
             InitializeComponent();
+        }
+
+        private void Close_Tab(object sender, RoutedEventArgs e)
+        {
+            var mainControl = FindParent<MainWindow>(this);
+
+            if (mainControl != null)
+            {
+                // Ищем вкладку с заданным именем
+                mainControl.RemoveNewTab(Name.Text);
+            }
+        }
+        private T FindParent<T>(DependencyObject child) where T : DependencyObject
+        {
+            DependencyObject parentObject = VisualTreeHelper.GetParent(child);
+
+            if (parentObject == null)
+                return null;
+
+            T parent = parentObject as T;
+            if (parent != null)
+                return parent;
+            else
+                return FindParent<T>(parentObject);
         }
     }
 }

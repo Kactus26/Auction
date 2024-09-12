@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Images\Exit.jpg" />
     <None Remove="Images\Guest.jpg" />
   </ItemGroup>
 
@@ -40,6 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\Exit.jpg" />
     <Resource Include="Images\Guest.jpg" />
   </ItemGroup>
 
