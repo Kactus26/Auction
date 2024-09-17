@@ -2,6 +2,7 @@
 using AuctionServer.Interfaces;
 using AuctionServer.Model;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace AuctionServer.Repository
 {
@@ -14,12 +15,16 @@ namespace AuctionServer.Repository
             _dataContext = dataContext;
         }
 
-        public async Task<FriendStatus?> GetFriendStatus(int id, int anotherUserId)
+        public async ValueTask<EntityEntry<Friendship>> AddFriendship(Friendship friendship)
+        {
+            return await _dataContext.Friendships.AddAsync(friendship);
+        }
+
+        public async Task<Friendship?> GetFriendStatus(int id, int anotherUserId)
         {
             return await _dataContext.Friendships
                 .Where(x => x.UserId == id || x.UserId == anotherUserId)
                 .Where(y => y.FriendId == anotherUserId || y.FriendId == id)
-                .Select(z => z.Relations)
                 .FirstOrDefaultAsync();
         }
 
@@ -65,6 +70,19 @@ namespace AuctionServer.Repository
                     .Skip((currentPages - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();
+        }
+
+        public async Task<Friendship?> GetUsersFriendship(int userId, int friendId)
+        {
+            return await _dataContext.Friendships
+                .Where(f => f.UserId == userId && f.FriendId == friendId
+                || f.UserId == friendId && f.FriendId == userId)
+                .FirstOrDefaultAsync();            
+        }
+
+        public async Task SaveChanges()
+        {
+            await _dataContext.SaveChangesAsync();
         }
     }
 }

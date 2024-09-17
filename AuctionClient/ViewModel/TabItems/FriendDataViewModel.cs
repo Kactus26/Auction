@@ -6,6 +6,8 @@ using System.Net.Http;
 using AuctionServer.Model;
 using Newtonsoft.Json;
 using static AuctionClient.ViewModel.TabItems.FriendsViewModel;
+using CommunityToolkit.Mvvm.Input;
+using System.Windows;
 
 namespace AuctionClient.ViewModel.TabItems
 {
@@ -29,7 +31,7 @@ namespace AuctionClient.ViewModel.TabItems
         #endregion
 
         private readonly int userId;
-        private const string gatewayPort = "https://localhost:7002";
+        private const string gatewayPort = "http://localhost:5175";
         private readonly HttpClient _httpClient;
         ApplicationContext db = new ApplicationContext();
 
@@ -56,21 +58,58 @@ namespace AuctionClient.ViewModel.TabItems
             }
         }
 
+        [RelayCommand]
+        public async Task AddFriend()
+        {
+            UserIdDTO friendId = new() { Id = userId };
+            var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/AddFriend", friendId);
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                MessageBox.Show($"Error in AddFriend merhod {responseContent}");
+                return;
+            } else if(responseContent == "Request send")
+            {
+                MessageBox.Show("Request send!");
+                IsAddFriendEnabled = false;
+                return;
+            }
+
+            Friendship friendship = JsonConvert.DeserializeObject<Friendship>(responseContent);
+
+            IsAddFriendEnabled = false;
+
+            if (friendship.Relations == FriendStatus.Send)
+                MessageBox.Show("Friend request send!");
+            else if (friendship.Relations == FriendStatus.Friend)
+            {
+                IsRemoveFriendEnabled = true;
+                MessageBox.Show("You are now friends!");
+            }
+        }
+
         private async Task UsersFriendshipStatus()
         {
-            UserIdDTO userToFindStatus = new UserIdDTO { Id = userId };
+            UserIdDTO friendId = new() { Id = userId };
 
-            var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/GetUsersFriendshipStatus", userToFindStatus);
+            var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/GetUsersFriendshipStatus", friendId);
             string responseContent = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                if (responseContent == "0" || responseContent == "2")
+                Friendship friendship = JsonConvert.DeserializeObject<Friendship>(responseContent);
+                if (friendship.Relations == FriendStatus.Friend || friendship.Relations == FriendStatus.Blocked)
                 {
                     IsAddFriendEnabled = false;
                     IsRemoveFriendEnabled = true;
+                } if (friendship.FriendId == userId && friendship.Relations == FriendStatus.Send)
+                {
+                    IsAddFriendEnabled = false;
                 }
                     
-            }
+            } else
+                MessageBox.Show($"Error in UsersFriendshipStatus merhod: {responseContent}");
+
         }
     }
 }

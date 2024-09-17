@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 
 namespace AuctionGateway.Controllers
 {
@@ -18,6 +19,20 @@ namespace AuctionGateway.Controllers
         public DataController(IHttpClientFactory httpClient)
         {
             _httpClient = httpClient.CreateClient("AuctionServer");
+        }
+
+        [HttpPost("AddFriend")]
+        [Authorize]
+        public async Task<IActionResult> AddFriend(UserIdDTO userIdDTO, CancellationToken cancellationToken)
+        {
+            JWTIntoHeader();
+
+            var response = await _httpClient.PostAsJsonAsync("Friends/AddFriend", userIdDTO, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
         }
 
         [HttpPost("GetUsersFriendshipStatus")]

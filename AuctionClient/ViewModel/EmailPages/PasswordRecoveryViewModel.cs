@@ -27,7 +27,7 @@ namespace AuctionClient.ViewModel.EmailPagesViewModel
 
         private HttpClient _httpClient;
 
-        private const string gatewayPort = "https://localhost:7002";
+        private const string gatewayPort = "http://localhost:5175";
 
         public PasswordRecoveryViewModel()
         {

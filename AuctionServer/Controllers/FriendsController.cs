@@ -20,13 +20,41 @@ namespace AuctionServer.Controllers
             _mapper = mapper;
         }
 
+        [HttpPost("AddFriend")]
+        public async Task<IActionResult> AddFriend(UserIdDTO userIdDTO)
+        {
+            int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
+            int friendId = userIdDTO.Id;
+
+            Friendship friendship = await _friendsRepository.GetUsersFriendship(userId, friendId);
+
+            if (friendship == null)
+            {
+                Friendship friends = new() { UserId = userId, FriendId = friendId, Relations = FriendStatus.Send };
+                await _friendsRepository.AddFriendship(friends);
+                await _friendsRepository.SaveChanges();
+                return Ok("Request send");
+            }
+
+            if (friendship.Relations == FriendStatus.Send && friendship.UserId != userId)
+                friendship.Relations = FriendStatus.Friend;
+            else if (friendship.Relations != FriendStatus.Blocked || friendship.Relations != FriendStatus.Friend)
+                friendship.Relations = FriendStatus.Send;
+            else
+                return BadRequest("Something went wrong in controller add friend method");
+
+            await _friendsRepository.SaveChanges();
+
+            return Ok(friendship);
+        }
+
         [HttpPost("GetUsersFriendshipStatus")]
         public async Task<IActionResult> GetUsersFriendshipStatus(UserIdDTO userIdDTO)
         {
             int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
             int friendId = userIdDTO.Id;
 
-            FriendStatus? friendsStatus = await _friendsRepository.GetFriendStatus(userId, friendId);
+            Friendship? friendsStatus = await _friendsRepository.GetFriendStatus(userId, friendId);
 
             if (friendsStatus == null)
                 return Ok("Users are not related");
