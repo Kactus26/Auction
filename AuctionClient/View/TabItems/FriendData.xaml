@@ -61,7 +61,7 @@
         Visibility="{Binding IsAddFriendEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
         <Button Grid.Column="1" Grid.Row="2" Content="Remove Friend" BorderBrush="#8c72a9" Background="Transparent"
-        Foreground="White" Margin="15,0,15,20" VerticalAlignment="Bottom"
+        Foreground="White" Margin="15,0,15,20" VerticalAlignment="Bottom" Command="{Binding RemoveFriendCommand}"
         Visibility="{Binding IsRemoveFriendEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         
         <Image Grid.Row="0" Grid.RowSpan="3" Grid.Column="2" Height="450">

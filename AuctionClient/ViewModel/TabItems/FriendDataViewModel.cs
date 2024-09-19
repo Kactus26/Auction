@@ -89,6 +89,23 @@ namespace AuctionClient.ViewModel.TabItems
             }
         }
 
+        [RelayCommand]
+        public async Task RemoveFriend()
+        {
+            UserIdDTO friendId = new() { Id = userId };
+            var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/RemoveFriend", friendId);
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+                MessageBox.Show($"Error in RemoveFriend method! {responseContent}");
+            else
+            {
+                IsAddFriendEnabled = true;
+                IsRemoveFriendEnabled=false;
+                MessageBox.Show($"Friend deleted!");
+            }
+        }
+
         private async Task UsersFriendshipStatus()
         {
             UserIdDTO friendId = new() { Id = userId };

@@ -20,6 +20,24 @@ namespace AuctionServer.Controllers
             _mapper = mapper;
         }
 
+        [HttpPost("RemoveFriend")]
+        public async Task<IActionResult> RemoveFriend(UserIdDTO userIdDTO)
+        {
+            int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
+            int friendId = userIdDTO.Id;
+
+            var result = await _friendsRepository.RemoveFriend(userId, friendId);
+
+            if(result.State == Microsoft.EntityFrameworkCore.EntityState.Deleted)
+            {
+                await _friendsRepository.SaveChanges();
+                return Ok();
+            }
+            else
+                return BadRequest($"Something went wrong. {result}");
+        }
+
+
         [HttpPost("AddFriend")]
         public async Task<IActionResult> AddFriend(UserIdDTO userIdDTO)
         {

@@ -80,6 +80,13 @@ namespace AuctionServer.Repository
                 .FirstOrDefaultAsync();            
         }
 
+        public async Task<EntityEntry<Friendship>> RemoveFriend(int userId, int friendId)
+        {
+            return _dataContext.Friendships
+                .Remove(await _dataContext.Friendships
+                .FirstOrDefaultAsync(x => x.UserId == userId && x.FriendId == friendId || x.UserId == friendId && x.FriendId == userId));
+        }
+
         public async Task SaveChanges()
         {
             await _dataContext.SaveChangesAsync();
