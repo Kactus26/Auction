@@ -21,6 +21,20 @@ namespace AuctionGateway.Controllers
             _httpClient = httpClient.CreateClient("AuctionServer");
         }
 
+        [HttpPost("BlockUser")]
+        [Authorize]
+        public async Task<IActionResult> BlockUser(UserIdDTO userIdDTO, CancellationToken cancellationToken)
+        {
+            JWTIntoHeader();
+
+            var response = await _httpClient.PostAsJsonAsync("Friends/BlockUser", userIdDTO, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
         [HttpPost("RemoveFriend")]
         [Authorize]
         public async Task<IActionResult> RemoveFriend(UserIdDTO userIdDTO, CancellationToken cancellationToken)

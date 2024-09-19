@@ -59,6 +59,38 @@ namespace AuctionClient.ViewModel.TabItems
         }
 
         [RelayCommand]
+        public async Task BlockUser()
+        {
+            MessageBoxResult result = MessageBox.Show(
+                    "Are you sure you want to block this user? There is no going back...",
+                    "Confirm",
+                    MessageBoxButton.YesNo, // Выбираем кнопки Yes и No
+                    MessageBoxImage.Question // Можно задать иконку
+                );
+
+            if (result == MessageBoxResult.Yes)
+            {
+                UserIdDTO friendId = new() { Id = userId };
+                var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/BlockUser", friendId);
+
+                string responseContent = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode)
+                {
+                    MessageBox.Show($"Error in BlockUser method {responseContent}");
+                    return;
+                }
+                else
+                {
+                    MessageBox.Show("User blocked!");
+                    IsAddFriendEnabled = false;
+                    IsRemoveFriendEnabled = false;
+                    return;
+                }
+            }
+        }
+
+
+        [RelayCommand]
         public async Task AddFriend()
         {
             UserIdDTO friendId = new() { Id = userId };
@@ -67,7 +99,7 @@ namespace AuctionClient.ViewModel.TabItems
             string responseContent = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)
             {
-                MessageBox.Show($"Error in AddFriend merhod {responseContent}");
+                MessageBox.Show($"Error in AddFriend method {responseContent}");
                 return;
             } else if(responseContent == "Request send")
             {

@@ -20,6 +20,25 @@ namespace AuctionServer.Controllers
             _mapper = mapper;
         }
 
+        [HttpPost("BlockUser")]
+        public async Task<IActionResult> BlockUser(UserIdDTO userIdDTO)
+        {
+            int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
+            int friendId = userIdDTO.Id;
+
+            Friendship friendship = await _friendsRepository.GetUsersFriendship(userId, friendId);
+
+            if(friendship == null)
+            {
+                Friendship friends = new() { UserId = userId, FriendId = friendId, Relations = FriendStatus.Blocked };
+                await _friendsRepository.AddFriendship(friends);
+            } else
+                friendship.Relations = FriendStatus.Blocked;
+
+            await _friendsRepository.SaveChanges();
+            return Ok("User is now blocked");
+        }
+
         [HttpPost("RemoveFriend")]
         public async Task<IActionResult> RemoveFriend(UserIdDTO userIdDTO)
         {
