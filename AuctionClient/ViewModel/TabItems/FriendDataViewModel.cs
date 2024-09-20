@@ -28,16 +28,20 @@ namespace AuctionClient.ViewModel.TabItems
         public bool isAddFriendEnabled = true;
         [ObservableProperty]
         public bool isRemoveFriendEnabled = false;
+        [ObservableProperty]
+        public bool isBlockUserEnabled = true;
+        [ObservableProperty]
+        public bool isUnblockUserEnabled = false;
         #endregion
 
-        private readonly int userId;
+        private readonly int friendId;
         private const string gatewayPort = "http://localhost:5175";
         private readonly HttpClient _httpClient;
         ApplicationContext db = new ApplicationContext();
 
         public FriendDataViewModel(UserDataWithImageDTO userData)
         {
-            userId = userData.ProfileData.Id;
+            friendId = userData.ProfileData.Id;
             Name = userData.ProfileData.Name;
             SurName = userData.ProfileData.Surname;
             Email = userData.ProfileData.Email;
@@ -62,7 +66,7 @@ namespace AuctionClient.ViewModel.TabItems
         public async Task BlockUser()
         {
             MessageBoxResult result = MessageBox.Show(
-                    "Are you sure you want to block this user? There is no going back...",
+                    "Are you sure you want to block this user? Blocked user won't be able to see your profile or your lots...",
                     "Confirm",
                     MessageBoxButton.YesNo, // Выбираем кнопки Yes и No
                     MessageBoxImage.Question // Можно задать иконку
@@ -70,8 +74,8 @@ namespace AuctionClient.ViewModel.TabItems
 
             if (result == MessageBoxResult.Yes)
             {
-                UserIdDTO friendId = new() { Id = userId };
-                var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/BlockUser", friendId);
+                UserIdDTO friendToSendId = new() { Id = friendId };
+                var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/BlockUser", friendToSendId);
 
                 string responseContent = await response.Content.ReadAsStringAsync();
                 if (!response.IsSuccessStatusCode)
@@ -84,17 +88,40 @@ namespace AuctionClient.ViewModel.TabItems
                     MessageBox.Show("User blocked!");
                     IsAddFriendEnabled = false;
                     IsRemoveFriendEnabled = false;
+                    IsUnblockUserEnabled = true;
+                    IsBlockUserEnabled = false;
                     return;
                 }
             }
         }
 
+        [RelayCommand]
+        public async Task UnblockUser()
+        {
+            UserIdDTO friendToSendId = new() { Id = friendId };
+            var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/UnblockUser", friendToSendId);
+
+            string responseContent = await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                MessageBox.Show($"Error in UnblockUser method {responseContent}");
+                return;
+            }
+            else
+            {
+                MessageBox.Show("User unblocked!");
+                IsAddFriendEnabled = true;
+                IsBlockUserEnabled = true;
+                IsUnblockUserEnabled = false;
+                return;
+            }
+        }
 
         [RelayCommand]
         public async Task AddFriend()
         {
-            UserIdDTO friendId = new() { Id = userId };
-            var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/AddFriend", friendId);
+            UserIdDTO friendToSendId = new() { Id = friendId };
+            var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/AddFriend", friendToSendId);
 
             string responseContent = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)
@@ -124,8 +151,8 @@ namespace AuctionClient.ViewModel.TabItems
         [RelayCommand]
         public async Task RemoveFriend()
         {
-            UserIdDTO friendId = new() { Id = userId };
-            var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/RemoveFriend", friendId);
+            UserIdDTO friendToSendId = new() { Id = friendId };
+            var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/RemoveFriend", friendToSendId);
 
             string responseContent = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)
@@ -140,20 +167,25 @@ namespace AuctionClient.ViewModel.TabItems
 
         private async Task UsersFriendshipStatus()
         {
-            UserIdDTO friendId = new() { Id = userId };
+            UserIdDTO friendToSendId = new() { Id = friendId };
 
-            var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/GetUsersFriendshipStatus", friendId);
+            var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/GetUsersFriendshipStatus", friendToSendId);
             string responseContent = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
                 Friendship friendship = JsonConvert.DeserializeObject<Friendship>(responseContent);
-                if (friendship.Relations == FriendStatus.Friend || friendship.Relations == FriendStatus.Blocked)
+                if (friendship.Relations == FriendStatus.Friend)
                 {
                     IsAddFriendEnabled = false;
                     IsRemoveFriendEnabled = true;
-                } if (friendship.FriendId == userId && friendship.Relations == FriendStatus.Send)
+                } else if (friendship.FriendId == friendId && friendship.Relations == FriendStatus.Send)
                 {
                     IsAddFriendEnabled = false;
+                } else if (friendship.Relations == FriendStatus.Blocked && friendship.WhoBlockedId != friendId)
+                {
+                    IsAddFriendEnabled = false;
+                    IsUnblockUserEnabled = true;
+                    IsBlockUserEnabled = false;
                 }
                     
             } else

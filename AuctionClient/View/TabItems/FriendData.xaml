@@ -57,9 +57,12 @@
       Style="{StaticResource MaterialDesignFloatingHintTextBox}" Height="100"/>
 
         <Button Grid.Column="1" Grid.Row="2" Content="Block user" BorderBrush="#8c72a9" Background="Transparent"
-        Foreground="White" Margin="15,0,15,20" VerticalAlignment="Bottom" Command="{Binding BlockUserCommand}"/>
+        Foreground="White" Margin="15,0,15,20" VerticalAlignment="Bottom" Command="{Binding BlockUserCommand}"
+        Visibility="{Binding IsBlockUserEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-
+        <Button Grid.Column="1" Grid.Row="2" Content="Unblock user" BorderBrush="#8c72a9" Background="Transparent"
+        Foreground="White" Margin="15,0,15,20" VerticalAlignment="Bottom" Command="{Binding UnblockUserCommand}"
+        Visibility="{Binding IsUnblockUserEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         
         <Button Grid.Column="1" Grid.Row="2" Content="Add Friend" BorderBrush="#8c72a9" Background="Transparent"
         Foreground="White" Margin="15,0,15,20" VerticalAlignment="Center" Command="{Binding AddFriendCommand}"

@@ -20,6 +20,25 @@ namespace AuctionServer.Controllers
             _mapper = mapper;
         }
 
+        [HttpPost("UnblockUser")]
+        public async Task<IActionResult> UnblockUser(UserIdDTO userIdDTO)
+        {
+            int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
+            int friendId = userIdDTO.Id;
+
+            var result = await _friendsRepository.RemoveFriend(userId, friendId);
+
+            if (result.State == Microsoft.EntityFrameworkCore.EntityState.Deleted)
+            {
+                await _friendsRepository.SaveChanges();
+                return Ok();
+            }
+            else
+                return BadRequest($"Something went wrong in UnblockUser. {result}");
+
+
+        }
+
         [HttpPost("BlockUser")]
         public async Task<IActionResult> BlockUser(UserIdDTO userIdDTO)
         {
@@ -30,10 +49,14 @@ namespace AuctionServer.Controllers
 
             if(friendship == null)
             {
-                Friendship friends = new() { UserId = userId, FriendId = friendId, Relations = FriendStatus.Blocked };
+                Friendship friends = new() { UserId = userId, FriendId = friendId, Relations = FriendStatus.Blocked, WhoBlockedId = userId };
                 await _friendsRepository.AddFriendship(friends);
-            } else
+            }
+            else
+            {
                 friendship.Relations = FriendStatus.Blocked;
+                friendship.WhoBlockedId = userId;
+            }
 
             await _friendsRepository.SaveChanges();
             return Ok("User is now blocked");
@@ -53,7 +76,7 @@ namespace AuctionServer.Controllers
                 return Ok();
             }
             else
-                return BadRequest($"Something went wrong. {result}");
+                return BadRequest($"Something went wrong in RemoveFriend. {result}");
         }
 
 
@@ -78,7 +101,7 @@ namespace AuctionServer.Controllers
             else if (friendship.Relations != FriendStatus.Blocked || friendship.Relations != FriendStatus.Friend)
                 friendship.Relations = FriendStatus.Send;
             else
-                return BadRequest("Something went wrong in controller add friend method");
+                return BadRequest("Something went wrong in AddFriend method");
 
             await _friendsRepository.SaveChanges();
 

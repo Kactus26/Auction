@@ -59,7 +59,7 @@ namespace AuctionServer.Repository
                     && !_dataContext.Friendships.Any(f =>
                             (f.UserId == userId && f.FriendId == u.Id ||
                              f.FriendId == userId && f.UserId == u.Id)
-                            && f.Relations == FriendStatus.Blocked))
+                            && f.Relations == FriendStatus.Blocked && f.WhoBlockedId != userId))
                     .Skip((currentPages - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();
