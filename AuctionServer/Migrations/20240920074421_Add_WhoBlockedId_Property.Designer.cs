@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AuctionServer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240506133328_AllowNulls")]
-    partial class AllowNulls
+    [Migration("20240920074421_Add_WhoBlockedId_Property")]
+    partial class Add_WhoBlockedId_Property
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,6 +59,27 @@ namespace AuctionServer.Migrations
                     b.HasIndex("LotId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("AuctionServer.Model.Friendship", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FriendId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Relations")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("WhoBlockedId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "FriendId");
+
+                    b.HasIndex("FriendId");
+
+                    b.ToTable("Friendships");
                 });
 
             modelBuilder.Entity("AuctionServer.Model.Lot", b =>
@@ -110,20 +131,20 @@ namespace AuctionServer.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("InvestorId")
+                        .HasColumnType("int");
+
                     b.Property<int>("LotId")
                         .HasColumnType("int");
 
                     b.Property<double?>("Price")
                         .HasColumnType("float");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("LotId");
+                    b.HasIndex("InvestorId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("LotId");
 
                     b.ToTable("LotInvestings");
                 });
@@ -139,6 +160,10 @@ namespace AuctionServer.Migrations
                     b.Property<double>("Balance")
                         .HasColumnType("float");
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
@@ -146,15 +171,10 @@ namespace AuctionServer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Login")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsEmailConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -185,7 +205,7 @@ namespace AuctionServer.Migrations
             modelBuilder.Entity("AuctionServer.Model.Comment", b =>
                 {
                     b.HasOne("AuctionServer.Model.User", "Commentator")
-                        .WithMany()
+                        .WithMany("Comments")
                         .HasForeignKey("CommentatorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -201,6 +221,25 @@ namespace AuctionServer.Migrations
                     b.Navigation("Lot");
                 });
 
+            modelBuilder.Entity("AuctionServer.Model.Friendship", b =>
+                {
+                    b.HasOne("AuctionServer.Model.User", "Friend")
+                        .WithMany("TargetFriendship")
+                        .HasForeignKey("FriendId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("AuctionServer.Model.User", "User")
+                        .WithMany("InitiatorFriendship")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Friend");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("AuctionServer.Model.Lot", b =>
                 {
                     b.HasOne("AuctionServer.Model.User", "Owner")
@@ -212,21 +251,21 @@ namespace AuctionServer.Migrations
 
             modelBuilder.Entity("AuctionServer.Model.LotInvesting", b =>
                 {
+                    b.HasOne("AuctionServer.Model.User", "Investor")
+                        .WithMany("Investings")
+                        .HasForeignKey("InvestorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("AuctionServer.Model.Lot", "Lot")
                         .WithMany()
                         .HasForeignKey("LotId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AuctionServer.Model.User", "User")
-                        .WithMany("Investings")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Investor");
 
                     b.Navigation("Lot");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LotUser", b =>
@@ -251,9 +290,15 @@ namespace AuctionServer.Migrations
 
             modelBuilder.Entity("AuctionServer.Model.User", b =>
                 {
+                    b.Navigation("Comments");
+
+                    b.Navigation("InitiatorFriendship");
+
                     b.Navigation("Investings");
 
                     b.Navigation("OwnLots");
+
+                    b.Navigation("TargetFriendship");
                 });
 #pragma warning restore 612, 618
         }

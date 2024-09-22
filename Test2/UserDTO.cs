@@ -2,6 +2,7 @@
 
 namespace CommonDTO
 {
+
     public class ChangeUserPasswordDTO
     {
         public required int Id { get; set; }

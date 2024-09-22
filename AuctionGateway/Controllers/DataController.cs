@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
 
 namespace AuctionGateway.Controllers
 {
@@ -18,6 +19,116 @@ namespace AuctionGateway.Controllers
         public DataController(IHttpClientFactory httpClient)
         {
             _httpClient = httpClient.CreateClient("AuctionServer");
+        }
+
+        [HttpPost("UnblockUser")]
+        [Authorize]
+        public async Task<IActionResult> UnblockUser(UserIdDTO userIdDTO, CancellationToken cancellationToken)
+        {
+            JWTIntoHeader();
+
+            var response = await _httpClient.PostAsJsonAsync("Friends/UnblockUser", userIdDTO, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
+        [HttpPost("BlockUser")]
+        [Authorize]
+        public async Task<IActionResult> BlockUser(UserIdDTO userIdDTO, CancellationToken cancellationToken)
+        {
+            JWTIntoHeader();
+
+            var response = await _httpClient.PostAsJsonAsync("Friends/BlockUser", userIdDTO, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
+        [HttpPost("RemoveFriend")]
+        [Authorize]
+        public async Task<IActionResult> RemoveFriend(UserIdDTO userIdDTO, CancellationToken cancellationToken)
+        {
+            JWTIntoHeader();
+
+            var response = await _httpClient.PostAsJsonAsync("Friends/RemoveFriend", userIdDTO, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
+        [HttpPost("AddFriend")]
+        [Authorize]
+        public async Task<IActionResult> AddFriend(UserIdDTO userIdDTO, CancellationToken cancellationToken)
+        {
+            JWTIntoHeader();
+
+            var response = await _httpClient.PostAsJsonAsync("Friends/AddFriend", userIdDTO, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
+        [HttpPost("GetUsersFriendshipStatus")]
+        [Authorize]
+        public async Task<IActionResult> GetUsersFriendshipStatus(UserIdDTO userIdDTO, CancellationToken cancellationToken)
+        {
+            JWTIntoHeader();
+
+            var response = await _httpClient.PostAsJsonAsync("Friends/GetUsersFriendshipStatus", userIdDTO, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
+        [HttpPost("FindUserInvitations")]
+        [Authorize]
+        public async Task<IActionResult> FindUserInvitations(PaginationDTO paginationDTO, CancellationToken cancellationToken)
+        {
+            JWTIntoHeader();
+            var response = await _httpClient.PostAsJsonAsync("Friends/FindUserInvitations", paginationDTO, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
+        [HttpPost("FindUser")]
+        public async Task<IActionResult> FindUser(PaginationUserSearchDTO userSearchDTO, CancellationToken cancellationToken)
+        {
+            JWTIntoHeader();
+
+            var response = await _httpClient.PostAsJsonAsync("Friends/FindUser", userSearchDTO, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
+        [Authorize]
+        [HttpPost("GetUserFriends")]
+        public async Task<IActionResult> GetUserFriends(PaginationDTO paginationDTO, CancellationToken cancellationToken)
+        {
+            JWTIntoHeader();
+
+            var response = await _httpClient.PostAsJsonAsync("Friends/GetUserFriends", paginationDTO, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
         }
 
         [HttpPost("IsEmailConfirmed")]//Returns IsEmailConfirmed field
@@ -91,6 +202,8 @@ namespace AuctionGateway.Controllers
         private void JWTIntoHeader()
         {
             string jwt = Request.Headers.Authorization!;
+            if (jwt == null)
+                return;
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt[7..]);
         }
     }

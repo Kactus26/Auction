@@ -11,7 +11,7 @@
     
     <Grid>
 
-        <TabControl TabStripPlacement="Left" Grid.Column="0" Width="Auto"
+        <TabControl Name="MainTabControl" TabStripPlacement="Left" Grid.Column="0" Width="Auto"
             materialDesign:ColorZoneAssist.Foreground="White"
             materialDesign:ColorZoneAssist.Mode="Custom"
             materialDesign:ColorZoneAssist.Background="#281B27"
@@ -26,7 +26,7 @@
                 <t:Profile/>
             </TabItem>
             <TabItem Header="Friends">
-
+                <t:Friends/>
             </TabItem>
         </TabControl>
     </Grid>

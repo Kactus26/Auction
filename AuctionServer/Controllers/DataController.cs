@@ -8,7 +8,7 @@ namespace AuctionServer.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class DataController : Controller
+    public class DataController : Controller//Shoud've called it UserDataController 
     {
         private readonly IDataRepository _dataRepository;
         private readonly IMapper _mapper;
@@ -94,6 +94,8 @@ namespace AuctionServer.Controllers
                 int userId = System.Convert.ToInt32(User.Identities.First().Claims.First().Value);
                 User user = await _dataRepository.GetUserDataByid(userId);
 
+                string imgUrl = user.ImageUrl;
+
                 if(user == null) 
                     return NotFound("User not found");
 
@@ -102,6 +104,8 @@ namespace AuctionServer.Controllers
 
                 if(newData.Image != null)
                     UploadImage(newData.Image, user);
+                else
+                    user.ImageUrl = imgUrl;//imageUrl generates only in UploadImage(), that's why need to set it manually
 
                 await _dataRepository.SaveChanges();
 

@@ -14,19 +14,32 @@ namespace AuctionServer.Data
         public DbSet<Lot> Lots { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<LotInvesting> LotInvestings { get; set; }
+        public DbSet<Friendship> Friendships { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Friendship>()
+                .HasKey(uf => new { uf.UserId, uf.FriendId, });
+            modelBuilder.Entity<Friendship>()
+                .HasOne(fr => fr.User)
+                .WithMany(u => u.InitiatorFriendship)
+                .HasForeignKey(u => u.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Friendship>()
+                .HasOne(fr => fr.Friend)
+                .WithMany(u=>u.TargetFriendship)
+                .HasForeignKey(u => u.FriendId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<User>()
-                .HasMany(l => l.OwnLots)
-                .WithOne(u => u.Owner);
+                .HasMany(u => u.OwnLots)
+                .WithOne(l => l.Owner);
 
             modelBuilder.Entity<User>()
-                .HasMany(b => b.FollowingLots)
-                .WithMany(g => g.Followers);
+                .HasMany(u => u.FollowingLots)
+                .WithMany(l => l.Followers);
 
        
 
