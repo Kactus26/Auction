@@ -21,7 +21,20 @@ After the user enters all required data for registration and it has been validat
 
 Every time the app launches, it checks if the token exists and is not expired, and if everything is correct, it launches the MainWindow without the need to log in manually. When the user exits their account, the token is deleted from the local database. If the user chooses to enter as a guest, they won't be able to use some functions. On the program side, they just won't have a token, so gateway methods that are marked as Authorized will send the request back.
 
-<h3>If User forget his password, he can try to recover it.</h3>
+<h3>If User forgot his password, he can try to recover it.</h3>
 Click "Forget password" button on the authorization page. New modal page will be opend. User needs to write his login, after what program will send few request. 1. To find user id by login; 2. To find if his email was confirmed; 3. To send mail with code to his email. If anything goes wrong, user will be notifed about it dew to the cool try catch envelope. If you actually reading this check it out in AuctionClient PasswordRecoveryViewModel, i'm very proud. Then user needs to write the code that he now has and his new passwords.
 <b><h1>Testing</h1></b>
 In Auction.Test are located Unit and Integration tests. Integration tests connect to the real database, and after testing is done, roll back all changes. It has my own ChangeProperties method that, with the help of reflection, returns the object to its initial state. In this project, Integration tests also have the FluentAssertions library connected for better result checking. WebApplicationFactory is used there for the work of HttpClient. IntegrationTestBase has all necessary info for JWT creation work. For the work of Unit Tests, XUnit and Moq were connected, but I personally think that integration tests are more useful. For that reason, I have only a few unit tests, which I made just for learning purposes.
+
+<b><h1>Friends</h1></b>
+In the Friendship database, there is a UserId field for the user who sends the friend request, and a FriendId field for the user to whom the request was sent. This whole system is used to check which user should accept the friend request. The Friendship table also contains an enum with all possible relationship statuses between users, as well as a WhoBlockedId field. The WhoBlockedId field stores the ID of the user who blocked the other. The blocked user cannot see the other person or their listings. Only the user who initiated the block can search for the other by name and unblock them again.<br>
+
+There are three functions on the friends page:
+
+- Show users friends
+- Search users by name and surname
+- Display invitations sent to the user
+  
+All of these functions support pagination, allowing users to switch pages using arrows or enter the desired page number directly. On the client side, there is a constant PageSize property, which is sent to the server along with the current page number the user is on. On the server side, a smart LINQ query counts all users who are friends with the user sending the request, excluding blocked users and others. The search by name and surname works similarly, and the request can handle empty values for one or both fields.
+
+If you click on a user, their page will open as a new TabItem, and you can easily switch between tabs. On that page, you can view user information, add/remove them from friends, and block/unblock them. After blocking or unblocking a user, the relationship between them will be reset.
