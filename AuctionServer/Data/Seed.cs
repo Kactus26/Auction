@@ -24,7 +24,6 @@ namespace AuctionServer.Data
                 return;
             }
 
-
             User user1 = new User() { Name = "Kactus", Email = "sasha.baginsky@gmail.com", IsEmailConfirmed = true };
             User user2 = new User() { Name = "Odinson" };
             User user3 = new User() { Name = "Light" };
@@ -41,6 +40,15 @@ namespace AuctionServer.Data
             User zero5 = new User() { Name = "Dumb5" };
             User zero6 = new User() { Name = "Dumb6" };
             User zero7 = new User() { Name = "Dumb7" };
+
+            Lot lot1 = new Lot() { Name = "Chair", Owner = user2, Description = "You can sit on it, if you want, if not than i'm sorry", StartPrice = 2, CurrentPrice = 5 };
+            Lot lot2 = new Lot() { Name = "Table", Owner = user2, Description = "You can sit on it, if you want, if not than i'm sorry", StartPrice = 2, CurrentPrice = 5 };
+            Lot lot3 = new Lot() { Name = "PC", Owner = user2, Description = "You can sit on it, if you want, if not than i'm sorry", StartPrice = 2, CurrentPrice = 5 };
+            Lot lot4 = new Lot() { Name = "Sofa", Owner = user2, Description = "You can sit on it, if you want, if not than i'm sorry", StartPrice = 2, CurrentPrice = 5 };
+            Lot lot5 = new Lot() { Name = "Pen", Owner = user2, Description = "You can sit on it, if you want, if not than i'm sorry", StartPrice = 2, CurrentPrice = 5 };
+            Lot lot6 = new Lot() { Name = "Car", Owner = user2, Description = "You can sit on it, if you want, if not than i'm sorry", StartPrice = 2, CurrentPrice = 5 };
+            Lot lot7 = new Lot() { Name = "Pillow", Owner = user2, Description = "You can sit on it, if you want, if not than i'm sorry", StartPrice = 2, CurrentPrice = 5 };
+            Lot lot8 = new Lot() { Name = "House", Owner = user1, Description = "You can sit on it, if you want, if not than i'm sorry", StartPrice = 2, CurrentPrice = 5 };
 
 
             Friendship friendship = new() { User = user1, Friend = user2, Relations = FriendStatus.Friend };
@@ -79,6 +87,7 @@ namespace AuctionServer.Data
 
 
             dataContext.Users.AddRange(user1, user2, user3, user4, user5, user6, zero1, zero2, zero3, zero4, zero5, zero6, zero7);
+            dataContext.Lots.AddRange(lot1, lot2, lot3, lot4, lot5, lot6, lot7, lot8);
             dataContext.SaveChanges();
 
         }

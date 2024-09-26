@@ -64,11 +64,11 @@
         Foreground="White" Margin="15,0,15,20" VerticalAlignment="Bottom" Command="{Binding UnblockUserCommand}"
         Visibility="{Binding IsUnblockUserEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         
-        <Button Grid.Column="1" Grid.Row="2" Content="Add Friend" BorderBrush="#8c72a9" Background="Transparent"
+        <Button Grid.Column="1" Grid.Row="2" Content="Add Friend" BorderBrush="Green" Background="Transparent"
         Foreground="White" Margin="15,0,15,20" VerticalAlignment="Center" Command="{Binding AddFriendCommand}"
         Visibility="{Binding IsAddFriendEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-        <Button Grid.Column="1" Grid.Row="2" Content="Remove Friend" BorderBrush="#8c72a9" Background="Transparent"
+        <Button Grid.Column="1" Grid.Row="2" Content="Remove Friend" BorderBrush="Red" Background="Transparent"
         Foreground="White" Margin="15,0,15,20" VerticalAlignment="Center" Command="{Binding RemoveFriendCommand}"
         Visibility="{Binding IsRemoveFriendEnabled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
         

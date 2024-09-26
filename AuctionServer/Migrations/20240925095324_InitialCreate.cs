@@ -35,7 +35,9 @@ namespace AuctionServer.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    FriendId = table.Column<int>(type: "int", nullable: false)
+                    FriendId = table.Column<int>(type: "int", nullable: false),
+                    Relations = table.Column<int>(type: "int", nullable: true),
+                    WhoBlockedId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {

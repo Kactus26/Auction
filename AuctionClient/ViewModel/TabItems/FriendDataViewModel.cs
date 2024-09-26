@@ -57,6 +57,7 @@ namespace AuctionClient.ViewModel.TabItems
             }
             else
             {
+                isBlockUserEnabled = false;
                 isAddFriendEnabled = false;
                 isRemoveFriendEnabled = false;
             }

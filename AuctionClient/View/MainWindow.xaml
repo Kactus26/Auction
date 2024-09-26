@@ -20,7 +20,7 @@
 
             </TabItem>
             <TabItem Header="My lots">
-                
+                <t:MyLots/>
             </TabItem>
             <TabItem Header="Profile">
                 <t:Profile/>

@@ -26,8 +26,7 @@ namespace AuctionClient.ViewModel.TabItems
         #endregion
 
         private const int pageSize = 6;
-        private TypeOfUserFriendsOnPage typeOfUsers = TypeOfUserFriendsOnPage.Friends;//After trying to change page OnCurPageChanged method executes, that's why this variable exists 
-        //f-friends, s-search, i-invitations 
+        private TypeOfUserFriendsOnPage typeOfUsers = TypeOfUserFriendsOnPage.Friends;//After trying to change page, OnCurPageChanged method executes, that's why this variable exists 
         private const string gatewayPort = "http://localhost:5175";
         private readonly HttpClient _httpClient;
         ApplicationContext db = new ApplicationContext();
@@ -184,8 +183,6 @@ namespace AuctionClient.ViewModel.TabItems
             }
             else
                 MessageBox.Show($"{responseContent}");
-
-            return;
         }
 
     }
