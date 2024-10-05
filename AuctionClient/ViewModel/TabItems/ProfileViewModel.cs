@@ -71,7 +71,6 @@ namespace AuctionClient.ViewModel.TabItems
                 }
                 return false;
             }
-            var test = await response.Content.ReadAsStringAsync();
             return true;
         }//Method useful only if no data comes as response
 

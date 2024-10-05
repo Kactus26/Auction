@@ -128,7 +128,7 @@
 
             <Button Width="150px" Margin="20,5,0,0" Command="{Binding SearchButtonCommand}" Content="Find user" BorderBrush="#8c72a9" Background="#8c72a9" />
         </StackPanel>
-        <ListView ItemsSource="{Binding Friends1}" SelectionChanged="UsersListView1_SelectionChanged" Name="ListView1" Grid.Row="0" Grid.RowSpan="2" Margin="0,65,10,0" 
+        <ListView ItemsSource="{Binding Friends1}" SelectionChanged="UsersListView1_SelectionChanged" Name="ListView1" Grid.Row="0" Grid.RowSpan="2" Margin="0,65,0,0" 
                   ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>

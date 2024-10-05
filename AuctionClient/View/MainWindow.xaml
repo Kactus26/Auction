@@ -16,6 +16,7 @@
             materialDesign:ColorZoneAssist.Mode="Custom"
             materialDesign:ColorZoneAssist.Background="#281B27"
             Style="{StaticResource MaterialDesignFilledTabControl}">
+
             <TabItem Header="Auction">
 
             </TabItem>

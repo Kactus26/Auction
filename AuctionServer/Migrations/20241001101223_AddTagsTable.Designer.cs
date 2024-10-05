@@ -4,6 +4,7 @@ using AuctionServer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AuctionServer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241001101223_AddTagsTable")]
+    partial class AddTagsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,6 +90,9 @@ namespace AuctionServer.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<double>("CurrentPrice")
+                        .HasColumnType("float");
+
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
@@ -104,22 +110,17 @@ namespace AuctionServer.Migrations
                     b.Property<int?>("OwnerId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SoldToId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StartPrice")
-                        .HasColumnType("int");
+                    b.Property<double>("StartPrice")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OwnerId");
 
-                    b.HasIndex("SoldToId");
-
                     b.ToTable("Lots");
                 });
 
-            modelBuilder.Entity("AuctionServer.Model.Offer", b =>
+            modelBuilder.Entity("AuctionServer.Model.LotInvesting", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -130,22 +131,22 @@ namespace AuctionServer.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("InvestorId")
+                        .HasColumnType("int");
+
                     b.Property<int>("LotId")
                         .HasColumnType("int");
 
-                    b.Property<double>("Price")
+                    b.Property<double?>("Price")
                         .HasColumnType("float");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("InvestorId");
+
                     b.HasIndex("LotId");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Offers");
+                    b.ToTable("LotInvestings");
                 });
 
             modelBuilder.Entity("AuctionServer.Model.Tag", b =>
@@ -277,32 +278,26 @@ namespace AuctionServer.Migrations
                         .WithMany("OwnLots")
                         .HasForeignKey("OwnerId");
 
-                    b.HasOne("AuctionServer.Model.Offer", "SoldTo")
-                        .WithMany()
-                        .HasForeignKey("SoldToId");
-
                     b.Navigation("Owner");
-
-                    b.Navigation("SoldTo");
                 });
 
-            modelBuilder.Entity("AuctionServer.Model.Offer", b =>
+            modelBuilder.Entity("AuctionServer.Model.LotInvesting", b =>
                 {
+                    b.HasOne("AuctionServer.Model.User", "Investor")
+                        .WithMany("Investings")
+                        .HasForeignKey("InvestorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("AuctionServer.Model.Lot", "Lot")
-                        .WithMany("Offers")
+                        .WithMany()
                         .HasForeignKey("LotId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("AuctionServer.Model.User", "User")
-                        .WithMany("Offers")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Investor");
 
                     b.Navigation("Lot");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("LotTag", b =>
@@ -338,8 +333,6 @@ namespace AuctionServer.Migrations
             modelBuilder.Entity("AuctionServer.Model.Lot", b =>
                 {
                     b.Navigation("Comments");
-
-                    b.Navigation("Offers");
                 });
 
             modelBuilder.Entity("AuctionServer.Model.User", b =>
@@ -348,7 +341,7 @@ namespace AuctionServer.Migrations
 
                     b.Navigation("InitiatorFriendship");
 
-                    b.Navigation("Offers");
+                    b.Navigation("Investings");
 
                     b.Navigation("OwnLots");
 

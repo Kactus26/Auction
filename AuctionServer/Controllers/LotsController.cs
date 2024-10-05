@@ -1,10 +1,8 @@
 ﻿using AuctionServer.Interfaces;
 using AuctionServer.Model;
-using AuctionServer.Repository;
 using AutoMapper;
 using CommonDTO;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
 namespace AuctionServer.Controllers
 {
@@ -19,6 +17,60 @@ namespace AuctionServer.Controllers
         {
             _lotsRepository = lotsRepository;
             _mapper = mapper;
+        }
+
+
+        [HttpPost("GetLotOffersInfo")]
+        public async Task<IActionResult> GetLotOffersInfo(UserIdDTO userLotIdDTO)
+        {
+            ICollection<Offer>? offers = await _lotsRepository.GetLotOffersInfo(userLotIdDTO.Id);
+
+            if(offers != null)
+            {
+                ICollection<OffersDTO> offersDTO = OffersToDTO(offers);
+                return Ok(offersDTO);
+            }
+
+            return Ok("There is no offers for this lot");
+        }
+
+        private ICollection<OffersDTO> OffersToDTO(ICollection<Offer> offers)
+        {
+            ICollection<OffersDTO> offersDTO = new List<OffersDTO>();
+
+            foreach(Offer offer in offers)
+            {
+                var offerDTO = new OffersDTO();
+                offerDTO.Id = offer.Id;
+                offerDTO.Price = offer.Price;
+                offerDTO.Name = offer.User.Name;
+                offerDTO.Surname = offer.User.Surname;
+                offerDTO.DateTime = offer.DateTime;
+                offerDTO.Email = offer.User.Email;
+                offersDTO.Add(offerDTO);
+            }
+
+            return offersDTO;
+        }
+
+        [HttpPost("GetLotSellerInfo")]
+        public async Task<IActionResult> GetLotSellerInfo(UserIdDTO userLotIdDTO)
+        {
+            Lot lot = await _lotsRepository.GetLotSeller(userLotIdDTO.Id);
+            User owner = lot.Owner;
+
+            if (lot == null)
+                NotFound("Lot not found");
+            else if (owner == null)
+                NotFound("Owner not found");
+
+            byte[] image = System.IO.File.ReadAllBytes(owner.ImageUrl);
+
+
+            UserProfileDTO ownerDTO = _mapper.Map<UserProfileDTO>(owner);
+            UserDataWithImageDTO userData = new UserDataWithImageDTO() { ProfileData = ownerDTO, Image = image };
+
+            return Ok(userData);
         }
 
         [HttpPost("GetUserLots")]

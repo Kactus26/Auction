@@ -23,6 +23,20 @@ namespace AuctionServer.Controllers
             _environment = environment;
         }
 
+        [HttpGet("GetUserBalance")]
+        public async Task<IActionResult> GetUserBalance()
+        {
+            int userId = Convert.ToInt32(User.Identities.First().Claims.First().Value);
+
+            double? balance = await _dataRepository.GetUserBalance(userId);
+
+            if (balance == null)
+                return NotFound("Balance not found");
+
+
+            return Ok(balance);
+        }
+
         [HttpPost("IsEmailConfirmed")]//Returns IsEmailConfirmed field
         public async Task<IActionResult> IsEmailConfirmed(UserIdDTO userId)
         {

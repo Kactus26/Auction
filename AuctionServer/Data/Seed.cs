@@ -41,14 +41,14 @@ namespace AuctionServer.Data
             User zero6 = new User() { Name = "Dumb6" };
             User zero7 = new User() { Name = "Dumb7" };
 
-            Lot lot1 = new Lot() { Name = "Chair", Owner = user2, Description = "You can sit on it, if you want, if not than i'm sorry", StartPrice = 2, CurrentPrice = 5 };
-            Lot lot2 = new Lot() { Name = "Table", Owner = user2, Description = "You can sit on it, if you want, if not than i'm sorry", StartPrice = 2, CurrentPrice = 5 };
-            Lot lot3 = new Lot() { Name = "PC", Owner = user2, Description = "You can sit on it, if you want, if not than i'm sorry", StartPrice = 2, CurrentPrice = 5 };
-            Lot lot4 = new Lot() { Name = "Sofa", Owner = user2, Description = "You can sit on it, if you want, if not than i'm sorry", StartPrice = 2, CurrentPrice = 5 };
-            Lot lot5 = new Lot() { Name = "Pen", Owner = user2, Description = "You can sit on it, if you want, if not than i'm sorry", StartPrice = 2, CurrentPrice = 5 };
-            Lot lot6 = new Lot() { Name = "Car", Owner = user2, Description = "You can sit on it, if you want, if not than i'm sorry", StartPrice = 2, CurrentPrice = 5 };
-            Lot lot7 = new Lot() { Name = "Pillow", Owner = user2, Description = "You can sit on it, if you want, if not than i'm sorry", StartPrice = 2, CurrentPrice = 5 };
-            Lot lot8 = new Lot() { Name = "House", Owner = user1, Description = "You can sit on it, if you want, if not than i'm sorry", StartPrice = 2, CurrentPrice = 5 };
+            Lot lot1 = new Lot() { Name = "Chair", Owner = user2, Description = "You can sit on it, if you want, if not than i'm sorry" };
+            Lot lot2 = new Lot() { Name = "Table", Owner = user2, Description = "You can sit on it, if you want, if not than i'm sorry" };
+            Lot lot3 = new Lot() { Name = "PC", Owner = user2, Description = "You can sit on it, if you want, if not than i'm sorry" };
+            Lot lot4 = new Lot() { Name = "Sofa", Owner = user2, Description = "You can sit on it, if you want, if not than i'm sorry" };
+            Lot lot5 = new Lot() { Name = "Pen", Owner = user2, Description = "You can sit on it, if you want, if not than i'm sorry" };
+            Lot lot6 = new Lot() { Name = "Car", Owner = user2, Description = "You can sit on it, if you want, if not than i'm sorry" };
+            Lot lot7 = new Lot() { Name = "Pillow", Owner = user2, Description = "You can sit on it, if you want, if not than i'm sorry" };
+            Lot lot8 = new Lot() { Name = "House", Owner = user1, Description = "You can sit on it, if you want, if not than i'm sorry" };
 
 
             Friendship friendship = new() { User = user1, Friend = user2, Relations = FriendStatus.Friend };

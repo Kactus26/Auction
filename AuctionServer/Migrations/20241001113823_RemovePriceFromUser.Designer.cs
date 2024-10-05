@@ -4,6 +4,7 @@ using AuctionServer.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AuctionServer.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241001113823_RemovePriceFromUser")]
+    partial class RemovePriceFromUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,22 +107,14 @@ namespace AuctionServer.Migrations
                     b.Property<int?>("OwnerId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("SoldToId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StartPrice")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("OwnerId");
 
-                    b.HasIndex("SoldToId");
-
                     b.ToTable("Lots");
                 });
 
-            modelBuilder.Entity("AuctionServer.Model.Offer", b =>
+            modelBuilder.Entity("AuctionServer.Model.LotInvesting", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -129,6 +124,32 @@ namespace AuctionServer.Migrations
 
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("InvestorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LotId")
+                        .HasColumnType("int");
+
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InvestorId");
+
+                    b.HasIndex("LotId");
+
+                    b.ToTable("LotInvestings");
+                });
+
+            modelBuilder.Entity("AuctionServer.Model.Offer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("LotId")
                         .HasColumnType("int");
@@ -277,13 +298,26 @@ namespace AuctionServer.Migrations
                         .WithMany("OwnLots")
                         .HasForeignKey("OwnerId");
 
-                    b.HasOne("AuctionServer.Model.Offer", "SoldTo")
-                        .WithMany()
-                        .HasForeignKey("SoldToId");
-
                     b.Navigation("Owner");
+                });
 
-                    b.Navigation("SoldTo");
+            modelBuilder.Entity("AuctionServer.Model.LotInvesting", b =>
+                {
+                    b.HasOne("AuctionServer.Model.User", "Investor")
+                        .WithMany("Investings")
+                        .HasForeignKey("InvestorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AuctionServer.Model.Lot", "Lot")
+                        .WithMany()
+                        .HasForeignKey("LotId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Investor");
+
+                    b.Navigation("Lot");
                 });
 
             modelBuilder.Entity("AuctionServer.Model.Offer", b =>
@@ -347,6 +381,8 @@ namespace AuctionServer.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("InitiatorFriendship");
+
+                    b.Navigation("Investings");
 
                     b.Navigation("Offers");
 

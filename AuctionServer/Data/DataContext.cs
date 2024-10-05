@@ -12,8 +12,9 @@ namespace AuctionServer.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Lot> Lots { get; set; }
+        public DbSet<Offer> Offers { get; set; }        
+        public DbSet<Tag> Tags { get; set; }
         public DbSet<Comment> Comments { get; set; }
-        public DbSet<LotInvesting> LotInvestings { get; set; }
         public DbSet<Friendship> Friendships { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -41,6 +42,12 @@ namespace AuctionServer.Data
                 .HasMany(u => u.FollowingLots)
                 .WithMany(l => l.Followers);
 
+            modelBuilder.Entity<Lot>()
+                .HasOne(l => l.SoldTo);
+
+            modelBuilder.Entity<Lot>()
+                .HasMany(l => l.Offers)
+                .WithOne(o => o.Lot);
        
 
         }

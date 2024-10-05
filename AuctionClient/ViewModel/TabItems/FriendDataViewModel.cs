@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 using static AuctionClient.ViewModel.TabItems.FriendsViewModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Windows;
+using System.IdentityModel.Tokens.Jwt;
+using Newtonsoft.Json.Linq;
 
 namespace AuctionClient.ViewModel.TabItems
 {
@@ -35,12 +37,14 @@ namespace AuctionClient.ViewModel.TabItems
         #endregion
 
         private readonly int friendId;
+        private readonly int userId;
         private const string gatewayPort = "http://localhost:5175";
         private readonly HttpClient _httpClient;
         ApplicationContext db = new ApplicationContext();
 
         public FriendDataViewModel(UserDataWithImageDTO userData)
         {
+
             friendId = userData.ProfileData.Id;
             Name = userData.ProfileData.Name;
             SurName = userData.ProfileData.Surname;
@@ -59,7 +63,26 @@ namespace AuctionClient.ViewModel.TabItems
             {
                 isBlockUserEnabled = false;
                 isAddFriendEnabled = false;
-                isRemoveFriendEnabled = false;
+                return;
+            }
+
+            var handler = new JwtSecurityTokenHandler();
+            if (handler.CanReadToken(lu.JWTToken))
+            {
+                // Расшифровка JWT без проверки подписи
+                var jwtToken = handler.ReadJwtToken(lu.JWTToken);
+
+                // Доступ к claims (утверждениям)
+                var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "userId");
+
+                userId = System.Convert.ToInt32(userIdClaim.Value);
+            }
+
+
+            if (friendId == userId)
+            {
+                isBlockUserEnabled = false;
+                isAddFriendEnabled = false;
             }
         }
 

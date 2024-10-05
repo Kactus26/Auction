@@ -45,5 +45,13 @@ namespace AuctionServer.Repository
         {
             await _dataContext.SaveChangesAsync();
         }
+
+        public async Task<double?> GetUserBalance(int id)
+        {
+            return await _dataContext.Users
+                .Where(u=>u.Id==id)
+                .Select(x => x.Balance)
+                .FirstOrDefaultAsync();
+        }
     }
 }

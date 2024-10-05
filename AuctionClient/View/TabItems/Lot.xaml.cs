@@ -14,51 +14,61 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace AuctionClient.View.TabItems
 {
     /// <summary>
-    /// Логика взаимодействия для MyLots.xaml
+    /// Логика взаимодействия для Lot.xaml
     /// </summary>
-    public partial class MyLots : UserControl
+    public partial class Lot : UserControl
     {
-        public MyLots()
+        public Lot()
         {
             InitializeComponent();
         }
 
-        private void UsersListView1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+
+        private void Close_Tab(object sender, RoutedEventArgs e)
         {
-            if (ListView1.SelectedItem is LotWithImageDTO selectedUserList1)
+            var mainControl = FindParent<MainWindow>(this);
+
+            if (mainControl != null)
             {
-                AddNewTab(selectedUserList1);
+                string tabName;
+                if (Name.Text.Length > 10)
+                    tabName = Name.Text.Substring(0, 9) + "...";
+                else
+                    tabName = Name.Text;
+
+                mainControl.RemoveNewTab(tabName);
             }
         }
 
-        private void UsersListView2_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Owner_Selected(object sender, RoutedEventArgs e)
         {
-            if (ListView2.SelectedItem is LotWithImageDTO selectedUserList2)
+            if (Owner.SelectedItem is UserDataWithImageDTO selectedUserList2)
                 AddNewTab(selectedUserList2);
         }
 
-        private void AddNewTab(LotWithImageDTO selectedLot)
+        private void AddNewTab(UserDataWithImageDTO selectedUser)
         {
-            string lotName;
+            string userName;
 
-            if (selectedLot.LotInfo.Name.Length > 10)
-                lotName = selectedLot.LotInfo.Name.Substring(0, 9) + "...";
+            if (selectedUser.ProfileData.Name.Length > 10)
+                userName = selectedUser.ProfileData.Name.Substring(0,9) + "..."; 
             else
-                lotName = selectedLot.LotInfo.Name;
+                userName = selectedUser.ProfileData.Name;
 
-            var lotVM = new LotViewModel(selectedLot);
+            var friendsDataVM = new FriendDataViewModel(selectedUser);
 
-            Lot newLotPage = new() { DataContext = lotVM };
+            FriendData newProfile = new FriendData() { DataContext = friendsDataVM };
 
             var mainControl = FindParent<MainWindow>(this);
 
             if (mainControl != null)
             {
-                mainControl.AddNewTab(newLotPage, lotName);
+                mainControl.AddNewTab(newProfile, userName);
             }
         }
 

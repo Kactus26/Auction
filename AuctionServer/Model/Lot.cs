@@ -6,10 +6,12 @@
         public string Name { get; set; } = null!;
         public string? ImageUrl { get; set; }
         public string Description { get; set; } = String.Empty;
-        public double StartPrice { get; set; } = 1;
-        public double CurrentPrice { get; set; } = 1;
         public DateTime DateTime { get; set; } = DateTime.Now;
+        public int StartPrice { get; set; }
         public User Owner { get; set; } = null!;
+        public Offer? SoldTo { get; set; } = null;
+        public ICollection<Offer> Offers { get; set; } = new List<Offer>();
+        public ICollection<Tag> Tags { get; set; } = new List<Tag>();
         public ICollection<User> Followers { get; set; } = new List<User>();
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 

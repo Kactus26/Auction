@@ -5,6 +5,7 @@ using AuctionServer.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using SignalRTest;
 using System.Text;
 
@@ -21,6 +22,11 @@ builder.Services.AddScoped<IDataRepository, DataRepository>();
 builder.Services.AddScoped<IFriendsRepository, FriendsRepository>();
 builder.Services.AddScoped<ILotsRepository, LotsRepository>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+builder.Services.AddControllers()
+            .AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+
 
 
 builder.Services.AddDbContext<DataContext>(options =>

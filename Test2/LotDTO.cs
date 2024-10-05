@@ -6,9 +6,8 @@
         public string Name { get; set; } = null!;
         public string? ImageUrl { get; set; }
         public string Description { get; set; } = String.Empty;
-        public double StartPrice { get; set; } = 1;
-        public double CurrentPrice { get; set; } = 1;
         public DateTime DateTime { get; set; } = DateTime.Now;
+        public int StartPrice { get; set; }
 
     }
 
@@ -16,5 +15,15 @@
     {
         public LotDTO LotInfo { get; set; }
         public byte[] Image { get; set; }
+    }
+
+    public class OffersDTO
+    {
+        public int Id { get; set; }
+        public double Price { get; set; }
+        public DateTime DateTime { get; set; }
+        public string Name { get; set; } = null!;
+        public string Surname { get; set; } = String.Empty;
+        public string Email { get; set; } = String.Empty;
     }
 }

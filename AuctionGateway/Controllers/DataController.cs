@@ -22,6 +22,43 @@ namespace AuctionGateway.Controllers
         }
 
 
+        [HttpGet("GetUserBalance")]
+        [Authorize]
+        public async Task<IActionResult> GetUserBalance(CancellationToken cancellationToken)
+        {
+            JWTIntoHeader();
+
+            var response = await _httpClient.GetAsync("Data/GetUserBalance", cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
+
+        [HttpPost("GetLotOffersInfo")]
+        public async Task<IActionResult> GetLotOffersInfo(UserIdDTO userLotIdDTO, CancellationToken cancellationToken)
+        {
+            var response = await _httpClient.PostAsJsonAsync("Lots/GetLotOffersInfo", userLotIdDTO, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
+        [HttpPost("GetLotSellerInfo")]
+        public async Task<IActionResult> FindUser(UserIdDTO userLotIdDTO, CancellationToken cancellationToken)
+        {
+            var response = await _httpClient.PostAsJsonAsync("Lots/GetLotSellerInfo", userLotIdDTO, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
         [HttpPost("GetUserLots")]
         [Authorize]
         public async Task<IActionResult> GetUserLots(PaginationDTO paginationDTO, CancellationToken cancellationToken)
