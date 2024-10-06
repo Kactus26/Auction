@@ -102,7 +102,7 @@
             Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
         <Button Grid.Row="2" Content="Add Lot" BorderBrush="Green" Background="Transparent" Cursor="Hand"
-            Foreground="White" Width="100"  Margin="0,0,50,30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Command="{Binding AddLotCommand}"/>
+            Foreground="White" Width="100"  Margin="0,0,65,30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Command="{Binding AddLotCommand}"/>
 
         <ListView ItemsSource="{Binding Lots1}" Margin="0,5,0,0" Name="ListView1" SelectionChanged="UsersListView1_SelectionChanged" Panel.ZIndex="1" HorizontalAlignment="Center"
                   HorizontalContentAlignment="Stretch" Cursor="Hand" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"
@@ -143,8 +143,8 @@
             </ListView.ItemsPanel>
         </ListView>
 
-        <ListView ItemsSource="{Binding Lots2}" Margin="0,5,300,0" Grid.Column="1" Grid.Row="1" Name="ListView2" SelectionChanged="UsersListView2_SelectionChanged" Panel.ZIndex="2"
-          HorizontalContentAlignment="Stretch" Cursor="Hand" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Center"
+        <ListView ItemsSource="{Binding Lots2}" Margin="45,5,0,0" Grid.Column="1" Grid.Row="1" Name="ListView2" SelectionChanged="UsersListView2_SelectionChanged" Panel.ZIndex="2"
+          Cursor="Hand" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left"
           VerticalContentAlignment="Top">
             <ListView.ItemTemplate>
                 <DataTemplate>

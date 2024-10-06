@@ -114,7 +114,7 @@
                             materialDesign:TextFieldAssist.UnderlineBrush="White"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
                         <Button Content="Add Offer" BorderBrush="Green" Background="Transparent" Cursor="Hand" Margin="0,15,0,0"
-                            Foreground="White" Width="120" HorizontalAlignment="Right" Command="{Binding AddLotCommand}"/>
+                            Foreground="White" Width="120" HorizontalAlignment="Right" Command="{Binding SendOfferCommand}"/>
                     </StackPanel>
                 </StackPanel>
 

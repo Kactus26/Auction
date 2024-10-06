@@ -22,6 +22,21 @@ namespace AuctionGateway.Controllers
         }
 
 
+        [HttpPost("SendOffer")]
+        [Authorize]
+        public async Task<IActionResult> GetUserBalance(OfferPrice offerPrice, CancellationToken cancellationToken)
+        {
+            JWTIntoHeader();
+
+            var response = await _httpClient.PostAsJsonAsync("Lots/SendOffer", offerPrice, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
+
         [HttpGet("GetUserBalance")]
         [Authorize]
         public async Task<IActionResult> GetUserBalance(CancellationToken cancellationToken)

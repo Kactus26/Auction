@@ -1,5 +1,11 @@
 ﻿namespace CommonDTO
 {
+    public class OfferPrice
+    {
+        public int LotId {  get; set; }
+        public double Price { get; set; }
+    }
+
     public class LotDTO
     {
         public int Id { get; set; }

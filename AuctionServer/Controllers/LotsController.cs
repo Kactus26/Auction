@@ -3,6 +3,8 @@ using AuctionServer.Model;
 using AutoMapper;
 using CommonDTO;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
 
 namespace AuctionServer.Controllers
 {
@@ -17,6 +19,29 @@ namespace AuctionServer.Controllers
         {
             _lotsRepository = lotsRepository;
             _mapper = mapper;
+        }
+
+        [HttpPost("SendOffer")]
+        public async Task<IActionResult> SendOffer(OfferPrice offerPrice)
+        {
+            int userId = Convert.ToInt32(User.Identities.First().Claims.First().Value);
+
+            User userWhoOffers = await _lotsRepository.GetUserById(userId);
+
+            Lot lot = await _lotsRepository.GetLotById(offerPrice.LotId);
+
+            if (userWhoOffers == null || lot == null)
+                return NotFound("User or lot not found at SendOffer method");
+
+            var result = await _lotsRepository.AddOffer( new Offer() { DateTime = DateTime.Now, Price = offerPrice.Price, User = userWhoOffers, Lot = lot } );
+
+            if (result.State == Microsoft.EntityFrameworkCore.EntityState.Added)
+            {
+                await _lotsRepository.SaveChanges();
+                return Ok("Offer added successfully");
+            }
+            else
+                return BadRequest("Something went wrong");
         }
 
 

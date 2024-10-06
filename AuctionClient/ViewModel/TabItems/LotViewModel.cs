@@ -1,12 +1,14 @@
 ﻿using AuctionClient.Data;
 using CommonDTO;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Windows;
 
 namespace AuctionClient.ViewModel.TabItems
 {
@@ -23,11 +25,14 @@ namespace AuctionClient.ViewModel.TabItems
         [ObservableProperty]
         public double balance;
         [ObservableProperty]
+        public double userOffer;
+        [ObservableProperty]
         public List<OffersDTO> offers = new List<OffersDTO>();
         
         [ObservableProperty]
         public ObservableCollection<UserDataWithImageDTO> userData = new ObservableCollection<UserDataWithImageDTO>();
 
+        private int lotId;
         private const string gatewayPort = "http://localhost:5175";
         private readonly HttpClient _httpClient;
         ApplicationContext db = new ApplicationContext();
@@ -36,6 +41,7 @@ namespace AuctionClient.ViewModel.TabItems
         {
             _httpClient = new HttpClient();
 
+            lotId = lot.LotInfo.Id;
             Name = lot.LotInfo.Name;
             Description= lot.LotInfo.Description;
             StartedAt = "Started at: " + lot.LotInfo.DateTime;
@@ -51,6 +57,15 @@ namespace AuctionClient.ViewModel.TabItems
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", lu.JWTToken);
                 GetUserBalance();
             }
+        }
+
+        [RelayCommand]
+        public async Task SendOffer()
+        {
+            OfferPrice offerPrice = new OfferPrice() { LotId = lotId, Price = UserOffer };
+            var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/SendOffer", offerPrice);
+
+            MessageBox.Show(await response.Content.ReadAsStringAsync());
         }
 
         private async Task GetUserBalance()
