@@ -96,14 +96,28 @@
                     </ListView.ItemTemplate>
                 </ListView>
             </Grid>
-            <StackPanel Orientation="Vertical" VerticalAlignment="Bottom" Margin="20,0,0,20">
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,0">
-                    <Label Content="Offers" HorizontalAlignment="Left" Margin="0,0,0,0" FontSize="25" FontWeight="Bold" Foreground="White"/>
-                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                        <Label Content="Your balance:" FontSize="14" Foreground="Gray"/>
-                        <Label Content="{Binding Balance}" FontSize="14" Foreground="Gray"/>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Bottom" Margin="20,0,20,0">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,15,0,0">
+                        <Label Content="Offers" HorizontalAlignment="Left" Margin="0,0,0,0" FontSize="25" FontWeight="Bold" Foreground="White"/>
+                        <StackPanel Orientation="Horizontal" Margin="5,10,0,0">
+                            <Label Content="Your balance:" FontSize="14" Foreground="Gray"/>
+                            <Label Content="{Binding Balance}" FontSize="14" Foreground="Gray"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="120,0,0,20">
+                        <TextBox Text="{Binding UserOffer}"
+                            Foreground="White" FontSize="18" Margin="0,0,20,0"
+                            materialDesign:HintAssist.Foreground="White" Height="50" Width="150"
+                            materialDesign:HintAssist.Hint="Your offer" BorderBrush="Gray"
+                            materialDesign:TextFieldAssist.UnderlineBrush="White"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                        <Button Content="Add Offer" BorderBrush="Green" Background="Transparent" Cursor="Hand" Margin="0,15,0,0"
+                            Foreground="White" Width="120" HorizontalAlignment="Right" Command="{Binding AddLotCommand}"/>
                     </StackPanel>
                 </StackPanel>
+
                 <ListView ItemsSource="{Binding Offers}">
                     <ListView.ItemTemplate>
                         <DataTemplate>

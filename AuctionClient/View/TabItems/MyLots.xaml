@@ -102,7 +102,7 @@
             Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
         <Button Grid.Row="2" Content="Add Lot" BorderBrush="Green" Background="Transparent" Cursor="Hand"
-            Foreground="White" Width="150"  Margin="0,0,50,30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Command="{Binding AddLotCommand}"/>
+            Foreground="White" Width="100"  Margin="0,0,50,30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Command="{Binding AddLotCommand}"/>
 
         <ListView ItemsSource="{Binding Lots1}" Margin="0,5,0,0" Name="ListView1" SelectionChanged="UsersListView1_SelectionChanged" Panel.ZIndex="1" HorizontalAlignment="Center"
                   HorizontalContentAlignment="Stretch" Cursor="Hand" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"
