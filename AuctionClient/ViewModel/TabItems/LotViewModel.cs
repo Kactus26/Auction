@@ -3,6 +3,7 @@ using CommonDTO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Net.Http;
@@ -27,12 +28,15 @@ namespace AuctionClient.ViewModel.TabItems
         [ObservableProperty]
         public double userOffer;
         [ObservableProperty]
+        private bool isUserOwner;
+        [ObservableProperty]
         public List<OffersDTO> offers = new List<OffersDTO>();
         
         [ObservableProperty]
-        public ObservableCollection<UserDataWithImageDTO> userData = new ObservableCollection<UserDataWithImageDTO>();
+        public ObservableCollection<UserDataWithImageDTO> ownerData = new ObservableCollection<UserDataWithImageDTO>();
 
-        private int lotId;
+        private readonly int lotId;
+        private bool isUserEmailConfirmed;
         private const string gatewayPort = "http://localhost:5175";
         private readonly HttpClient _httpClient;
         ApplicationContext db = new ApplicationContext();
@@ -55,27 +59,61 @@ namespace AuctionClient.ViewModel.TabItems
             if (lu != null)
             {
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", lu.JWTToken);
-                GetUserBalance();
+                GetUserBalanceAndEmail();
             }
         }
 
         [RelayCommand]
         public async Task SendOffer()
         {
+            if (isUserEmailConfirmed != true)
+            {
+                MessageBox.Show("You need to confirm your email for this!", "Denied");
+                return;
+            }
+            else if (UserOffer == 0)
+            {
+                MessageBox.Show("You need to have some balance for this!", "Denied");
+                return;
+            }
+
             OfferPrice offerPrice = new OfferPrice() { LotId = lotId, Price = UserOffer };
             var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/SendOffer", offerPrice);
 
             MessageBox.Show(await response.Content.ReadAsStringAsync());
-        }
 
-        private async Task GetUserBalance()
-        {
-            var response = await _httpClient.GetAsync($"{gatewayPort}/api/Data/GetUserBalance");
-
-            if(!response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
                 return;
 
-            Balance = await response.Content.ReadFromJsonAsync<double>();
+            await GetLotOffersInfo(lotId);
+        }
+
+        private async Task GetUserBalanceAndEmail()
+        {
+            var response = await _httpClient.GetAsync($"{gatewayPort}/api/Data/GetUserBalanceAndEmail");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Something went wrong with request in GetUserBalanceAndEmail");
+                return;
+            }
+
+            var userDTO = JsonConvert.DeserializeObject<UserBalanceAndEmailDTO>(await response.Content.ReadAsStringAsync());
+
+            if (userDTO == null) 
+            { 
+                MessageBox.Show("Something went wrong with deserialization in GetUserBalanceAndEmail");
+                return;
+            }
+
+            Balance = userDTO.Balance;
+            isUserEmailConfirmed = userDTO.IsEmailConfirmed;
+
+            if (userDTO.UserId == OwnerData.First().ProfileData.Id)
+                IsUserOwner = true;
+            else
+                IsUserOwner = false;
+
         }
 
         private async Task GetLotSellerInfo(int lotId)
@@ -85,7 +123,7 @@ namespace AuctionClient.ViewModel.TabItems
             string result = await response.Content.ReadAsStringAsync();
 
             UserDataWithImageDTO userDTO = JsonConvert.DeserializeObject<UserDataWithImageDTO>(result)!;
-            UserData.Add(userDTO);
+            OwnerData.Add(userDTO);
         }
 
         private async Task GetLotOffersInfo(int lotId)
@@ -95,6 +133,10 @@ namespace AuctionClient.ViewModel.TabItems
             string result = await response.Content.ReadAsStringAsync();
 
             ICollection<OffersDTO> offersDTO = JsonConvert.DeserializeObject<List<OffersDTO>>(result)!;
+
+            if (!Offers.IsNullOrEmpty())
+                Offers.Clear();
+
             Offers = offersDTO.ToList();
         }
     }

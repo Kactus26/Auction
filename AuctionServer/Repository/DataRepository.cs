@@ -46,12 +46,16 @@ namespace AuctionServer.Repository
             await _dataContext.SaveChangesAsync();
         }
 
-        public async Task<double?> GetUserBalance(int id)
+        public async Task<UserBalanceAndEmailDTO> GetUserBalanceAndEmail(int id)
         {
-            return await _dataContext.Users
+            var data = await _dataContext.Users
                 .Where(u=>u.Id==id)
-                .Select(x => x.Balance)
+                .Select(x => new { x.Balance, x.IsEmailConfirmed })
                 .FirstOrDefaultAsync();
+
+            UserBalanceAndEmailDTO userDTO = new UserBalanceAndEmailDTO() { Balance = data.Balance, IsEmailConfirmed = data.IsEmailConfirmed };
+
+            return userDTO;
         }
     }
 }

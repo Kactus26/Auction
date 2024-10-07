@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:vm="clr-namespace:AuctionClient.ViewModel.TabItems"
       xmlns:conv="clr-namespace:AuctionClient.Services"
       xmlns:local="clr-namespace:AuctionClient.View.TabItems"
       mc:Ignorable="d" 
@@ -12,8 +13,8 @@
     <UserControl.Resources>
         <conv:ByteArrayToImageConverter x:Key="ByteArrayToImageConverter"/>
     </UserControl.Resources>
-    
-    <ScrollViewer >
+
+    <ScrollViewer x:Name="MainScrollViewer" PreviewMouseWheel="ListView_PreviewMouseWheel">
         <StackPanel Orientation="Vertical">
             <Grid Height="450">
                 <Grid.ColumnDefinitions>
@@ -34,25 +35,25 @@
 
                 <TextBox Text="{Binding Name}" Name="Name" Margin="0,55,20,0"
                     VerticalAlignment="Top" IsReadOnly="True" Height="110"
-                    Foreground="White" FontSize="20" Grid.Column="2"
+                    Foreground="White" FontSize="18" Grid.Column="2"
                     materialDesign:HintAssist.Foreground="White" TextWrapping="WrapWithOverflow"
                     materialDesign:HintAssist.Hint="Name" BorderBrush="Gray"
                     materialDesign:TextFieldAssist.UnderlineBrush="White"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
-                <Label Grid.Column="1" Grid.Row="1" FontSize="20" Content="{Binding StartedAt}" VerticalAlignment="Bottom" Margin="20,0,0,40" Foreground="White"
+                <Label Grid.Column="1" Grid.Row="1" FontSize="18" Content="{Binding StartedAt}" VerticalAlignment="Bottom" Margin="20,0,0,40" Foreground="White"
                        Grid.ColumnSpan="2"/>
 
 
                 <TextBox Text="{Binding Description}" Name="Description" Margin="20,100,20,10"  VerticalScrollBarVisibility="Auto" 
                     VerticalAlignment="Center" IsReadOnly="True" Grid.ColumnSpan="2" TextWrapping="WrapWithOverflow"
-                    Foreground="White" FontSize="20" Grid.Column="1" Grid.RowSpan="2"
+                    Foreground="White" FontSize="18" Grid.Column="1" Grid.RowSpan="2"
                     materialDesign:HintAssist.Foreground="White" Height="180"
                     materialDesign:HintAssist.Hint="Description" BorderBrush="Gray"
                     materialDesign:TextFieldAssist.UnderlineBrush="White"
                     Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
 
-                <ListView ItemsSource="{Binding UserData}" Grid.Column="1"
+                <ListView ItemsSource="{Binding OwnerData}" Grid.Column="1"
                   Name="Owner" Height="140" 
                   Margin="10,0,0,20" ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
                   ScrollViewer.VerticalScrollBarVisibility="Disabled">
@@ -107,18 +108,19 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="120,0,0,20">
-                        <TextBox Text="{Binding UserOffer}"
+                        <TextBox Text="{Binding UserOffer}" Visibility="{Binding IsUserOwner, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Foreground="White" FontSize="18" Margin="0,0,20,0"
                             materialDesign:HintAssist.Foreground="White" Height="50" Width="150"
                             materialDesign:HintAssist.Hint="Your offer" BorderBrush="Gray"
                             materialDesign:TextFieldAssist.UnderlineBrush="White"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
                         <Button Content="Add Offer" BorderBrush="Green" Background="Transparent" Cursor="Hand" Margin="0,15,0,0"
+                                Visibility="{Binding IsUserOwner, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Foreground="White" Width="120" HorizontalAlignment="Right" Command="{Binding SendOfferCommand}"/>
                     </StackPanel>
                 </StackPanel>
 
-                <ListView ItemsSource="{Binding Offers}">
+                <ListView ItemsSource="{Binding Offers}" PreviewMouseWheel="ListView_PreviewMouseWheel">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">

@@ -23,18 +23,18 @@ namespace AuctionServer.Controllers
             _environment = environment;
         }
 
-        [HttpGet("GetUserBalance")]
-        public async Task<IActionResult> GetUserBalance()
+        [HttpGet("GetUserBalanceAndEmail")]
+        public async Task<IActionResult> GetUserBalanceAndEmail()
         {
             int userId = Convert.ToInt32(User.Identities.First().Claims.First().Value);
 
-            double? balance = await _dataRepository.GetUserBalance(userId);
+            UserBalanceAndEmailDTO userDTO = await _dataRepository.GetUserBalanceAndEmail(userId);
+            userDTO.UserId = userId;
 
-            if (balance == null)
-                return NotFound("Balance not found");
+            if (userDTO == null)
+                return NotFound("Something not found");
 
-
-            return Ok(balance);
+            return Ok(userDTO);
         }
 
         [HttpPost("IsEmailConfirmed")]//Returns IsEmailConfirmed field

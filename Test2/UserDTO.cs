@@ -1,5 +1,11 @@
 ﻿namespace CommonDTO
 {
+    public class UserBalanceAndEmailDTO
+    {
+        public int UserId { get; set; }
+        public double Balance { get; set; }
+        public bool IsEmailConfirmed { get; set; }
+    }
 
     public class ChangeUserPasswordDTO
     {

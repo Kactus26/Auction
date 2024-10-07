@@ -1,19 +1,11 @@
 ﻿using AuctionClient.Data;
 using CommonDTO;
 using CommunityToolkit.Mvvm.ComponentModel;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Net.Http.Headers;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using Newtonsoft.Json;
-using static AuctionClient.ViewModel.TabItems.FriendsViewModel;
-using AuctionClient.View.TabItems;
-using AuctionServer.Model;
 using CommunityToolkit.Mvvm.Input;
 
 namespace AuctionClient.ViewModel.TabItems
@@ -69,7 +61,13 @@ namespace AuctionClient.ViewModel.TabItems
             while (index < all.Count)
             {
                 if (index <= 3)
+                {
+                    if (all[index].LotInfo.Name.Count() > 19)
+                    {
+                        
+                    }
                     Lots1.Add(all[index]);
+                }
                 else
                     Lots2.Add(all[index]);
                 index++;

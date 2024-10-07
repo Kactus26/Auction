@@ -40,8 +40,7 @@ namespace AuctionServer.Controllers
                 await _lotsRepository.SaveChanges();
                 return Ok("Offer added successfully");
             }
-            else
-                return BadRequest("Something went wrong");
+            return BadRequest("Something went wrong");
         }
 
 

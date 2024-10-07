@@ -28,6 +28,16 @@ namespace AuctionClient.View.TabItems
             InitializeComponent();
         }
 
+        private void ListView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            // Проверяем, существует ли родительский ScrollViewer
+            if (MainScrollViewer != null)
+            {
+                // Передаём событие прокрутки родительскому ScrollViewer
+                MainScrollViewer.ScrollToVerticalOffset(MainScrollViewer.VerticalOffset - e.Delta);
+                e.Handled = true; // Предотвращаем дальнейшую обработку события ListView
+            }
+        }
 
         private void Close_Tab(object sender, RoutedEventArgs e)
         {

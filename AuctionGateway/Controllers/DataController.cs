@@ -24,7 +24,7 @@ namespace AuctionGateway.Controllers
 
         [HttpPost("SendOffer")]
         [Authorize]
-        public async Task<IActionResult> GetUserBalance(OfferPrice offerPrice, CancellationToken cancellationToken)
+        public async Task<IActionResult> SendOffer(OfferPrice offerPrice, CancellationToken cancellationToken)
         {
             JWTIntoHeader();
 
@@ -37,13 +37,13 @@ namespace AuctionGateway.Controllers
         }
 
 
-        [HttpGet("GetUserBalance")]
+        [HttpGet("GetUserBalanceAndEmail")]
         [Authorize]
-        public async Task<IActionResult> GetUserBalance(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetUserBalanceAndEmail(CancellationToken cancellationToken)
         {
             JWTIntoHeader();
 
-            var response = await _httpClient.GetAsync("Data/GetUserBalance", cancellationToken);
+            var response = await _httpClient.GetAsync("Data/GetUserBalanceAndEmail", cancellationToken);
 
             if (!response.IsSuccessStatusCode)
                 return BadRequest(await response.Content.ReadAsStringAsync());
