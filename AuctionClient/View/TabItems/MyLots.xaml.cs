@@ -41,7 +41,7 @@ namespace AuctionClient.View.TabItems
                 AddNewTab(selectedUserList2);
         }
 
-        private void AddNewTab(LotWithImageDTO selectedLot)
+        private async Task AddNewTab(LotWithImageDTO selectedLot)
         {
             string lotName;
 
@@ -50,9 +50,11 @@ namespace AuctionClient.View.TabItems
             else
                 lotName = selectedLot.LotInfo.Name;
 
-            var lotVM = new LotViewModel(selectedLot);
+            var lotVM = new LotViewModel();
 
             Lot newLotPage = new() { DataContext = lotVM };
+
+            await lotVM.InitializeAync(selectedLot);
 
             var mainControl = FindParent<MainWindow>(this);
 

@@ -27,39 +27,52 @@ namespace AuctionClient.ViewModel.TabItems
         public double balance;
         [ObservableProperty]
         public double userOffer;
-        [ObservableProperty]
-        private bool isUserOwner;
+
         [ObservableProperty]
         public List<OffersDTO> offers = new List<OffersDTO>();
         
         [ObservableProperty]
         public ObservableCollection<UserDataWithImageDTO> ownerData = new ObservableCollection<UserDataWithImageDTO>();
 
-        private readonly int lotId;
+        private bool _isUserOwner;
+        public bool IsUserOwner
+        {
+            get => _isUserOwner;
+            set
+            {
+                _isUserOwner = !value;
+                OnPropertyChanged(nameof(_isUserOwner));
+            }
+        }
+
+        private int lotId;
         private bool isUserEmailConfirmed;
         private const string gatewayPort = "http://localhost:5175";
         private readonly HttpClient _httpClient;
         ApplicationContext db = new ApplicationContext();
 
-        public LotViewModel(LotWithImageDTO lot)
+        public LotViewModel()
         {
             _httpClient = new HttpClient();
+        }
 
+        public async Task InitializeAync(LotWithImageDTO lot)
+        {
             lotId = lot.LotInfo.Id;
             Name = lot.LotInfo.Name;
-            Description= lot.LotInfo.Description;
+            Description = lot.LotInfo.Description;
             StartedAt = "Started at: " + lot.LotInfo.DateTime;
             Image = lot.Image;
 
-            GetLotSellerInfo(lot.LotInfo.Id);
+            await GetLotSellerInfo(lot.LotInfo.Id);
 
-            GetLotOffersInfo(lot.LotInfo.Id);
+            await GetLotOffersInfo(lot.LotInfo.Id);
 
             LoggedUser lu = db.Find<LoggedUser>(1)!;
             if (lu != null)
             {
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", lu.JWTToken);
-                GetUserBalanceAndEmail();
+                await GetUserBalanceAndEmail();
             }
         }
 
