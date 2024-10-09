@@ -34,7 +34,7 @@ namespace AuctionServer.Repository
                 .ToListAsync();
         }
 
-        public async Task<Lot> GetLotSeller(int lotId)
+        public async Task<Lot> GetLotWithSeller(int lotId)
         {
             return await _dataContext.Lots
                 .Include(x=>x.Owner)

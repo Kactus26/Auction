@@ -58,7 +58,7 @@ namespace AuctionClient.ViewModel.TabItems
             {
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", lu.JWTToken);
                 UsersFriendshipStatus();
-            }
+            } 
             else
             {
                 isBlockUserEnabled = false;
@@ -78,7 +78,6 @@ namespace AuctionClient.ViewModel.TabItems
                 userId = System.Convert.ToInt32(userIdClaim.Value);
             }
 
-
             if (friendId == userId)
             {
                 isBlockUserEnabled = false;
@@ -92,8 +91,7 @@ namespace AuctionClient.ViewModel.TabItems
             MessageBoxResult result = MessageBox.Show(
                     "Are you sure you want to block this user? Blocked user won't be able to see your profile or your lots...",
                     "Confirm",
-                    MessageBoxButton.YesNo, // Выбираем кнопки Yes и No
-                    MessageBoxImage.Question // Можно задать иконку
+                    MessageBoxButton.YesNo
                 );
 
             if (result == MessageBoxResult.Yes)

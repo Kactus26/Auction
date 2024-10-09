@@ -1,9 +1,23 @@
 ﻿namespace CommonDTO
 {
+    public class LotWithOfferDTO
+    {
+        public LotChangebleDataDTO LotInfo { get; set; }
+        public ICollection<OffersDTO>? Offers { get; set; }
+    }
+
     public class OfferPrice
     {
         public int LotId {  get; set; }
         public double Price { get; set; }
+    }
+
+    public class LotChangebleDataDTO
+    {
+        public string Name { get; set; } = null!;
+        public string Description { get; set; } = String.Empty;
+        public bool IsClosed { get; set; }
+
     }
 
     public class LotDTO
@@ -14,6 +28,7 @@
         public string Description { get; set; } = String.Empty;
         public DateTime DateTime { get; set; } = DateTime.Now;
         public int StartPrice { get; set; }
+        public bool IsClosed { get; set; }
 
     }
 

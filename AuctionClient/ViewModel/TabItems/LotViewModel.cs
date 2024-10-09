@@ -27,15 +27,13 @@ namespace AuctionClient.ViewModel.TabItems
         public double balance;
         [ObservableProperty]
         public double userOffer;
-
         [ObservableProperty]
-        public List<OffersDTO> offers = new List<OffersDTO>();
-        
+        public List<OffersDTO>? offers = new List<OffersDTO>();
         [ObservableProperty]
         public ObservableCollection<UserDataWithImageDTO> ownerData = new ObservableCollection<UserDataWithImageDTO>();
 
         private bool _isUserOwner;
-        public bool IsUserOwner
+        public bool IsUserOwner//reverse value for button visability
         {
             get => _isUserOwner;
             set
@@ -45,6 +43,10 @@ namespace AuctionClient.ViewModel.TabItems
             }
         }
 
+        [ObservableProperty]
+        private bool isLotClosedButtonShows = false;
+
+        private bool isLotClosed;
         private int lotId;
         private bool isUserEmailConfirmed;
         private const string gatewayPort = "http://localhost:5175";
@@ -59,21 +61,48 @@ namespace AuctionClient.ViewModel.TabItems
         public async Task InitializeAync(LotWithImageDTO lot)
         {
             lotId = lot.LotInfo.Id;
-            Name = lot.LotInfo.Name;
-            Description = lot.LotInfo.Description;
+
             StartedAt = "Started at: " + lot.LotInfo.DateTime;
             Image = lot.Image;
 
             await GetLotSellerInfo(lot.LotInfo.Id);
 
-            await GetLotOffersInfo(lot.LotInfo.Id);
+            await GetLotAndOffersInfo(lot.LotInfo.Id);
 
             LoggedUser lu = db.Find<LoggedUser>(1)!;
             if (lu != null)
             {
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", lu.JWTToken);
                 await GetUserBalanceAndEmail();
+
+                if (!IsUserOwner && !isLotClosed)
+                    IsLotClosedButtonShows = true;
             }
+        }
+
+        [RelayCommand]
+        public async Task CloseLot()
+        {
+            MessageBoxResult result = MessageBox.Show(
+                    "Are you sure? There is no going back...",
+                    "Confirm",
+                    MessageBoxButton.YesNo
+                );
+
+            if (result == MessageBoxResult.No)
+                return;
+
+            UserIdDTO lotIdDTO = new UserIdDTO() { Id = lotId };
+            var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/CloseLot", lotIdDTO);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                MessageBox.Show("Something went wrong in CloseLot method");
+                return;
+            }
+
+            IsLotClosedButtonShows = false;
+            MessageBox.Show(await response.Content.ReadAsStringAsync());
         }
 
         [RelayCommand]
@@ -98,7 +127,7 @@ namespace AuctionClient.ViewModel.TabItems
             if (!response.IsSuccessStatusCode)
                 return;
 
-            await GetLotOffersInfo(lotId);
+            await GetLotAndOffersInfo(lotId);
         }
 
         private async Task GetUserBalanceAndEmail()
@@ -139,18 +168,22 @@ namespace AuctionClient.ViewModel.TabItems
             OwnerData.Add(userDTO);
         }
 
-        private async Task GetLotOffersInfo(int lotId)
+        private async Task GetLotAndOffersInfo(int lotId)
         {
             UserIdDTO lotIdDTO = new() { Id = lotId };
-            var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/GetLotOffersInfo", lotIdDTO);
+            var response = await _httpClient.PostAsJsonAsync($"{gatewayPort}/api/Data/GetLotAndOffersInfo", lotIdDTO);
             string result = await response.Content.ReadAsStringAsync();
 
-            ICollection<OffersDTO> offersDTO = JsonConvert.DeserializeObject<List<OffersDTO>>(result)!;
+            LotWithOfferDTO lotWithOffersDTO = JsonConvert.DeserializeObject<LotWithOfferDTO>(result)!;
 
             if (!Offers.IsNullOrEmpty())
                 Offers.Clear();
 
-            Offers = offersDTO.ToList();
+            Offers = lotWithOffersDTO.Offers.ToList();
+
+            Name = lotWithOffersDTO.LotInfo.Name;
+            Description = lotWithOffersDTO.LotInfo.Description;
+            isLotClosed = lotWithOffersDTO.LotInfo.IsClosed;
         }
     }
 }

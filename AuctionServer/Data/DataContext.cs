@@ -43,9 +43,6 @@ namespace AuctionServer.Data
                 .WithMany(l => l.Followers);
 
             modelBuilder.Entity<Lot>()
-                .HasOne(l => l.SoldTo);
-
-            modelBuilder.Entity<Lot>()
                 .HasMany(l => l.Offers)
                 .WithOne(o => o.Lot);
        

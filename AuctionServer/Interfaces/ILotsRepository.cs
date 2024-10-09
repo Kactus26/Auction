@@ -9,7 +9,7 @@ namespace AuctionServer.Interfaces
         public Task<User> GetUserById(int userId);
         public Task<EntityEntry<Offer>> AddOffer(Offer offer);
         public Task<ICollection<Offer>> GetLotOffersInfo(int lotId);
-        public Task<Lot> GetLotSeller(int lotId);
+        public Task<Lot> GetLotWithSeller(int lotId);
         public Task<ICollection<Lot>> GetUserLotsByIdWithPagination(int userId, int currentPages, int pageSize);
         public Task SaveChanges();
     }

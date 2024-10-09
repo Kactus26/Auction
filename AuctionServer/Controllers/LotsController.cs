@@ -21,6 +21,23 @@ namespace AuctionServer.Controllers
             _mapper = mapper;
         }
 
+        [HttpPost("CloseLot")]
+        public async Task<IActionResult> CloseLot(UserIdDTO lotIdDTO)
+        {
+            int userId = Convert.ToInt32(User.Identities.First().Claims.First().Value);
+            Lot lot = await _lotsRepository.GetLotWithSeller(lotIdDTO.Id);
+
+            if (lot == null)
+                return NotFound("Lot not found");
+            else if (lot.Owner.Id != userId)
+                return BadRequest("User in not owner");
+
+            lot.IsClosed = true;
+            await _lotsRepository.SaveChanges();
+
+            return Ok("Lot closed!");
+        }
+
         [HttpPost("SendOffer")]
         public async Task<IActionResult> SendOffer(OfferPrice offerPrice)
         {
@@ -44,18 +61,19 @@ namespace AuctionServer.Controllers
         }
 
 
-        [HttpPost("GetLotOffersInfo")]
-        public async Task<IActionResult> GetLotOffersInfo(UserIdDTO userLotIdDTO)
+        [HttpPost("GetLotAndOffersInfo")]
+        public async Task<IActionResult> GetLotAndOffersInfo(UserIdDTO userLotIdDTO)
         {
+            Lot lot = await _lotsRepository.GetLotById(userLotIdDTO.Id);
+
+            if (lot == null)
+                return NotFound("Lot not found");
+
             ICollection<Offer>? offers = await _lotsRepository.GetLotOffersInfo(userLotIdDTO.Id);
 
-            if(offers != null)
-            {
-                ICollection<OffersDTO> offersDTO = OffersToDTO(offers);
-                return Ok(offersDTO);
-            }
-
-            return Ok("There is no offers for this lot");
+            LotWithOfferDTO lotWithOfferDTO = new LotWithOfferDTO() { Offers = OffersToDTO(offers), LotInfo = _mapper.Map<LotChangebleDataDTO>(lot) };
+            
+            return Ok(lotWithOfferDTO);
         }
 
         private ICollection<OffersDTO> OffersToDTO(ICollection<Offer> offers)
@@ -64,13 +82,7 @@ namespace AuctionServer.Controllers
 
             foreach(Offer offer in offers)
             {
-                var offerDTO = new OffersDTO();
-                offerDTO.Id = offer.Id;
-                offerDTO.Price = offer.Price;
-                offerDTO.Name = offer.User.Name;
-                offerDTO.Surname = offer.User.Surname;
-                offerDTO.DateTime = offer.DateTime;
-                offerDTO.Email = offer.User.Email;
+                var offerDTO = _mapper.Map<OffersDTO>(offer);
                 offersDTO.Add(offerDTO);
             }
 
@@ -80,7 +92,7 @@ namespace AuctionServer.Controllers
         [HttpPost("GetLotSellerInfo")]
         public async Task<IActionResult> GetLotSellerInfo(UserIdDTO userLotIdDTO)
         {
-            Lot lot = await _lotsRepository.GetLotSeller(userLotIdDTO.Id);
+            Lot lot = await _lotsRepository.GetLotWithSeller(userLotIdDTO.Id);
             User owner = lot.Owner;
 
             if (lot == null)

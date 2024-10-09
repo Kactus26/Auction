@@ -21,6 +21,19 @@ namespace AuctionGateway.Controllers
             _httpClient = httpClient.CreateClient("AuctionServer");
         }
 
+        [HttpPost("CloseLot")]
+        [Authorize]
+        public async Task<IActionResult> CloseLot(UserIdDTO lotIdDTO, CancellationToken cancellationToken)
+        {
+            JWTIntoHeader();
+
+            var response = await _httpClient.PostAsJsonAsync("Lots/CloseLot", lotIdDTO, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
 
         [HttpPost("SendOffer")]
         [Authorize]
@@ -52,10 +65,10 @@ namespace AuctionGateway.Controllers
         }
 
 
-        [HttpPost("GetLotOffersInfo")]
+        [HttpPost("GetLotAndOffersInfo")]
         public async Task<IActionResult> GetLotOffersInfo(UserIdDTO userLotIdDTO, CancellationToken cancellationToken)
         {
-            var response = await _httpClient.PostAsJsonAsync("Lots/GetLotOffersInfo", userLotIdDTO, cancellationToken);
+            var response = await _httpClient.PostAsJsonAsync("Lots/GetLotAndOffersInfo", userLotIdDTO, cancellationToken);
 
             if (!response.IsSuccessStatusCode)
                 return BadRequest(await response.Content.ReadAsStringAsync());
