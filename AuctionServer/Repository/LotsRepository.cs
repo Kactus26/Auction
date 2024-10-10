@@ -30,6 +30,7 @@ namespace AuctionServer.Repository
             return await _dataContext.Offers
                 .Include(x=>x.User)
                 .Where(x => x.Lot.Id == lotId)
+                .OrderByDescending(p=>p.Price)
                 .Take(10)
                 .ToListAsync();
         }
@@ -46,6 +47,7 @@ namespace AuctionServer.Repository
         {
             return await _dataContext.Lots
                     .Where(x => x.Owner.Id == userId)
+                    .OrderBy(d => d.DateTime)
                     .Skip((currentPages - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();
@@ -59,6 +61,11 @@ namespace AuctionServer.Repository
         public async Task SaveChanges()
         {
             await _dataContext.SaveChangesAsync();
+        }
+
+        public async Task<EntityEntry<Lot>> AddLot(Lot lot)
+        {
+            return await _dataContext.Lots.AddAsync(lot);
         }
     }
 }

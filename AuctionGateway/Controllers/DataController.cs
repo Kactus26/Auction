@@ -21,6 +21,20 @@ namespace AuctionGateway.Controllers
             _httpClient = httpClient.CreateClient("AuctionServer");
         }
 
+        [HttpPost("CreateLot")]
+        [Authorize]
+        public async Task<IActionResult> CreateLot(CreateLotWithImageDTO lotWithImageDTO, CancellationToken cancellationToken)
+        {
+            JWTIntoHeader();
+
+            var response = await _httpClient.PostAsJsonAsync("Lots/CreateLot", lotWithImageDTO, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
         [HttpPost("CloseLot")]
         [Authorize]
         public async Task<IActionResult> CloseLot(UserIdDTO lotIdDTO, CancellationToken cancellationToken)

@@ -1,5 +1,14 @@
 ﻿namespace CommonDTO
 {
+    public class CreateLotWithImageDTO
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = null!;
+        public byte[]? Image { get; set; }
+        public string Description { get; set; } = String.Empty;
+        public double StartPrice { get; set; }
+    }
+
     public class LotWithOfferDTO
     {
         public LotChangebleDataDTO LotInfo { get; set; }

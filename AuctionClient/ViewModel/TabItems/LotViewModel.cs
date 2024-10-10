@@ -28,6 +28,8 @@ namespace AuctionClient.ViewModel.TabItems
         [ObservableProperty]
         public double userOffer;
         [ObservableProperty]
+        public double startPrice;
+        [ObservableProperty]
         public List<OffersDTO>? offers = new List<OffersDTO>();
         [ObservableProperty]
         public ObservableCollection<UserDataWithImageDTO> ownerData = new ObservableCollection<UserDataWithImageDTO>();
@@ -62,6 +64,7 @@ namespace AuctionClient.ViewModel.TabItems
         {
             lotId = lot.LotInfo.Id;
 
+            StartPrice = lot.LotInfo.StartPrice;
             StartedAt = "Started at: " + lot.LotInfo.DateTime;
             Image = lot.Image;
 

@@ -7,7 +7,7 @@
         public string? ImageUrl { get; set; }
         public string Description { get; set; } = String.Empty;
         public DateTime DateTime { get; set; } = DateTime.Now;
-        public int StartPrice { get; set; }
+        public double StartPrice { get; set; }
         public User Owner { get; set; } = null!;
         public bool IsClosed { get; set; } = false;
         public ICollection<Offer> Offers { get; set; } = new List<Offer>();

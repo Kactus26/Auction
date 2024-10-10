@@ -4,9 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-      xmlns:vm="clr-namespace:AuctionClient.ViewModel.TabItems"
       xmlns:conv="clr-namespace:AuctionClient.Services"
-      xmlns:local="clr-namespace:AuctionClient.View.TabItems"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800">
 
@@ -108,6 +106,8 @@
                         <StackPanel Orientation="Horizontal" Margin="5,10,0,0">
                             <Label Content="Your balance:" FontSize="14" Foreground="Gray"/>
                             <Label Content="{Binding Balance}" FontSize="14" Foreground="Gray"/>
+                            <Label Content="Start price:" Margin="5,0,0,0" Foreground="Gray"/>
+                            <Label Content="{Binding StartPrice}" FontSize="14" Foreground="Gray"/>
                         </StackPanel>
                     </StackPanel>
 

@@ -4,6 +4,7 @@ using AutoMapper;
 using CommonDTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.Hosting;
 using System;
 
 namespace AuctionServer.Controllers
@@ -14,11 +15,64 @@ namespace AuctionServer.Controllers
     {
         private readonly ILotsRepository _lotsRepository;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _environment;
 
-        public LotsController(ILotsRepository lotsRepository, IMapper mapper)
+
+        public LotsController(ILotsRepository lotsRepository, IMapper mapper, IWebHostEnvironment environment)
         {
             _lotsRepository = lotsRepository;
             _mapper = mapper;
+            _environment = environment;
+        }
+
+        [HttpPost("CreateLot")]
+        public async Task<IActionResult> CreateLot(CreateLotWithImageDTO lotDTO)
+        {
+            int userId = Convert.ToInt32(User.Identities.First().Claims.First().Value);
+            Lot newLot = new Lot
+            {
+                Name = lotDTO.Name,
+                Description = lotDTO.Description,
+                StartPrice = lotDTO.StartPrice,
+                Owner = await _lotsRepository.GetUserById(userId)
+            };
+            UploadImage(lotDTO.Image, newLot);
+
+            var result = await _lotsRepository.AddLot(newLot);
+            if (result.State == Microsoft.EntityFrameworkCore.EntityState.Added)
+            {
+                await _lotsRepository.SaveChanges();
+                return Ok("Lot had beed added");
+            }
+            else
+                return BadRequest("Something went wrong in CreateLot");
+        }
+
+        private IActionResult UploadImage(byte[] image, Lot lot)
+        {
+            try
+            {
+                var uploadPath = Path.Combine(_environment.WebRootPath, "lotImages");
+                if (!Directory.Exists(uploadPath))
+                    Directory.CreateDirectory(uploadPath);
+
+                var filePath = Path.Combine(uploadPath, System.Convert.ToString(lot.Owner.Name + lot.Name) + ".jpg");
+
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    stream.Write(image);
+                }
+
+                lot.ImageUrl = filePath;
+
+                return Ok("User Image successfully updated");
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("CloseLot")]

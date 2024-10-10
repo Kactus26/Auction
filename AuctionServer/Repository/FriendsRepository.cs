@@ -42,12 +42,12 @@ namespace AuctionServer.Repository
         public async Task<ICollection<User>> GetUserInvitations(int userId, int currentPages, int pageSize)
         {
             return await _dataContext.Friendships
-                            .Where(x => x.FriendId == userId || x.UserId == userId)
-                            .Where(y => y.Relations == FriendStatus.Send)
-                            .Select(z => z.UserId == userId ? z.Friend : z.User)
-                            .Skip((currentPages - 1) * pageSize)
-                            .Take(pageSize)
-                            .ToListAsync();
+                .Where(x => x.FriendId == userId || x.UserId == userId)
+                .Where(y => y.Relations == FriendStatus.Send)
+                .Select(z => z.UserId == userId ? z.Friend : z.User)
+                .Skip((currentPages - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
 
         public async Task<ICollection<User>> GetUsersByName(int? userId, string? name, string? surname, int currentPages, int pageSize)

@@ -7,6 +7,7 @@ namespace AuctionServer.Interfaces
     {
         public Task<Lot> GetLotById(int lotId);
         public Task<User> GetUserById(int userId);
+        public Task<EntityEntry<Lot>> AddLot(Lot lot);
         public Task<EntityEntry<Offer>> AddOffer(Offer offer);
         public Task<ICollection<Offer>> GetLotOffersInfo(int lotId);
         public Task<Lot> GetLotWithSeller(int lotId);
