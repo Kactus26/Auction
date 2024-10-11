@@ -42,6 +42,15 @@ namespace AuctionServer.Repository
                 .FirstOrDefaultAsync(x=>x.Id==lotId);
         }
 
+        public async Task<ICollection<Lot>> GetLotsByNameWithPagination(string name, int currentPages, int pageSize)
+        {
+            return await _dataContext.Lots
+                        .Where(u => (name != null ? u.Name.Contains(name) : true))
+                        .OrderBy(d => d.DateTime)
+                        .Skip((currentPages - 1) * pageSize)
+                        .Take(pageSize)
+                        .ToListAsync();
+        }
 
         public async Task<ICollection<Lot>> GetUserLotsByIdWithPagination(int userId, int currentPages, int pageSize)
         {
@@ -51,6 +60,15 @@ namespace AuctionServer.Repository
                     .Skip((currentPages - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();
+        }
+
+        public async Task<ICollection<Lot>> GetLotsWithPagination(int currentPages, int pageSize)
+        {
+            return await _dataContext.Lots
+                .OrderBy(d => d.DateTime)
+                .Skip((currentPages - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
 
         public async Task<EntityEntry<Offer>> AddOffer(Offer offer)
@@ -67,5 +85,7 @@ namespace AuctionServer.Repository
         {
             return await _dataContext.Lots.AddAsync(lot);
         }
+
+
     }
 }

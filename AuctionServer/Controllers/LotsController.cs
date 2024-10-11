@@ -3,9 +3,7 @@ using AuctionServer.Model;
 using AutoMapper;
 using CommonDTO;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.Extensions.Hosting;
-using System;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AuctionServer.Controllers
 {
@@ -23,6 +21,28 @@ namespace AuctionServer.Controllers
             _lotsRepository = lotsRepository;
             _mapper = mapper;
             _environment = environment;
+        }
+
+        [HttpPost("FindLot")]
+        public async Task<IActionResult> FindLot(PaginationLotSearchDTO paginationLotSearchDTO)
+        {
+            ICollection<Lot> lots = await _lotsRepository.GetLotsByNameWithPagination
+                (paginationLotSearchDTO.Name, paginationLotSearchDTO.CurrentPage, paginationLotSearchDTO.PageSize);
+
+            ICollection<LotWithImageDTO> lotWithImageDTO = LotsIntoLotWithImageDTO(lots);
+
+            return Ok(lotWithImageDTO);
+        }
+
+
+        [HttpPost("GetLots")]
+        public async Task<IActionResult> GetLots(PaginationDTO paginationDTO)
+        {
+            ICollection<Lot> lots = await _lotsRepository.GetLotsWithPagination(paginationDTO.CurrentPage, paginationDTO.PageSize);
+
+            ICollection<LotWithImageDTO> lotWithImageDTO = LotsIntoLotWithImageDTO(lots);
+
+            return Ok(lotWithImageDTO);
         }
 
         [HttpPost("CreateLot")]

@@ -1,12 +1,7 @@
-﻿using AutoMapper;
-using CommonDTO;
+﻿using CommonDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.IO;
-using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading;
 
 namespace AuctionGateway.Controllers
 {
@@ -19,6 +14,28 @@ namespace AuctionGateway.Controllers
         public DataController(IHttpClientFactory httpClient)
         {
             _httpClient = httpClient.CreateClient("AuctionServer");
+        }
+
+        [HttpPost("FindLot")]
+        public async Task<IActionResult> GetLots(PaginationLotSearchDTO paginationDTO, CancellationToken cancellationToken)
+        {
+            var response = await _httpClient.PostAsJsonAsync("Lots/FindLot", paginationDTO, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
+        }
+
+        [HttpPost("GetLots")]
+        public async Task<IActionResult> GetLots(PaginationDTO paginationDTO, CancellationToken cancellationToken)
+        {
+            var response = await _httpClient.PostAsJsonAsync("Lots/GetLots", paginationDTO, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+                return BadRequest(await response.Content.ReadAsStringAsync());
+
+            return Ok(await response.Content.ReadAsStringAsync());
         }
 
         [HttpPost("CreateLot")]

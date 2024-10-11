@@ -22,6 +22,7 @@ namespace AuctionServer.Controllers
             _mapper = mapper;
             _environment = environment;
         }
+                
 
         [HttpGet("GetUserBalanceAndEmail")]
         public async Task<IActionResult> GetUserBalanceAndEmail()

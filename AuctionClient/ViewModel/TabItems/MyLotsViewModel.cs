@@ -46,13 +46,13 @@ namespace AuctionClient.ViewModel.TabItems
             if (response.IsSuccessStatusCode)
             {
                 List<LotWithImageDTO>? all = JsonConvert.DeserializeObject<List<LotWithImageDTO>>(responseContent);
-                UsersAllocation(all);
+                LotAllocation(all);
             }
             else
                 MessageBox.Show($"{responseContent}");
         }
 
-        private void UsersAllocation(List<LotWithImageDTO> all)
+        private void LotAllocation(List<LotWithImageDTO> all)
         {
             Lots1.Clear();
             Lots2.Clear();
@@ -62,22 +62,12 @@ namespace AuctionClient.ViewModel.TabItems
             {
                 if (index <= 3)
                 {
-                    if (all[index].LotInfo.Name.Count() > 19)
-                    {
-                        
-                    }
                     Lots1.Add(all[index]);
                 }
                 else
                     Lots2.Add(all[index]);
                 index++;
             }
-        }
-
-        [RelayCommand]
-        public async Task AddLot()
-        {
-            
         }
 
         [RelayCommand]
@@ -100,8 +90,6 @@ namespace AuctionClient.ViewModel.TabItems
             }
             else
                 CurrentPage--;
-
-
 
             GetUserLots();
         }
