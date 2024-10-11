@@ -109,7 +109,7 @@
         <Button Grid.Row="2" Content="Find Lot" Command="{Binding SearchButtonCommand}" BorderBrush="Green" Background="Transparent" Cursor="Hand"
             Foreground="White" Width="100"  Margin="0,0,62,85" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
 
-        <ListView ItemsSource="{Binding Lots1}" Margin="0,5,0,0" Name="ListView1" Panel.ZIndex="1" HorizontalAlignment="Center"
+        <ListView ItemsSource="{Binding Lots1}" Margin="0,5,0,0" SelectionChanged="ListView1_SelectionChanged" Name="ListView1" Panel.ZIndex="1" HorizontalAlignment="Center"
               HorizontalContentAlignment="Stretch" Cursor="Hand" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"
               VerticalContentAlignment="Top">
             <ListView.ItemTemplate>
@@ -148,7 +148,7 @@
             </ListView.ItemsPanel>
         </ListView>
 
-        <ListView ItemsSource="{Binding Lots2}" Margin="45,5,0,0" Grid.Column="1" Grid.Row="1" Name="ListView2" Panel.ZIndex="2"
+        <ListView ItemsSource="{Binding Lots2}" Margin="45,5,0,0" SelectionChanged="ListView2_SelectionChanged" Grid.Column="1" Grid.Row="1" Name="ListView2" Panel.ZIndex="2"
       Cursor="Hand" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left"
       VerticalContentAlignment="Top">
             <ListView.ItemTemplate>

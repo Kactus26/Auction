@@ -174,7 +174,9 @@ namespace AuctionServer.Controllers
             else if (owner == null)
                 NotFound("Owner not found");
 
-            byte[] image = System.IO.File.ReadAllBytes(owner.ImageUrl);
+            byte[] image = null;
+            if (owner.ImageUrl != null)
+                 image = System.IO.File.ReadAllBytes(owner.ImageUrl);
 
 
             UserProfileDTO ownerDTO = _mapper.Map<UserProfileDTO>(owner);
